@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -12,7 +13,7 @@ const links = [
   { id: "experience", label: "Exp" },
   { id: "skills", label: "Skills" },
   { id: "projects", label: "Projects" },
-  { id: "certifications", label: "Certs" },
+  { id: "activity", label: "Activity" },
   { id: "contact", label: "Contact" },
 ];
 
@@ -75,15 +76,14 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 w-full px-3 pt-3 sm:px-4">
-      <div className="relative mx-auto max-w-[52rem]">
+      <div className="relative mx-auto max-w-[46.25rem]">
         <nav
           className={`flex h-12 items-center justify-between gap-4 rounded-2xl border border-border/60 bg-background/70 pl-4 pr-2 backdrop-blur-md transition-shadow duration-300 sm:pl-5 ${
             scrolled || menuOpen ? "shadow-lg shadow-black/20" : "shadow-sm"
           }`}
         >
-          <Link href="/#top" className="font-pixel text-[11px] text-foreground" aria-label="Home">
-            {profile.monogram}
-            <span className="text-muted-foreground">_</span>
+          <Link href="/#top" aria-label="Home" className="shrink-0 transition-transform duration-200 hover:scale-110">
+            <Image src="/logo-skull.png" alt="" width={28} height={28} loading="eager" unoptimized className="h-7 w-7" />
           </Link>
 
           <div className="hidden items-center gap-5 text-[13px] md:flex">
@@ -110,6 +110,8 @@ export default function Navbar() {
           </div>
 
           <div className="flex items-center gap-1 text-muted-foreground">
+            {/* Divider between the section links and the icons; only shown when the links are */}
+            <span aria-hidden className="mr-2 hidden h-5 w-px bg-border md:block" />
             <a href={profile.socials.github} target="_blank" rel="noreferrer" aria-label="GitHub" className="rounded p-1.5 transition-colors hover:bg-card/60 hover:text-foreground">
               <GithubIcon className="h-4 w-4" />
             </a>

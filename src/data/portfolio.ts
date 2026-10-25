@@ -226,6 +226,29 @@ export const projects: Project[] = [
     screenshots: [],
   },
   {
+    slug: "portfolio",
+    title: "Developer Portfolio",
+    description:
+      "This site: a themeable developer portfolio with live GitHub and LeetCode heatmaps, project detail pages and a working contact form.",
+    tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "three.js"],
+    code: "https://github.com/sprakash2006/portfolio",
+    year: "2026",
+    category: "Web",
+    overview: [
+      "My personal portfolio, built with Next.js 16 and Tailwind CSS v4. It brings my experience, skills, projects and activity together on one fast, mostly static site, with a separate detail page for every project.",
+      "The design has eight switchable themes, each with its own accent colour that carries through the whole site, from the animated dot-field background to the heatmaps and the cursor-friendly navbar.",
+    ],
+    features: [
+      "Eight colour themes, applied before the first paint so there's no flash",
+      "Live GitHub and LeetCode activity heatmaps, fetched on the server and refreshed every 12 hours",
+      "Filterable project list with statically generated detail pages",
+      "Floating navbar that highlights the section you're reading",
+      "Contact form that delivers straight to my inbox through Web3Forms",
+      "Animated WebGL dot-field background that pauses off-screen and respects reduced motion",
+    ],
+    screenshots: [],
+  },
+  {
     slug: "inboxly",
     title: "Inboxly",
     description:

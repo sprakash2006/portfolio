@@ -1,13 +1,12 @@
 import Image from "next/image";
 import Activity from "@/components/Activity";
 import Apod from "@/components/Apod";
-import ContactForm from "@/components/ContactForm";
 import Experience from "@/components/Experience";
 import Footer from "@/components/Footer";
 import Loader from "@/components/Loader";
 import ProjectList from "@/components/ProjectList";
 import Section, { Tag, cardClass } from "@/components/Section";
-import { CodeIcon, ExternalIcon, FileIcon, GithubIcon, LinkedinIcon, MailIcon, PhoneIcon } from "@/components/icons";
+import { CodeIcon, ExternalIcon, FileIcon, GithubIcon, LinkedinIcon, MailIcon } from "@/components/icons";
 import { about, achievements, certifications, education, profile, skills } from "@/data/portfolio";
 
 export default function Home() {
@@ -119,10 +118,6 @@ export default function Home() {
           </div>
         </Section>
 
-        <Section id="activity" label="Activity">
-          <Activity />
-        </Section>
-
         <Section id="projects" label="Featured Projects">
           <ProjectList />
           <a
@@ -135,7 +130,12 @@ export default function Home() {
           </a>
         </Section>
 
-        <Section id="certifications" label="Certifications & Achievements">
+        <Section id="activity" label="Activity">
+          <Activity />
+
+          <h3 className="mb-3 mt-8 font-mono text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+            Certifications
+          </h3>
           <div className="grid gap-3 sm:grid-cols-2">
             {certifications.map((c, i) => (
               <div key={c.title} className={`${cardClass} flex items-start gap-3 p-4`}>
@@ -157,7 +157,10 @@ export default function Home() {
               </div>
             ))}
           </div>
-          <ul className="mt-5 space-y-1.5">
+          <h3 className="mb-3 mt-8 font-mono text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+            Achievements
+          </h3>
+          <ul className="space-y-3">
             {achievements.map((a) => (
               <li key={a} className="flex items-start gap-2 text-xs leading-relaxed text-muted-foreground sm:text-sm">
                 <span className="shrink-0 select-none font-mono font-bold text-primary">&gt;</span>
@@ -169,35 +172,6 @@ export default function Home() {
 
         <Section id="apod" label="NASA Astronomy Picture of the Day">
           <Apod />
-        </Section>
-
-        <Section id="contact" label="Contact">
-          <div className="grid gap-8 sm:grid-cols-[1fr_1.2fr]">
-            <div className="space-y-3">
-              <h3 className="font-display text-3xl font-bold tracking-tight">Let&apos;s build together.</h3>
-              <p className="text-sm leading-relaxed text-muted-foreground">
-                I&apos;m looking for web development and software developer internships, and I&apos;m open to freelance gigs and interesting collaborations. Have a project in mind? Drop me a message.
-              </p>
-              <a href={`mailto:${profile.email}`} className="inline-flex items-center gap-1.5 break-all font-mono text-xs text-foreground hover:text-primary">
-                <MailIcon className="h-3.5 w-3.5 shrink-0" /> {profile.email}
-              </a>
-              <a href={`tel:${profile.phone.replace(/\s/g, "")}`} className="flex items-center gap-1.5 font-mono text-xs text-foreground hover:text-primary">
-                <PhoneIcon className="h-3.5 w-3.5 shrink-0" /> {profile.phone}
-              </a>
-              <div className="flex gap-2 text-muted-foreground">
-                <a href={profile.socials.github} target="_blank" rel="noreferrer" aria-label="GitHub" className="rounded-md border border-border/40 p-2 hover:text-foreground">
-                  <GithubIcon className="h-4 w-4" />
-                </a>
-                <a href={profile.socials.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn" className="rounded-md border border-border/40 p-2 hover:text-foreground">
-                  <LinkedinIcon className="h-4 w-4" />
-                </a>
-                <a href={profile.socials.leetcode} target="_blank" rel="noreferrer" aria-label="LeetCode" className="rounded-md border border-border/40 p-2 hover:text-foreground">
-                  <CodeIcon className="h-4 w-4" />
-                </a>
-              </div>
-            </div>
-            <ContactForm />
-          </div>
         </Section>
       </main>
 

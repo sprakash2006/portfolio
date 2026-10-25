@@ -3,6 +3,7 @@ import { Inter, Outfit, Press_Start_2P, JetBrains_Mono } from "next/font/google"
 import { DEFAULT_THEME, themeScript } from "@/lib/themes";
 import Background from "@/components/Background";
 import Navbar from "@/components/Navbar";
+import ScrollToTop from "@/components/ScrollToTop";
 import "./globals.css";
 
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
@@ -34,6 +35,7 @@ export default function RootLayout({
         <Background />
         <Navbar />
         {children}
+        <ScrollToTop />
       </body>
     </html>
   );
