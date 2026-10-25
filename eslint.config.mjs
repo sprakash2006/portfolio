@@ -5,6 +5,11 @@ import nextTs from "eslint-config-next/typescript";
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
+  // Vendored React Bits components are kept unmodified; they sync props into refs during render.
+  {
+    files: ["src/components/react-bits/**"],
+    rules: { "react-hooks/refs": "off" },
+  },
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:

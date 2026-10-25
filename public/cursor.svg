@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <!-- Arrow pointer: white fill with a thin dark outline so it shows on light and dark themes. Tip at (6, 2). -->
+  <path
+    d="M6 2 L21.5 15.6 L13.8 16.9 L6 22.6 Z"
+    fill="#ffffff"
+    stroke="#000000"
+    stroke-opacity="0.65"
+    stroke-width="1.2"
+    stroke-linejoin="round"
+  />
+</svg>

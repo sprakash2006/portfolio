@@ -1,65 +1,207 @@
 import Image from "next/image";
+import Activity from "@/components/Activity";
+import Apod from "@/components/Apod";
+import ContactForm from "@/components/ContactForm";
+import Experience from "@/components/Experience";
+import Footer from "@/components/Footer";
+import Loader from "@/components/Loader";
+import ProjectList from "@/components/ProjectList";
+import Section, { Tag, cardClass } from "@/components/Section";
+import { CodeIcon, ExternalIcon, FileIcon, GithubIcon, LinkedinIcon, MailIcon, PhoneIcon } from "@/components/icons";
+import { about, achievements, certifications, education, profile, skills } from "@/data/portfolio";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
+    <>
+      <Loader />
+
+      <main className="mx-auto w-full max-w-3xl px-4 sm:px-6">
+        {/* Hero */}
+        {/* Fills the first screen (minus the 3.75rem floating navbar) so the next section starts below the fold */}
+        <section
+          id="top"
+          className="flex min-h-[calc(100svh-3.75rem)] animate-fade-up flex-col justify-center space-y-6 py-12"
+        >
+          {/* Black and white until hovered, then full colour */}
+          <Image
+            src={profile.photo}
+            alt={profile.name}
+            width={80}
+            height={80}
+            loading="eager"
+            className="h-20 w-20 rounded-full object-cover ring-[0.5px] ring-primary/40 ring-offset-[3px] ring-offset-background grayscale transition-[filter] duration-500 hover:grayscale-0"
+          />
+          <div className="space-y-3">
+            <h1 className="font-display text-4xl font-bold tracking-tight sm:text-6xl">{profile.name}</h1>
+            <div className="h-px w-24 bg-primary" />
+            <p className="font-mono text-xs text-muted-foreground sm:text-sm">
+              {profile.role} <span className="text-primary">•</span> {profile.location}
+            </p>
+          </div>
+          <p className="max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">{profile.intro}</p>
+          <div className="flex flex-wrap items-center gap-3">
             <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              href="#contact"
+              className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
+              Get in touch
+            </a>
             <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              href="#projects"
+              className="rounded-lg border border-border/60 bg-card/40 px-4 py-2 text-sm font-medium transition-colors hover:border-primary/40"
             >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
+              View Projects
+            </a>
+          </div>
+          <div className="flex flex-wrap gap-4 font-mono text-xs text-muted-foreground">
+            <a href={profile.socials.github} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 hover:text-foreground">
+              <GithubIcon className="h-3.5 w-3.5" /> GitHub
+            </a>
+            <a href={profile.socials.linkedin} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 hover:text-foreground">
+              <LinkedinIcon className="h-3.5 w-3.5" /> LinkedIn
+            </a>
+            <a href={profile.socials.leetcode} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 hover:text-foreground">
+              <CodeIcon className="h-3.5 w-3.5" /> LeetCode
+            </a>
+            <a href={`mailto:${profile.email}`} className="inline-flex items-center gap-1.5 hover:text-foreground">
+              <MailIcon className="h-3.5 w-3.5" /> Email
+            </a>
+            <a href={profile.resume} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 hover:text-foreground">
+              <FileIcon className="h-3.5 w-3.5" /> Resume
+            </a>
+          </div>
+        </section>
+
+        <Section id="about" label="About Me">
+          <div className="space-y-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
+            {about.map((p) => (
+              <p key={p}>{p}</p>
+            ))}
+          </div>
+        </Section>
+
+        <Section id="education" label="Education">
+          <div className="space-y-3">
+            {education.map((e) => (
+              <div key={e.title} className={`${cardClass} flex flex-col gap-1 p-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6`}>
+                <div className="min-w-0">
+                  <p className="text-sm font-bold tracking-tight sm:text-base">{e.title}</p>
+                  <p className="text-xs text-muted-foreground/80">{e.place}</p>
+                  <p className="mt-1.5 font-mono text-[11px] text-muted-foreground">
+                    <span className="text-primary">&gt;</span> {e.focus}
+                  </p>
+                </div>
+                <span className="shrink-0 font-mono text-[11px] text-muted-foreground">{e.period}</span>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        <Section id="experience" label="Career & Experience">
+          <Experience />
+        </Section>
+
+        <Section id="skills" label="Skills & Toolbox">
+          <div className="grid gap-3 sm:grid-cols-2">
+            {skills.map((g) => (
+              <div key={g.title} className={`${cardClass} space-y-3 p-4 sm:p-5`}>
+                <div>
+                  <p className="text-sm font-bold tracking-tight">{g.title}</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground/80">{g.blurb}</p>
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {g.items.map((s) => (
+                    <Tag key={s}>{s}</Tag>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        <Section id="activity" label="Activity">
+          <Activity />
+        </Section>
+
+        <Section id="projects" label="Featured Projects">
+          <ProjectList />
           <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+            href={profile.socials.github}
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noreferrer"
+            className="mt-4 inline-flex items-center gap-1.5 font-mono text-xs text-muted-foreground hover:text-foreground"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
+            See all projects on GitHub <ExternalIcon className="h-3 w-3" />
           </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+        </Section>
+
+        <Section id="certifications" label="Certifications & Achievements">
+          <div className="grid gap-3 sm:grid-cols-2">
+            {certifications.map((c, i) => (
+              <div key={c.title} className={`${cardClass} flex items-start gap-3 p-4`}>
+                <span className="shrink-0 font-mono text-xs font-bold text-primary">{String(i + 1).padStart(2, "0")}</span>
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-bold tracking-tight">{c.title}</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground/80">{c.issuer}</p>
+                </div>
+                {c.url && (
+                  <a
+                    href={c.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex shrink-0 items-center gap-1 font-mono text-[11px] text-muted-foreground hover:text-foreground"
+                  >
+                    Verify <ExternalIcon className="h-3 w-3" />
+                  </a>
+                )}
+              </div>
+            ))}
+          </div>
+          <ul className="mt-5 space-y-1.5">
+            {achievements.map((a) => (
+              <li key={a} className="flex items-start gap-2 text-xs leading-relaxed text-muted-foreground sm:text-sm">
+                <span className="shrink-0 select-none font-mono font-bold text-primary">&gt;</span>
+                {a}
+              </li>
+            ))}
+          </ul>
+        </Section>
+
+        <Section id="apod" label="NASA Astronomy Picture of the Day">
+          <Apod />
+        </Section>
+
+        <Section id="contact" label="Contact">
+          <div className="grid gap-8 sm:grid-cols-[1fr_1.2fr]">
+            <div className="space-y-3">
+              <h3 className="font-display text-3xl font-bold tracking-tight">Let&apos;s build together.</h3>
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                I&apos;m looking for web development and software developer internships, and I&apos;m open to freelance gigs and interesting collaborations. Have a project in mind? Drop me a message.
+              </p>
+              <a href={`mailto:${profile.email}`} className="inline-flex items-center gap-1.5 break-all font-mono text-xs text-foreground hover:text-primary">
+                <MailIcon className="h-3.5 w-3.5 shrink-0" /> {profile.email}
+              </a>
+              <a href={`tel:${profile.phone.replace(/\s/g, "")}`} className="flex items-center gap-1.5 font-mono text-xs text-foreground hover:text-primary">
+                <PhoneIcon className="h-3.5 w-3.5 shrink-0" /> {profile.phone}
+              </a>
+              <div className="flex gap-2 text-muted-foreground">
+                <a href={profile.socials.github} target="_blank" rel="noreferrer" aria-label="GitHub" className="rounded-md border border-border/40 p-2 hover:text-foreground">
+                  <GithubIcon className="h-4 w-4" />
+                </a>
+                <a href={profile.socials.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn" className="rounded-md border border-border/40 p-2 hover:text-foreground">
+                  <LinkedinIcon className="h-4 w-4" />
+                </a>
+                <a href={profile.socials.leetcode} target="_blank" rel="noreferrer" aria-label="LeetCode" className="rounded-md border border-border/40 p-2 hover:text-foreground">
+                  <CodeIcon className="h-4 w-4" />
+                </a>
+              </div>
+            </div>
+            <ContactForm />
+          </div>
+        </Section>
       </main>
-    </div>
+
+      <Footer />
+    </>
   );
 }

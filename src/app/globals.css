@@ -1,26 +1,215 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* Dark-family themes; drives the dark: variant */
+@custom-variant dark (&:where(.dark, .deep-dark, .forest, .ocean, .midnight, .dark *, .deep-dark *, .forest *, .ocean *, .midnight *));
+
+/* Eight themes, applied as a class on <html>. Light is the fallback. */
+:root,
+.light {
+  color-scheme: light;
+  --background: hsl(0 0% 100%);
+  --foreground: hsl(240 10% 3.9%);
+  --card: hsl(0 0% 100%);
+  --primary: hsl(240 5.9% 10%);
+  --primary-foreground: hsl(0 0% 98%);
+  --muted: hsl(240 4.8% 95.9%);
+  --muted-foreground: hsl(240 3.8% 46.1%);
+  --border: hsl(240 5.9% 90%);
+}
+
+.dark {
+  color-scheme: dark;
+  --background: hsl(240 10% 3.9%);
+  --foreground: hsl(0 0% 98%);
+  --card: hsl(240 10% 5.5%);
+  --primary: hsl(0 0% 98%);
+  --primary-foreground: hsl(240 5.9% 10%);
+  --muted: hsl(240 3.7% 15.9%);
+  --muted-foreground: hsl(240 5% 64.9%);
+  --border: hsl(240 3.7% 15.9%);
+}
+
+.blue-gray {
+  color-scheme: light;
+  --background: hsl(215 35% 85%);
+  --foreground: hsl(215 25% 15%);
+  --card: hsl(215 35% 92%);
+  --primary: hsl(210 35% 45%);
+  --primary-foreground: hsl(0 0% 98%);
+  --muted: hsl(215 30% 78%);
+  --muted-foreground: hsl(215 20% 40%);
+  --border: hsl(215 25% 70%);
+}
+
+.deep-dark {
+  color-scheme: dark;
+  --background: hsl(220 20% 4%);
+  --foreground: hsl(200 25% 88%);
+  --card: hsl(220 20% 9%);
+  --primary: hsl(170 90% 50%);
+  --primary-foreground: hsl(220 20% 4%);
+  --muted: hsl(220 15% 12%);
+  --muted-foreground: hsl(200 15% 60%);
+  --border: hsl(220 15% 12%);
+}
+
+.sunset {
+  color-scheme: light;
+  --background: hsl(30 30% 98%);
+  --foreground: hsl(20 30% 15%);
+  --card: hsl(30 25% 96%);
+  --primary: hsl(25 95% 50%);
+  --primary-foreground: hsl(0 0% 100%);
+  --muted: hsl(30 20% 90%);
+  --muted-foreground: hsl(20 20% 40%);
+  --border: hsl(30 20% 85%);
+}
+
+.forest {
+  color-scheme: dark;
+  --background: hsl(150 30% 12%);
+  --foreground: hsl(150 20% 90%);
+  --card: hsl(150 30% 15%);
+  --primary: hsl(142 70% 45%);
+  --primary-foreground: hsl(0 0% 100%);
+  --muted: hsl(150 25% 20%);
+  --muted-foreground: hsl(150 20% 70%);
+  --border: hsl(150 25% 20%);
+}
+
+.ocean {
+  color-scheme: dark;
+  --background: hsl(200 40% 15%);
+  --foreground: hsl(200 20% 90%);
+  --card: hsl(200 40% 18%);
+  --primary: hsl(195 85% 45%);
+  --primary-foreground: hsl(0 0% 100%);
+  --muted: hsl(200 35% 25%);
+  --muted-foreground: hsl(200 20% 70%);
+  --border: hsl(200 35% 25%);
+}
+
+.midnight {
+  color-scheme: dark;
+  --background: hsl(230 25% 8%);
+  --foreground: hsl(220 25% 90%);
+  --card: hsl(230 25% 12%);
+  --primary: hsl(260 85% 65%);
+  --primary-foreground: hsl(0 0% 100%);
+  --muted: hsl(230 20% 15%);
+  --muted-foreground: hsl(220 20% 70%);
+  --border: hsl(230 20% 15%);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-outfit);
+  --font-pixel: var(--font-pixel);
+  --font-mono: var(--font-mono);
+  --animate-pixel-pulse: pixel-pulse 1.2s ease-in-out infinite;
+  --animate-fade-up: fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes pixel-pulse {
+  0%,
+  100% {
+    opacity: 0.12;
   }
+  50% {
+    opacity: 0.95;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Custom arrow cursor everywhere (vector, so it stays sharp); the hotspot (6 2) is the arrow's tip.
+   !important overrides link/button/input defaults and any cursor-* utility classes. */
+*,
+*::before,
+*::after {
+  cursor: url("/cursor.svg") 6 2, auto !important;
+}
+
+/* Square grid behind the page */
+.bg-grid-pattern {
+  background-size: 32px 32px;
+  background-image:
+    linear-gradient(90deg, rgb(255 255 255 / 0.04) 1px, transparent 0),
+    linear-gradient(180deg, rgb(255 255 255 / 0.04) 1px, transparent 0);
+}
+
+:is(.light, .sunset, .blue-gray) .bg-grid-pattern {
+  background-image:
+    linear-gradient(90deg, rgb(15 23 42 / 0.12) 1px, transparent 0),
+    linear-gradient(180deg, rgb(15 23 42 / 0.12) 1px, transparent 0);
+}
+
+/* Activity heatmap shades: empty cells use the muted tone, active ones step up to the accent */
+.heat-0 {
+  background: color-mix(in oklab, var(--muted) 70%, transparent);
+}
+.heat-1 {
+  background: color-mix(in oklab, var(--primary) 30%, var(--muted));
+}
+.heat-2 {
+  background: color-mix(in oklab, var(--primary) 55%, var(--muted));
+}
+.heat-3 {
+  background: color-mix(in oklab, var(--primary) 78%, var(--muted));
+}
+.heat-4 {
+  background: var(--primary);
+}
+
+/* Scrolls normally but shows no scrollbar */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+::selection {
+  background: var(--foreground);
+  color: var(--background);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
