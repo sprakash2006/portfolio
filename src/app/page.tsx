@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Activity from "@/components/Activity";
-import Apod from "@/components/Apod";
 import Experience from "@/components/Experience";
 import Footer from "@/components/Footer";
 import Loader from "@/components/Loader";
+import PictureOfTheDay from "@/components/PictureOfTheDay";
 import ProjectList from "@/components/ProjectList";
 import Section, { Tag, cardClass } from "@/components/Section";
 import { CodeIcon, ExternalIcon, FileIcon, GithubIcon, LinkedinIcon, MailIcon } from "@/components/icons";
@@ -170,8 +170,8 @@ export default function Home() {
           </ul>
         </Section>
 
-        <Section id="apod" label="NASA Astronomy Picture of the Day">
-          <Apod />
+        <Section id="picture" label="Wikipedia Picture of the Day">
+          <PictureOfTheDay />
         </Section>
       </main>
 
