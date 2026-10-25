@@ -174,3 +174,10 @@ export const HeadphonesIcon = (p: IconProps) => (
     <path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3" />
   </svg>
 );
+
+export const HeadphonesOffIcon = (p: IconProps) => (
+  <svg {...base(p)}>
+    <path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3" />
+    <path d="m2 2 20 20" />
+  </svg>
+);

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { HeadphonesIcon } from "./icons";
+import { HeadphonesIcon, HeadphonesOffIcon } from "./icons";
 
 // "Lofi Relaxing" by velariomusic (Pixabay; free to use, no attribution required)
 const TRACK = "/music/lofi-relaxing.mp3";
@@ -87,7 +87,7 @@ export default function MusicToggle() {
         aria-pressed={playing}
         className={`rounded p-1.5 transition-colors hover:bg-card/60 ${playing ? "text-red-500" : "text-foreground"}`}
       >
-        <HeadphonesIcon className="h-4 w-4" />
+        {playing ? <HeadphonesIcon className="h-4 w-4" /> : <HeadphonesOffIcon className="h-4 w-4" />}
       </button>
     </>
   );
