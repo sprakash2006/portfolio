@@ -26,8 +26,12 @@ export async function getPictureOfTheDay(): Promise<PictureOfTheDay | null> {
     const img = (await res.json())?.image;
     if (!img?.image?.source) return null;
 
+    // The feed appends utm_* tracking parameters; drop them so the URL matches next.config's pattern
+    const src = new URL(img.image.source);
+    src.search = "";
+
     return {
-      src: img.image.source,
+      src: src.toString(),
       width: img.image.width,
       height: img.image.height,
       // Prefer the short English caption; fall back to the longer description
