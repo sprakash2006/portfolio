@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { profile } from "@/data/portfolio";
 import { CloseIcon, FileIcon, GithubIcon, LinkedinIcon, MenuIcon } from "./icons";
+import MusicToggle from "./MusicToggle";
 import ThemeSwitcher from "./ThemeSwitcher";
 
 const links = [
@@ -121,6 +122,7 @@ export default function Navbar() {
             <a href={profile.resume} target="_blank" rel="noreferrer" aria-label="Resume" className="rounded p-1.5 transition-colors hover:bg-card/60 hover:text-foreground">
               <FileIcon className="h-4 w-4" />
             </a>
+            <MusicToggle />
             <ThemeSwitcher />
             <button
               onClick={() => setMenuOpen((o) => !o)}
