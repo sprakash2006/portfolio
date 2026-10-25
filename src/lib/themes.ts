@@ -3,13 +3,10 @@
 // dots/glow tint the page background.
 
 export const THEMES = [
-  { value: "light", label: "Light", dots: "#000000", dotsOpacity: 0.65, glow: "rgb(15 23 42 / 0.10)" },
   { value: "dark", label: "Dark", dots: "#ffffff", dotsOpacity: 0.35, glow: "rgb(148 163 184 / 0.10)" },
-  { value: "blue-gray", label: "Blue Gray", dots: "#0f172a", dotsOpacity: 0.55, glow: "rgb(30 41 59 / 0.10)" },
+  { value: "light", label: "Light", dots: "#000000", dotsOpacity: 0.65, glow: "rgb(15 23 42 / 0.10)" },
   { value: "deep-dark", label: "Deep Dark", dots: "#10b981", dotsOpacity: 0.3, glow: "rgb(16 185 129 / 0.10)" },
   { value: "sunset", label: "Sunset", dots: "#7c2d12", dotsOpacity: 0.55, glow: "rgb(217 119 6 / 0.10)" },
-  { value: "forest", label: "Rainforest", dots: "#22c55e", dotsOpacity: 0.35, glow: "rgb(34 197 94 / 0.12)" },
-  { value: "ocean", label: "Ocean", dots: "#0284c7", dotsOpacity: 0.35, glow: "rgb(14 165 233 / 0.12)" },
   { value: "midnight", label: "Midnight", dots: "#8b5cf6", dotsOpacity: 0.3, glow: "rgb(168 85 247 / 0.12)" },
 ] as const;
 

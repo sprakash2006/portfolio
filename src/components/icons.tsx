@@ -125,11 +125,6 @@ export const CheckIcon = (p: IconProps) => (
   </svg>
 );
 
-export const CloudIcon = (p: IconProps) => (
-  <svg {...base(p)}>
-    <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" />
-  </svg>
-);
 
 export const EclipseIcon = (p: IconProps) => (
   <svg {...base(p)}>
@@ -151,20 +146,7 @@ export const SunsetIcon = (p: IconProps) => (
   </svg>
 );
 
-export const TreeIcon = (p: IconProps) => (
-  <svg {...base(p)}>
-    <path d="M12 2 6 10h3l-4 6h14l-4-6h3z" />
-    <path d="M12 16v6" />
-  </svg>
-);
 
-export const WavesIcon = (p: IconProps) => (
-  <svg {...base(p)}>
-    <path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" />
-    <path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" />
-    <path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" />
-  </svg>
-);
 
 export const SparklesIcon = (p: IconProps) => (
   <svg {...base(p)}>
@@ -184,5 +166,11 @@ export const CodeIcon = (p: IconProps) => (
 export const PhoneIcon = (p: IconProps) => (
   <svg {...base(p)}>
     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+  </svg>
+);
+
+export const HeadphonesIcon = (p: IconProps) => (
+  <svg {...base(p)}>
+    <path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3" />
   </svg>
 );

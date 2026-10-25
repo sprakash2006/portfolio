@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { HeadphonesIcon } from "./icons";
 
 // "Lofi Relaxing" by velariomusic (Pixabay; free to use, no attribution required)
 const TRACK = "/music/lofi-relaxing.mp3";
@@ -84,21 +85,9 @@ export default function MusicToggle() {
         onClick={toggle}
         aria-label={playing ? "Pause background music" : "Play background music"}
         aria-pressed={playing}
-        className={`rounded p-1.5 transition-colors hover:bg-card/60 hover:text-foreground ${playing ? "text-primary" : ""}`}
+        className={`rounded p-1.5 transition-colors hover:bg-card/60 ${playing ? "text-red-500" : "text-foreground"}`}
       >
-        {/* Equalizer bars: still when paused, bouncing while playing */}
-        <span aria-hidden className="flex h-4 w-4 items-end justify-center gap-[2px]">
-          {[0, 1, 2, 3].map((i) => (
-            <span
-              key={i}
-              className={`w-[2px] rounded-full bg-current ${playing ? "animate-equalizer" : ""}`}
-              style={{
-                height: playing ? undefined : `${[40, 70, 50, 30][i]}%`,
-                animationDelay: `${i * 0.15}s`,
-              }}
-            />
-          ))}
-        </span>
+        <HeadphonesIcon className="h-4 w-4" />
       </button>
     </>
   );

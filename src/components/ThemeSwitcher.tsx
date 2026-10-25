@@ -3,16 +3,13 @@
 import { useEffect, useRef, useState } from "react";
 import { THEMES, applyTheme, type ThemeName } from "@/lib/themes";
 import { useThemeName } from "@/lib/useTheme";
-import { CheckIcon, CloudIcon, EclipseIcon, MoonIcon, SparklesIcon, SunIcon, SunsetIcon, TreeIcon, WavesIcon } from "./icons";
+import { CheckIcon, EclipseIcon, MoonIcon, SparklesIcon, SunIcon, SunsetIcon } from "./icons";
 
 const ICONS: Record<ThemeName, typeof SunIcon> = {
   light: SunIcon,
   dark: MoonIcon,
-  "blue-gray": CloudIcon,
   "deep-dark": EclipseIcon,
   sunset: SunsetIcon,
-  forest: TreeIcon,
-  ocean: WavesIcon,
   midnight: SparklesIcon,
 };
 
