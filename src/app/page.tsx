@@ -6,7 +6,7 @@ import Loader from "@/components/Loader";
 import PictureOfTheDay from "@/components/PictureOfTheDay";
 import ProjectList from "@/components/ProjectList";
 import Section, { Tag, cardClass } from "@/components/Section";
-import { CodeIcon, ExternalIcon, FileIcon, GithubIcon, LinkedinIcon, MailIcon } from "@/components/icons";
+import { LeetcodeIcon, ExternalIcon, FileIcon, GithubIcon, LinkedinIcon, MailIcon } from "@/components/icons";
 import { about, achievements, certifications, education, profile, skills } from "@/data/portfolio";
 
 export default function Home() {
@@ -19,7 +19,7 @@ export default function Home() {
         {/* Fills the first screen (minus the 3.75rem floating navbar) so the next section starts below the fold */}
         <section
           id="top"
-          className="flex min-h-[calc(100svh-3.75rem)] animate-fade-up flex-col justify-center space-y-6 py-12"
+          className="flex min-h-[calc(100svh-3.75rem)] animate-fade-up flex-col justify-center space-y-6 pb-8 pt-28"
         >
           {/* Mouse devices: black and white until hovered. Touch devices (no hover): always in colour. */}
           <Image
@@ -31,14 +31,28 @@ export default function Home() {
             className="h-20 w-20 rounded-full object-cover ring-[0.5px] ring-primary/40 ring-offset-[3px] ring-offset-background transition-[filter] duration-500 [@media(hover:hover)]:grayscale [@media(hover:hover)]:hover:grayscale-0"
           />
           <div className="space-y-3">
-            <h1 className="font-display text-4xl font-bold tracking-tight sm:text-6xl">{profile.name}</h1>
-            <div className="h-px w-24 bg-primary" />
+            <h1>
+              <span className="sr-only">{profile.name}</span>
+              {/* Signature drawn on load (see .signature in globals.css) */}
+              <svg aria-hidden viewBox="0 18 620 104" className="signature h-auto w-full max-w-[22rem] overflow-visible text-foreground">
+                <text x="4" y="110" fontSize="108">
+                  {profile.name}
+                </text>
+              </svg>
+            </h1>
+            {/* Underline: a line trailing off into three dots, the last one red */}
+            <div aria-hidden className="flex items-center gap-1.5">
+              <span className="h-px w-24 bg-primary" />
+              <span className="h-1 w-1 rounded-full bg-primary" />
+              <span className="h-1 w-1 rounded-full bg-primary" />
+              <span className="h-1 w-1 rounded-full bg-red-500" />
+            </div>
             <p className="font-mono text-xs text-muted-foreground sm:text-sm">
               {profile.role} <span className="text-primary">•</span> {profile.location}
             </p>
           </div>
           <p className="max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">{profile.intro}</p>
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3 pt-4">
             <a
               href="#contact"
               className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
@@ -60,7 +74,7 @@ export default function Home() {
               <LinkedinIcon className="h-3.5 w-3.5" /> LinkedIn
             </a>
             <a href={profile.socials.leetcode} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 hover:text-foreground">
-              <CodeIcon className="h-3.5 w-3.5" /> LeetCode
+              <LeetcodeIcon className="h-3.5 w-3.5" /> LeetCode
             </a>
             <a href={`mailto:${profile.email}`} className="inline-flex items-center gap-1.5 hover:text-foreground">
               <MailIcon className="h-3.5 w-3.5" /> Email

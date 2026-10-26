@@ -156,10 +156,13 @@ export const SparklesIcon = (p: IconProps) => (
   </svg>
 );
 
-export const CodeIcon = (p: IconProps) => (
+// LeetCode logo, redrawn as strokes to match the other icons: an angled bracket with
+// rounded corners, the small hook at the top right, and the horizontal bar.
+export const LeetcodeIcon = (p: IconProps) => (
   <svg {...base(p)}>
-    <path d="m16 18 6-6-6-6" />
-    <path d="m8 6-6 6 6 6" />
+    <path d="M13.8 1.6 5.4 10a3 3 0 0 0 0 4.2l5.2 5.2a3 3 0 0 0 4.2 0l2.2-1.6" />
+    <path d="M11.6 5.6c1.6-1.4 3.6-1.2 5 .2l1.9 2" />
+    <path d="M10.2 13.6h11" />
   </svg>
 );
 

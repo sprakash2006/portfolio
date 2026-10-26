@@ -2,7 +2,7 @@ import { profile } from "@/data/portfolio";
 import { getGithubActivity, getLeetcodeActivity } from "@/lib/activity";
 import ActivityTabs from "./ActivityTabs";
 import Heatmap from "./Heatmap";
-import { CodeIcon, GithubIcon } from "./icons";
+import { LeetcodeIcon, GithubIcon } from "./icons";
 import { cardClass } from "./Section";
 
 function Stat({ value, label }: { value: number | string; label: string }) {
@@ -74,7 +74,7 @@ export default async function Activity() {
         {
           id: "leetcode",
           label: "LeetCode",
-          icon: <CodeIcon className="h-3.5 w-3.5" />,
+          icon: <LeetcodeIcon className="h-3.5 w-3.5" />,
           href: profile.socials.leetcode,
           handle: profile.handles.leetcode,
           content: leetcodePanel,

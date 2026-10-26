@@ -95,6 +95,34 @@
   }
 }
 
+/* Hero signature: glyph outlines are traced like a pen stroke, then the letters fill in.
+   Starts after the page loader has faded. */
+.signature text {
+  font-family: var(--font-signature), cursive;
+  fill: currentColor;
+  fill-opacity: 0;
+  stroke: currentColor;
+  stroke-width: 0.9;
+  stroke-dasharray: 700;
+  stroke-dashoffset: 700;
+  animation:
+    sign-draw 4.5s cubic-bezier(0.45, 0, 0.25, 1) 1.2s forwards,
+    sign-fill 1.2s ease 5.2s forwards;
+}
+
+@keyframes sign-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes sign-fill {
+  to {
+    fill-opacity: 1;
+    stroke-width: 0.2;
+  }
+}
+
 @keyframes fade-up {
   from {
     opacity: 0;

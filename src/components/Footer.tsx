@@ -1,6 +1,6 @@
 import { profile } from "@/data/portfolio";
 import ContactForm from "./ContactForm";
-import { CodeIcon, GithubIcon, LinkedinIcon, MailIcon, PhoneIcon } from "./icons";
+import { LeetcodeIcon, GithubIcon, LinkedinIcon, MailIcon, PhoneIcon } from "./icons";
 
 const social = "rounded-md border border-border/40 p-2 transition-colors hover:border-primary/30 hover:text-foreground";
 
@@ -44,7 +44,7 @@ export default function Footer() {
                 <LinkedinIcon className="h-4 w-4" />
               </a>
               <a href={profile.socials.leetcode} target="_blank" rel="noreferrer" aria-label="LeetCode" className={social}>
-                <CodeIcon className="h-4 w-4" />
+                <LeetcodeIcon className="h-4 w-4" />
               </a>
             </div>
           </div>
