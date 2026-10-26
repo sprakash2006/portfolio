@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { experience } from "@/data/portfolio";
-import { CalendarIcon, ChevronDownIcon } from "./icons";
+import { ChevronDownIcon } from "./icons";
 import { Tag, cardClass } from "./Section";
 
 export default function Experience() {
@@ -47,7 +47,6 @@ export default function Experience() {
               <div className="flex shrink-0 items-center gap-3">
                 {job.period && (
                   <span className="hidden items-center gap-1.5 font-mono text-[11px] text-muted-foreground sm:flex">
-                    <CalendarIcon className="h-3 w-3 text-primary/70" />
                     {job.period}
                   </span>
                 )}
@@ -70,7 +69,6 @@ export default function Experience() {
                 <div className="space-y-4 px-3.5 pb-4 sm:px-4">
                   {job.period && (
                     <p className="flex items-center gap-1.5 font-mono text-[11px] text-muted-foreground sm:hidden">
-                      <CalendarIcon className="h-3 w-3 text-primary/70" />
                       {job.period}
                     </p>
                   )}
