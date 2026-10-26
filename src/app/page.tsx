@@ -22,14 +22,13 @@ export default function Home() {
           id="top"
           className="flex min-h-[calc(100svh-3.75rem)] animate-fade-up flex-col justify-center space-y-6 pb-8 pt-28"
         >
-          {/* Mouse devices: black and white until hovered. Touch devices (no hover): always in colour. */}
           <Image
             src={profile.photo}
             alt={profile.name}
             width={80}
             height={80}
             loading="eager"
-            className="h-20 w-20 rounded-full object-cover ring-[0.5px] ring-primary/40 ring-offset-[3px] ring-offset-background transition-[filter] duration-500 [@media(hover:hover)]:grayscale [@media(hover:hover)]:hover:grayscale-0"
+            className="h-20 w-20 rounded-full object-cover ring-[0.5px] ring-primary/40 ring-offset-[3px] ring-offset-background"
           />
           <div className="space-y-3">
             <h1>
