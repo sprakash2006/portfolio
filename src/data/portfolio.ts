@@ -28,9 +28,9 @@ export const profile = {
 };
 
 export const about = [
-  "I'm a Full-Stack Developer and Computer Engineering student at VIT Pune, building scalable web applications with React.js, Next.js, Node.js, Express.js and PostgreSQL.",
-  "I design REST APIs, integrate authentication, and ship AI/LLM-powered features using LangChain and RAG. I have a strong foundation in data structures, algorithms and OOP, with 400+ problems solved on LeetCode.",
-  "Outside of code you'll find me watching movies, playing cricket, listening to rap or exploring new tech. I speak English, Hindi, Marathi and Kannada.",
+  "I'm a Full-Stack Developer and Computer Engineering student at VIT Pune who enjoys turning ideas into products people actually use. As CTO and co-founder of MediChain, I lead the technology behind a platform that puts patients in control of their medical records.",
+  "I work across the stack with React, Next.js, Node.js and PostgreSQL, and I like building AI features with LLMs, LangChain and RAG. During my internship at Career Craftly, I built The GP Edge for a client in Australia, owning the system design and backend development with Next.js, TypeScript, PostgreSQL and the Gemini API. With 400+ LeetCode problems solved, my fundamentals in data structures and algorithms stay sharp.",
+  "Away from the keyboard, I'm usually watching movies, playing cricket, listening to rap or trying out something new in tech.",
 ];
 
 export const education = [
@@ -76,7 +76,7 @@ export const experience: Experience[] = [
     role: "Web Developer Intern",
     org: "Career Craftly",
     logo: "/experience/career-craftly.png",
-    period: "May 2026 — Present",
+    period: "May 2026 — Oct 2026",
     points: [
       "Built a full-stack SaaS platform for General Practitioners using Next.js, TypeScript and PostgreSQL, with a personalized dashboard and real-time study analytics.",
       "Implemented secure authentication and role-based access with Clerk, and developed REST APIs for the study, billing and assessment modules.",
