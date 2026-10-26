@@ -408,9 +408,3 @@ export const certifications: Certification[] = [
     skills: ["Python", "NumPy", "Pandas", "Matplotlib", "Supervised Learning"], // TODO
   },
 ];
-
-export const achievements = [
-  "Solved 400+ data structures & algorithms problems on LeetCode.",
-  "Finalist in CanHack International and 4 national-level hackathons.",
-  "Led development of the official ICON club website, coordinating the web team and event updates.",
-];

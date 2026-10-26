@@ -8,7 +8,7 @@ import PictureOfTheDay from "@/components/PictureOfTheDay";
 import ProjectList from "@/components/ProjectList";
 import Section, { Tag, cardClass } from "@/components/Section";
 import { LeetcodeIcon, ExternalIcon, FileIcon, GithubIcon, LinkedinIcon, MailIcon } from "@/components/icons";
-import { about, achievements, education, profile, skills } from "@/data/portfolio";
+import { about, education, profile, skills } from "@/data/portfolio";
 
 export default function Home() {
   return (
@@ -151,17 +151,6 @@ export default function Home() {
             Certifications
           </h3>
           <CertificationList />
-          <h3 className="mb-3 mt-8 font-mono text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-            Achievements
-          </h3>
-          <ul className="space-y-3">
-            {achievements.map((a) => (
-              <li key={a} className="flex items-start gap-2 text-xs leading-relaxed text-muted-foreground sm:text-sm">
-                <span className="shrink-0 select-none font-mono font-bold text-primary">&gt;</span>
-                {a}
-              </li>
-            ))}
-          </ul>
         </Section>
 
         <Section id="picture" label="Wikipedia Picture of the Day">
