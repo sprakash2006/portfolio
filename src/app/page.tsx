@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Activity from "@/components/Activity";
+import CertificationList from "@/components/CertificationList";
 import Experience from "@/components/Experience";
 import Footer from "@/components/Footer";
 import Loader from "@/components/Loader";
@@ -7,7 +8,7 @@ import PictureOfTheDay from "@/components/PictureOfTheDay";
 import ProjectList from "@/components/ProjectList";
 import Section, { Tag, cardClass } from "@/components/Section";
 import { LeetcodeIcon, ExternalIcon, FileIcon, GithubIcon, LinkedinIcon, MailIcon } from "@/components/icons";
-import { about, achievements, certifications, education, profile, skills } from "@/data/portfolio";
+import { about, achievements, education, profile, skills } from "@/data/portfolio";
 
 export default function Home() {
   return (
@@ -150,27 +151,7 @@ export default function Home() {
           <h3 className="mb-3 mt-8 font-mono text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
             Certifications
           </h3>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {certifications.map((c, i) => (
-              <div key={c.title} className={`${cardClass} flex items-start gap-3 p-4`}>
-                <span className="shrink-0 font-mono text-xs font-bold text-primary">{String(i + 1).padStart(2, "0")}</span>
-                <div className="min-w-0 flex-1">
-                  <p className="text-sm font-bold tracking-tight">{c.title}</p>
-                  <p className="mt-0.5 text-xs text-muted-foreground/80">{c.issuer}</p>
-                </div>
-                {c.url && (
-                  <a
-                    href={c.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex shrink-0 items-center gap-1 font-mono text-[11px] text-muted-foreground hover:text-foreground"
-                  >
-                    Verify <ExternalIcon className="h-3 w-3" />
-                  </a>
-                )}
-              </div>
-            ))}
-          </div>
+          <CertificationList />
           <h3 className="mb-3 mt-8 font-mono text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
             Achievements
           </h3>

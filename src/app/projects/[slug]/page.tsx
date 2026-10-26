@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Footer from "@/components/Footer";
-import ProjectGallery from "@/components/ProjectGallery";
+import ScreenshotViewer from "@/components/ScreenshotViewer";
 import { ExternalIcon, GithubIcon } from "@/components/icons";
 import { profile, projects } from "@/data/portfolio";
 
@@ -49,7 +49,9 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
           <p className="text-sm text-muted-foreground sm:text-base">{project.description}</p>
         </header>
 
-        <ProjectGallery title={project.title} shots={project.screenshots} />
+        {project.screenshots.length > 0 && (
+          <ScreenshotViewer shots={project.screenshots} label={`${project.title} screenshots`} />
+        )}
 
         <section className="space-y-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
           {project.overview.map((para) => (

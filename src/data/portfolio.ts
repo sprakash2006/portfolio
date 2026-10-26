@@ -115,6 +115,13 @@ export const skills = [
   },
 ];
 
+// Placeholder screenshots shared by every project until real ones are added
+// TODO: replace each project's `screenshots` with its own images in /public/projects/<slug>/
+const SAMPLE_SCREENSHOTS = [1, 2, 3, 4, 5].map((n) => ({
+  src: `/projects/samples/sample-${String(n).padStart(2, "0")}.jpg`,
+  alt: `Sample screenshot ${n}`,
+}));
+
 export type Project = {
   slug: string; // URL of the detail page: /projects/<slug>
   title: string;
@@ -127,7 +134,7 @@ export type Project = {
   category: string;
   overview: string[]; // paragraphs
   features: string[];
-  screenshots: { src: string; alt: string }[]; // put images in /public/projects/<slug>/; empty shows placeholders
+  screenshots: { src: string; alt: string }[]; // shown one at a time on the project page; put images in /public/projects/<slug>/
 };
 
 // Detail-page fields (year, category, overview, features, screenshots) are placeholders marked TODO.
@@ -153,7 +160,7 @@ export const projects: Project[] = [
       "Gasless for patients through an ERC-2771 relayer",
       "View-only secure viewer for doctors with watermarks and timed sessions",
     ],
-    screenshots: [],
+    screenshots: SAMPLE_SCREENSHOTS,
   },
   {
     slug: "the-gp-edge",
@@ -176,7 +183,7 @@ export const projects: Project[] = [
       "AI-powered Medicare (MBS) billing lookup with semantic search",
       "Exam prep with quizzes, mock tests, mastery scoring and PDF reports",
     ],
-    screenshots: [],
+    screenshots: SAMPLE_SCREENSHOTS,
   },
   {
     slug: "solarmitra",
@@ -200,7 +207,7 @@ export const projects: Project[] = [
       "PM Surya Ghar subsidy, ROI and payback calculations",
       "16-section PDF report generated entirely on the phone",
     ],
-    screenshots: [],
+    screenshots: SAMPLE_SCREENSHOTS,
   },
   {
     slug: "papertrail",
@@ -223,7 +230,7 @@ export const projects: Project[] = [
       "Duplicate document detection",
       "Citation-backed, low-hallucination answers",
     ],
-    screenshots: [],
+    screenshots: SAMPLE_SCREENSHOTS,
   },
   {
     slug: "portfolio",
@@ -246,7 +253,7 @@ export const projects: Project[] = [
       "Contact form that delivers straight to my inbox through Web3Forms",
       "Animated WebGL dot-field background that pauses off-screen and respects reduced motion",
     ],
-    screenshots: [],
+    screenshots: SAMPLE_SCREENSHOTS,
   },
   {
     slug: "inboxly",
@@ -269,7 +276,7 @@ export const projects: Project[] = [
       "Workflow builder and a Gemini-powered auto-reply agent",
       "Leads, a drag-and-drop deals pipeline and follow-up tasks",
     ],
-    screenshots: [],
+    screenshots: SAMPLE_SCREENSHOTS,
   },
   {
     slug: "gharbudget",
@@ -292,7 +299,7 @@ export const projects: Project[] = [
       "Budgets and expense categories",
       "Interactive spending analytics charts",
     ],
-    screenshots: [],
+    screenshots: SAMPLE_SCREENSHOTS,
   },
   {
     slug: "ai-business-analyst-agent",
@@ -314,22 +321,76 @@ export const projects: Project[] = [
       "Edit, approve or request revisions, with dependency gates between artifacts",
       "Export approved artifacts as DOCX, PDF or JSON",
     ],
-    screenshots: [],
+    screenshots: SAMPLE_SCREENSHOTS,
   },
 ];
 
-export const certifications: { title: string; issuer: string; url?: string }[] = [
+export type Certification = {
+  slug: string; // URL of the detail page: /certifications/<slug>
+  title: string;
+  issuer: string;
+  url?: string; // verification link
+  // Detail page
+  date?: string;
+  learned: string[]; // "What I learned" bullet points
+  skills: string[];
+  image?: { src: string; alt: string; width: number; height: number }; // the certificate itself (pixel size sets the frame), e.g. /public/certifications/<slug>.png; missing shows a placeholder
+};
+
+// Detail-page fields (date, learned, skills) are placeholders marked TODO; add image once you have it.
+export const certifications: Certification[] = [
   {
+    slug: "full-stack-web-development-bootcamp",
     title: "Complete Full Stack Web Development Bootcamp",
     issuer: "The App Brewery",
     url: "https://www.udemy.com/certificate/UC-444c13cb-7c3e-4f48-bb1d-1813939a3765/",
+    date: "July 18, 2025",
+    image: {
+      src: "/certifications/full-stack-web-development-bootcamp.jpg",
+      alt: "Udemy certificate of completion: The Complete Full-Stack Web Development Bootcamp, Prakash Swami",
+      width: 1600,
+      height: 1190,
+    },
+    learned: [
+      // TODO
+      "Building responsive layouts with semantic HTML, modern CSS and Flexbox/Grid",
+      "Writing modern JavaScript and manipulating the DOM",
+      "Creating back-end servers and REST APIs with Node.js and Express",
+      "Designing and querying relational databases with PostgreSQL",
+      "Building component-based front-ends with React",
+    ],
+    skills: ["HTML", "CSS", "JavaScript", "Node.js", "Express", "PostgreSQL", "React", "REST APIs"], // TODO
   },
   {
+    slug: "ai-agents-langchain-llm-apps",
     title: "AI Agents: Automation & Business with LangChain & LLM Apps",
     issuer: "Arnold Oberleiter",
     url: "https://www.udemy.com/certificate/UC-9f13ca10-a431-4f09-88a7-2877aeebb3d4/",
+    date: "2026", // TODO
+    learned: [
+      // TODO
+      "Building LLM-powered applications with LangChain",
+      "Designing effective prompts and structured outputs",
+      "Retrieval-augmented generation (RAG) over custom documents",
+      "Creating AI agents that use tools and automate multi-step workflows",
+      "Applying LLM automation to real business processes",
+    ],
+    skills: ["LangChain", "LLM Apps", "AI Agents", "RAG", "Prompt Engineering", "Automation"], // TODO
   },
-  { title: "The Ultimate Job Ready Data Science Course", issuer: "CodeWithHarry" },
+  {
+    slug: "job-ready-data-science",
+    title: "The Ultimate Job Ready Data Science Course",
+    issuer: "CodeWithHarry",
+    date: "2025", // TODO
+    learned: [
+      // TODO
+      "Using Python for data analysis",
+      "Cleaning and transforming data with NumPy and Pandas",
+      "Visualising data with Matplotlib",
+      "Foundations of supervised machine learning",
+    ],
+    skills: ["Python", "NumPy", "Pandas", "Matplotlib", "Supervised Learning"], // TODO
+  },
 ];
 
 export const achievements = [
