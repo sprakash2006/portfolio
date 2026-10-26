@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { experience } from "@/data/portfolio";
 import { CalendarIcon, ChevronDownIcon } from "./icons";
 import { Tag, cardClass } from "./Section";
@@ -21,13 +22,23 @@ export default function Experience() {
             >
               <div className="flex min-w-0 items-center gap-3">
                 <span className="shrink-0 font-mono text-xs font-bold text-primary">
-                  {String(i + 1).padStart(2, "0")}
+                  {String(i).padStart(2, "0")}
                 </span>
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border/40 bg-muted/40 font-display text-sm font-bold">
-                  {job.org.charAt(0)}
-                </div>
+                {job.logo ? (
+                  <Image
+                    src={job.logo}
+                    alt={`${job.org} logo`}
+                    width={36}
+                    height={36}
+                    className="h-9 w-9 shrink-0 rounded-lg border border-border/40 bg-white object-contain"
+                  />
+                ) : (
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border/40 bg-muted/40 font-display text-sm font-bold">
+                    {job.org.charAt(0)}
+                  </div>
+                )}
                 <div className="min-w-0">
-                  <p className="truncate text-sm font-bold tracking-tight transition-colors group-hover:text-primary sm:text-base">
+                  <p className="truncate font-jakarta text-sm font-bold tracking-tight transition-colors group-hover:text-primary sm:text-base">
                     {job.role}
                   </p>
                   <p className="mt-0.5 truncate text-xs text-muted-foreground/80">{job.org}</p>
@@ -75,7 +86,7 @@ export default function Experience() {
                   )}
                   <ul className="space-y-1.5">
                     {job.points.map((p) => (
-                      <li key={p} className="flex items-start gap-2 text-xs leading-relaxed text-muted-foreground sm:text-sm">
+                      <li key={p} className="flex items-start gap-2 font-jakarta text-xs leading-relaxed text-muted-foreground sm:text-sm">
                         <span className="shrink-0 select-none font-mono font-bold text-primary">&gt;</span>
                         {p}
                       </li>

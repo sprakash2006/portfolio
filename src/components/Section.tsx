@@ -11,7 +11,7 @@ export default function Section({
     <section id={id} className="w-full border-t border-border/40 py-12 sm:py-16">
       <div className="mb-6 flex items-center gap-3 sm:mb-8">
         <h2 className="shrink-0 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-          <span className="text-primary">{"// "}</span>
+          <span className="text-red-500">{"// "}</span>
           {label}
         </h2>
         <div className="h-px flex-1 bg-border/40" />

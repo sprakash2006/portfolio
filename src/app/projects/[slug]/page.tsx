@@ -60,7 +60,7 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
 
         <section className="space-y-4">
           <h2 className={heading}>
-            <span className="text-primary">{"// "}</span>Tech Stack
+            <span className="text-red-500">{"// "}</span>Tech Stack
           </h2>
           <div className="flex flex-wrap gap-2">
             {project.tags.map((t) => (
@@ -73,7 +73,7 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
 
         <section className="space-y-4">
           <h2 className={heading}>
-            <span className="text-primary">{"// "}</span>Key Features
+            <span className="text-red-500">{"// "}</span>Key Features
           </h2>
           <ul className="space-y-2">
             {project.features.map((f) => (

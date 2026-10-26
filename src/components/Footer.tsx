@@ -8,10 +8,10 @@ const social = "rounded-md border border-border/40 p-2 transition-colors hover:b
 export default function Footer() {
   return (
     <footer id="contact" className="mx-auto w-full max-w-3xl px-4 sm:px-6">
-      <div className="border-t border-border/40 py-12 sm:py-16">
+      <div className="border-t border-border/40 pb-6 pt-12 sm:pb-8 sm:pt-16">
         <div className="mb-6 flex items-center gap-3 sm:mb-8">
           <h2 className="shrink-0 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            <span className="text-primary">{"// "}</span>
+            <span className="text-red-500">{"// "}</span>
             Contact
           </h2>
           <div className="h-px flex-1 bg-border/40" />
@@ -50,10 +50,6 @@ export default function Footer() {
           </div>
           <ContactForm />
         </div>
-
-        <p className="mt-12 text-center font-mono text-[11px] text-muted-foreground/70">
-          © {new Date().getFullYear()} {profile.name}. All rights reserved.
-        </p>
       </div>
     </footer>
   );

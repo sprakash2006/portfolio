@@ -87,7 +87,7 @@ export default async function CertificationPage({ params }: PageProps<"/certific
 
         <section className="space-y-4">
           <h2 className={heading}>
-            <span className="text-primary">{"// "}</span>What I Learned
+            <span className="text-red-500">{"// "}</span>What I Learned
           </h2>
           <ul className="space-y-2">
             {cert.learned.map((l) => (
@@ -101,7 +101,7 @@ export default async function CertificationPage({ params }: PageProps<"/certific
 
         <section className="space-y-4">
           <h2 className={heading}>
-            <span className="text-primary">{"// "}</span>Skills
+            <span className="text-red-500">{"// "}</span>Skills
           </h2>
           <div className="flex flex-wrap gap-2">
             {cert.skills.map((s) => (

@@ -52,6 +52,7 @@ export type Experience = {
   role: string;
   org: string;
   period?: string;
+  logo?: string; // square image in /public/experience/; falls back to the org's first letter
   metrics?: { value: string; label: string }[];
   points: string[];
   tech?: string[];
@@ -59,8 +60,22 @@ export type Experience = {
 
 export const experience: Experience[] = [
   {
+    role: "CTO & Co-Founder",
+    org: "MediChain",
+    period: "2025 — Present",
+    logo: "/experience/medichain.png",
+    points: [
+      "Co-founded MediChain and lead its technology: a platform that gives patients ownership of their medical records.",
+      "Architected the system across a Flutter mobile app, a React web portal, a Node.js backend and Solidity smart contracts on Polygon.",
+      "Designed AES-256 encrypted record storage on IPFS, with every grant, revoke, view and download logged on-chain as a tamper-proof audit trail.",
+      "Made the app gasless for patients with an ERC-2771 relayer, and built a view-only secure viewer for doctors with watermarks and timed sessions.",
+    ],
+    tech: ["Flutter", "React", "Node.js", "Solidity", "Polygon", "IPFS", "Supabase"],
+  },
+  {
     role: "Web Developer Intern",
-    org: "Career Craftly · Project: The GP Edge",
+    org: "Career Craftly",
+    logo: "/experience/career-craftly.png",
     period: "May 2026 — Present",
     points: [
       "Built a full-stack SaaS platform for General Practitioners using Next.js, TypeScript and PostgreSQL, with a personalized dashboard and real-time study analytics.",
@@ -73,6 +88,7 @@ export const experience: Experience[] = [
   {
     role: "Website Secretary",
     org: "Indus Connect (ICON), VIT Pune",
+    logo: "/experience/icon.png",
     period: "Sept 2025",
     points: [
       "Led development of the official ICON club website, coordinating the web team and event updates.",

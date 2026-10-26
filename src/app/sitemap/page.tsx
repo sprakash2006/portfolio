@@ -46,7 +46,7 @@ export default function SitemapPage() {
       {groups.map((g) => (
         <section key={g.title} className="space-y-4">
           <h2 className={heading}>
-            <span className="text-primary">{"// "}</span>
+            <span className="text-red-500">{"// "}</span>
             {g.title}
           </h2>
           <ul className="space-y-2">

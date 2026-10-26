@@ -79,6 +79,7 @@
   --color-border: var(--border);
   --font-sans: var(--font-inter);
   --font-display: var(--font-outfit);
+  --font-jakarta: var(--font-jakarta);
   --font-pixel: var(--font-pixel);
   --font-mono: var(--font-mono);
   --animate-pixel-pulse: pixel-pulse 1.2s ease-in-out infinite;
