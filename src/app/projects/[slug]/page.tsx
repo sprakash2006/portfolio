@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import Footer from "@/components/Footer";
 import ScreenshotViewer from "@/components/ScreenshotViewer";
 import { ExternalIcon, GithubIcon } from "@/components/icons";
 import { profile, projects } from "@/data/portfolio";
@@ -108,7 +107,6 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
           </Link>
         </nav>
       </main>
-      <Footer />
     </>
   );
 }

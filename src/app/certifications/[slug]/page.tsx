@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import Footer from "@/components/Footer";
 import TiltCard from "@/components/TiltCard";
 import { ExternalIcon } from "@/components/icons";
 import { certifications, profile } from "@/data/portfolio";
@@ -124,7 +123,6 @@ export default async function CertificationPage({ params }: PageProps<"/certific
           </nav>
         )}
       </main>
-      <Footer />
     </>
   );
 }
