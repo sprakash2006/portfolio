@@ -443,6 +443,7 @@ export const certifications: Certification[] = [
     slug: "prompt-engineering-bootcamp",
     title: "Prompt Engineering Bootcamp",
     issuer: "LetsUpgrade · NSDC · GDG MAD",
+    url: "https://verify.letsupgrade.in/certificate/LUEPEAPR125933",
     date: "August 7, 2025",
     image: {
       src: "/certifications/prompt-engineering-bootcamp.jpg",
