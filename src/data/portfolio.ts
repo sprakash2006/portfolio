@@ -382,7 +382,13 @@ export const certifications: Certification[] = [
     title: "AI Agents: Automation & Business with LangChain & LLM Apps",
     issuer: "Arnold Oberleiter",
     url: "https://www.udemy.com/certificate/UC-9f13ca10-a431-4f09-88a7-2877aeebb3d4/",
-    date: "2026", // TODO
+    date: "February 19, 2026",
+    image: {
+      src: "/certifications/ai-agents-langchain-llm-apps.jpg",
+      alt: "Udemy certificate of completion: AI-Agents: Automation & Business with LangChain & LLM Apps, Prakash Swami",
+      width: 1600,
+      height: 1190,
+    },
     learned: [
       // TODO
       "Building LLM-powered applications with LangChain",
@@ -397,7 +403,13 @@ export const certifications: Certification[] = [
     slug: "job-ready-data-science",
     title: "The Ultimate Job Ready Data Science Course",
     issuer: "CodeWithHarry",
-    date: "2025", // TODO
+    date: "October 21, 2025",
+    image: {
+      src: "/certifications/job-ready-data-science.jpg",
+      alt: "CodeWithHarry course certificate: The Ultimate Job Ready Data Science Course, Prakash Swami",
+      width: 1600,
+      height: 1132,
+    },
     learned: [
       // TODO
       "Using Python for data analysis",
@@ -406,5 +418,62 @@ export const certifications: Certification[] = [
       "Foundations of supervised machine learning",
     ],
     skills: ["Python", "NumPy", "Pandas", "Matplotlib", "Supervised Learning"], // TODO
+  },
+  {
+    slug: "blockchain-revolution-financial-services",
+    title: "Blockchain Revolution in Financial Services Specialization",
+    issuer: "INSEAD · Coursera",
+    url: "https://coursera.org/verify/specialization/UBWWZUDUYK3F",
+    date: "October 21, 2026",
+    image: {
+      src: "/certifications/blockchain-revolution-financial-services.jpg",
+      alt: "Coursera specialization certificate: Blockchain Revolution in Financial Services by INSEAD, Prakash Dayanand Swami",
+      width: 1600,
+      height: 1237,
+    },
+    learned: [
+      "What blockchain is, how it works and why it is revolutionary for financial services",
+      "Categories of cryptoassets and how they are transacted on a blockchain",
+      "Decentralized finance (DeFi) and how blockchain is reshaping payments and workflows",
+      "Producing a strategic action plan for a blockchain application in financial services",
+    ],
+    skills: ["Blockchain", "Cryptoassets", "DeFi", "FinTech", "Strategy"],
+  },
+  {
+    slug: "prompt-engineering-bootcamp",
+    title: "Prompt Engineering Bootcamp",
+    issuer: "LetsUpgrade · NSDC · GDG MAD",
+    date: "August 7, 2025",
+    image: {
+      src: "/certifications/prompt-engineering-bootcamp.jpg",
+      alt: "LetsUpgrade certificate: Prompt Engineering Bootcamp, 24–25 April 2025, Prakash Swami",
+      width: 1600,
+      height: 1131,
+    },
+    learned: [
+      // TODO
+      "Writing clear, structured prompts for large language models",
+      "Using techniques like role prompting, few-shot examples and chain-of-thought",
+      "Iterating on prompts to improve the accuracy and format of outputs",
+    ],
+    skills: ["Prompt Engineering", "LLMs", "Generative AI"], // TODO
+  },
+  {
+    slug: "fly-scholar",
+    title: "FLY-Scholar (Finding the Leader in You)",
+    issuer: "Competitiveness Mindset Institute, USA",
+    date: "January 2026",
+    image: {
+      src: "/certifications/fly-scholar.jpg",
+      alt: "Certificate of Completion of the FLY-Scholar program from the Competitiveness Mindset Institute, Prakash Swami of Foundation for Excellence",
+      width: 570,
+      height: 806,
+    },
+    learned: [
+      "Conscientiousness and taking ownership of work",
+      "Innovativeness and taking initiative",
+      "Perseverance and structured problem solving through a change of mindset",
+    ],
+    skills: ["Leadership", "Problem Solving", "Initiative", "Perseverance"],
   },
 ];
