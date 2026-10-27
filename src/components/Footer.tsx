@@ -7,7 +7,7 @@ const social = "rounded-md border border-border/40 p-2 transition-colors hover:b
 // Site footer doubling as the contact section (the navbar's Contact link targets #contact).
 export default function Footer() {
   return (
-    <footer id="contact" className="mx-auto w-full max-w-3xl px-4 sm:px-6">
+    <footer id="contact" className="mx-auto w-full max-w-[50.625rem] px-4 sm:px-6">
       <div className="border-t border-border/40 pb-6 pt-12 sm:pb-8 sm:pt-16">
         <div className="mb-6 flex items-center gap-3 sm:mb-8">
           <h2 className="shrink-0 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">

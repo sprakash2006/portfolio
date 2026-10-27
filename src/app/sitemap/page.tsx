@@ -35,7 +35,7 @@ const groups: { title: string; links: { href: string; label: string }[] }[] = [
 // Also where unknown URLs land (see not-found.tsx)
 export default function SitemapPage() {
   return (
-    <main className="mx-auto w-full max-w-3xl animate-fade-up space-y-10 px-4 pb-16 pt-10 sm:px-6 sm:pt-14">
+    <main className="mx-auto w-full max-w-[50.625rem] animate-fade-up space-y-10 px-4 pb-16 pt-10 sm:px-6 sm:pt-14">
       <header className="space-y-2">
         <h1 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">Sitemap</h1>
         <p className="text-sm text-muted-foreground sm:text-base">

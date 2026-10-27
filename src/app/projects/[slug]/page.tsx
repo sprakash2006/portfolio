@@ -32,7 +32,7 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
 
   return (
     <>
-      <main className="mx-auto w-full max-w-3xl animate-fade-up space-y-10 px-4 pb-16 pt-10 sm:px-6 sm:pt-14">
+      <main className="mx-auto w-full max-w-[50.625rem] animate-fade-up space-y-10 px-4 pb-16 pt-10 sm:px-6 sm:pt-14">
         <Link href="/#projects" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
           <span aria-hidden>←</span> Back to projects
         </Link>

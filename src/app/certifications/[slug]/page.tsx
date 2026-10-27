@@ -31,7 +31,7 @@ export default async function CertificationPage({ params }: PageProps<"/certific
 
   return (
     <>
-      <main className="mx-auto w-full max-w-3xl animate-fade-up space-y-10 px-4 pb-16 pt-10 sm:px-6 sm:pt-14">
+      <main className="mx-auto w-full max-w-[50.625rem] animate-fade-up space-y-10 px-4 pb-16 pt-10 sm:px-6 sm:pt-14">
         <Link
           href="/#activity"
           className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
@@ -42,7 +42,16 @@ export default async function CertificationPage({ params }: PageProps<"/certific
         <header className="space-y-3">
           <div className="flex items-center gap-2 font-mono text-[11px] text-muted-foreground">
             {cert.date}
-            <span className="rounded-full border border-border/60 px-2 py-0.5 uppercase tracking-wider text-primary">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-border/60 py-0.5 pl-0.5 pr-2 uppercase tracking-wider text-primary">
+              {cert.logo && (
+                <Image
+                  src={cert.logo}
+                  alt=""
+                  width={18}
+                  height={18}
+                  className="h-[18px] w-[18px] rounded-full bg-white object-contain"
+                />
+              )}
               {cert.issuer}
             </span>
           </div>
@@ -63,7 +72,10 @@ export default async function CertificationPage({ params }: PageProps<"/certific
         </header>
 
         {/* Single certificate image that tilts in 3D on hover; A4-shaped placeholder until one is added */}
-        <TiltCard className="rounded-xl">
+        {/* Portrait certificates are capped narrower so they don't run very tall */}
+        <TiltCard
+          className={`rounded-xl ${cert.image && cert.image.height > cert.image.width ? "mx-auto max-w-md" : ""}`}
+        >
           {cert.image ? (
             // Frame takes the certificate's own proportions
             <div className="overflow-hidden rounded-xl border border-border/60">

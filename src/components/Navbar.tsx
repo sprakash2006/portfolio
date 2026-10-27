@@ -77,7 +77,7 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 w-full px-3 pt-3 sm:px-4">
-      <div className="relative mx-auto max-w-[46.25rem]">
+      <div className="relative mx-auto max-w-[48.875rem]">
         <nav
           className={`flex h-12 items-center justify-between gap-4 rounded-2xl border border-border/60 bg-background/70 pl-4 pr-2 backdrop-blur-md transition-shadow duration-300 sm:pl-5 ${
             scrolled || menuOpen ? "shadow-lg shadow-black/20" : "shadow-sm"

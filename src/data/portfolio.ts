@@ -345,6 +345,7 @@ export type Certification = {
   slug: string; // URL of the detail page: /certifications/<slug>
   title: string;
   issuer: string;
+  logo?: string; // square issuer logo in /public/certifications/logos/; falls back to the issuer's first letter
   url?: string; // verification link
   // Detail page
   date?: string;
@@ -359,6 +360,7 @@ export const certifications: Certification[] = [
     slug: "full-stack-web-development-bootcamp",
     title: "Complete Full Stack Web Development Bootcamp",
     issuer: "The App Brewery · Udemy",
+    logo: "/certifications/logos/udemy.png",
     url: "https://www.udemy.com/certificate/UC-444c13cb-7c3e-4f48-bb1d-1813939a3765/",
     date: "July 18, 2025",
     image: {
@@ -381,6 +383,7 @@ export const certifications: Certification[] = [
     slug: "ai-agents-langchain-llm-apps",
     title: "AI Agents: Automation & Business with LangChain & LLM Apps",
     issuer: "Arnold Oberleiter · Udemy",
+    logo: "/certifications/logos/udemy.png",
     url: "https://www.udemy.com/certificate/UC-9f13ca10-a431-4f09-88a7-2877aeebb3d4/",
     date: "February 19, 2026",
     image: {
@@ -403,6 +406,7 @@ export const certifications: Certification[] = [
     slug: "job-ready-data-science",
     title: "The Ultimate Job Ready Data Science Course",
     issuer: "CodeWithHarry",
+    logo: "/certifications/logos/codewithharry-logo.png",
     date: "October 21, 2025",
     image: {
       src: "/certifications/job-ready-data-science.jpg",
@@ -423,6 +427,7 @@ export const certifications: Certification[] = [
     slug: "blockchain-revolution-financial-services",
     title: "Blockchain Revolution in Financial Services Specialization",
     issuer: "INSEAD · Coursera",
+    logo: "/certifications/logos/insead.png",
     url: "https://coursera.org/verify/specialization/UBWWZUDUYK3F",
     date: "October 21, 2026",
     image: {
@@ -443,6 +448,7 @@ export const certifications: Certification[] = [
     slug: "prompt-engineering-bootcamp",
     title: "Prompt Engineering Bootcamp",
     issuer: "LetsUpgrade",
+    logo: "/certifications/logos/letsupgrade.png",
     url: "https://verify.letsupgrade.in/certificate/LUEPEAPR125933",
     date: "August 7, 2025",
     image: {
@@ -463,6 +469,7 @@ export const certifications: Certification[] = [
     slug: "fly-scholar",
     title: "FLY-Scholar (Finding the Leader in You)",
     issuer: "Competitiveness Mindset Institute, USA",
+    logo: "/certifications/logos/cmi.png",
     date: "January 2026",
     image: {
       src: "/certifications/fly-scholar.jpg",

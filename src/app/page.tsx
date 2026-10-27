@@ -15,7 +15,7 @@ export default function Home() {
     <>
       <Loader />
 
-      <main className="mx-auto w-full max-w-3xl px-4 sm:px-6">
+      <main className="mx-auto w-full max-w-[50.625rem] px-4 sm:px-6">
         {/* Hero */}
         {/* Fills the first screen (minus the 3.75rem floating navbar) so the next section starts below the fold */}
         <section
