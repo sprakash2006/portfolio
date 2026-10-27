@@ -57,7 +57,7 @@ export default async function CertificationPage({ params }: PageProps<"/certific
           </div>
           {/* Verify flows inline after the title's last word, so it stays beside long, wrapping titles */}
           <div>
-            <h1 className="inline font-display text-3xl font-bold tracking-tight sm:text-4xl">{cert.title}</h1>
+            <h1 className="inline font-display text-2xl font-bold tracking-tight sm:text-3xl">{cert.title}</h1>
             {cert.url && (
               <a
                 href={cert.url}
