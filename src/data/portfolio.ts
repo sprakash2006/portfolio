@@ -358,7 +358,7 @@ export const certifications: Certification[] = [
   {
     slug: "full-stack-web-development-bootcamp",
     title: "Complete Full Stack Web Development Bootcamp",
-    issuer: "The App Brewery",
+    issuer: "The App Brewery · Udemy",
     url: "https://www.udemy.com/certificate/UC-444c13cb-7c3e-4f48-bb1d-1813939a3765/",
     date: "July 18, 2025",
     image: {
@@ -380,7 +380,7 @@ export const certifications: Certification[] = [
   {
     slug: "ai-agents-langchain-llm-apps",
     title: "AI Agents: Automation & Business with LangChain & LLM Apps",
-    issuer: "Arnold Oberleiter",
+    issuer: "Arnold Oberleiter · Udemy",
     url: "https://www.udemy.com/certificate/UC-9f13ca10-a431-4f09-88a7-2877aeebb3d4/",
     date: "February 19, 2026",
     image: {
@@ -442,7 +442,7 @@ export const certifications: Certification[] = [
   {
     slug: "prompt-engineering-bootcamp",
     title: "Prompt Engineering Bootcamp",
-    issuer: "LetsUpgrade · NSDC · GDG MAD",
+    issuer: "LetsUpgrade",
     url: "https://verify.letsupgrade.in/certificate/LUEPEAPR125933",
     date: "August 7, 2025",
     image: {
