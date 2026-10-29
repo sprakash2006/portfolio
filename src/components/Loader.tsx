@@ -2,42 +2,52 @@
 
 import { useEffect, useState } from "react";
 
-// Full-screen percentage counter shown on first paint, then fades away.
+const WORDS = ["Design", "Build", "Ship", "Prakash"];
+// When each word appears (ms); the name stays a little longer
+const AT = [0, 300, 600, 900];
+const HIDE_WORDS = 1420;
+const OPEN = 1540; // the halves start sliding apart
+const DONE = OPEN + 900;
+
+// Page loader: words flash in the middle (Design. Build. Ship. Prakash.), then the screen
+// splits along a red line and the two halves slide apart to reveal the page. The hero
+// signature is timed to start drawing as the halves open (.signature in globals.css).
+// Skipped for visitors who prefer reduced motion.
 export default function Loader() {
-  const [pct, setPct] = useState(0);
-  const [gone, setGone] = useState(false);
+  const [word, setWord] = useState(0);
+  const [wordsHidden, setWordsHidden] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [done, setDone] = useState(false);
 
   useEffect(() => {
-    const id = setInterval(() => {
-      setPct((p) => {
-        const next = Math.min(100, p + Math.ceil(Math.random() * 9));
-        if (next === 100) {
-          clearInterval(id);
-          setTimeout(() => setGone(true), 350);
-        }
-        return next;
-      });
-    }, 45);
-    return () => clearInterval(id);
+    const timers = [
+      ...AT.slice(1).map((t, i) => setTimeout(() => setWord(i + 1), t)),
+      setTimeout(() => setWordsHidden(true), HIDE_WORDS),
+      setTimeout(() => setOpen(true), OPEN),
+      setTimeout(() => setDone(true), DONE),
+    ];
+    return () => timers.forEach(clearTimeout);
   }, []);
 
+  if (done) return null;
+
+  const half = "absolute inset-x-0 h-[50.5%] bg-background transition-transform duration-[900ms] ease-[cubic-bezier(.77,0,.18,1)]";
+
   return (
-    <div
-      aria-hidden
-      className={`fixed inset-0 z-[100] flex flex-col items-center justify-center gap-6 bg-background transition-opacity duration-500 ${
-        gone ? "pointer-events-none opacity-0" : "opacity-100"
-      }`}
-    >
-      <div className="grid grid-cols-3 gap-1">
-        {Array.from({ length: 9 }, (_, i) => (
-          <span
-            key={i}
-            className="h-2.5 w-2.5 animate-pixel-pulse rounded-[1px] bg-primary"
-            style={{ animationDelay: `${(i * 137) % 900}ms` }}
-          />
-        ))}
+    // motion-reduce:hidden skips the whole loader for visitors who prefer reduced motion
+    <div aria-hidden className={`fixed inset-0 z-[100] motion-reduce:hidden ${open ? "pointer-events-none" : ""}`}>
+      <div className={`${half} top-0 border-b border-red-500/60 ${open ? "-translate-y-full" : ""}`} />
+      <div className={`${half} bottom-0 ${open ? "translate-y-full" : ""}`} />
+      <div
+        className={`absolute inset-0 flex items-center justify-center font-display text-[clamp(3rem,10vw,7rem)] font-black uppercase leading-none tracking-[-0.04em] transition-opacity duration-200 ${
+          wordsHidden ? "opacity-0" : ""
+        }`}
+      >
+        <span key={word} className="inline-block animate-loader-word">
+          {WORDS[word]}
+          <span className="text-red-500">.</span>
+        </span>
       </div>
-      <p className="font-pixel text-xs tabular-nums text-muted-foreground">{pct}%</p>
     </div>
   );
 }

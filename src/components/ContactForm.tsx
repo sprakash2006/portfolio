@@ -9,7 +9,7 @@ type State = { status: "idle" | "sent" | "error"; message?: string; fields?: Fie
 const initialState: State = { status: "idle" };
 
 const field =
-  "w-full rounded-lg border border-border/60 bg-card/40 px-3 py-2 text-sm placeholder:text-muted-foreground/60 outline-none transition-colors focus:border-primary/50 disabled:opacity-60";
+  "w-full rounded-xl border border-border bg-background/60 px-[13px] py-[11px] text-sm placeholder:text-muted-foreground/60 outline-none transition-colors focus:border-red-500/55 disabled:opacity-60";
 
 // Posts the message to Web3Forms, which emails it to you; replying goes straight to the visitor.
 async function send(_prev: State, form: FormData): Promise<State> {
@@ -87,18 +87,21 @@ export default function ContactForm() {
       {/* Spam trap: hidden from people, bots tick it */}
       <input type="checkbox" name="botcheck" tabIndex={-1} autoComplete="off" aria-hidden className="hidden" />
 
-      <div className="flex flex-wrap items-center gap-3">
+      <div className="flex flex-wrap-reverse items-center justify-end gap-3">
+        <p role="status" aria-live="polite" className="mr-auto font-mono text-xs">
+          {state.status === "sent" && <span className="text-green-500">&gt; Message sent. I&apos;ll get back to you soon.</span>}
+          {state.status === "error" && <span className="text-rose-500">&gt; {state.message}</span>}
+        </p>
         <button
           type="submit"
           disabled={pending}
-          className="rounded-lg bg-primary px-5 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
+          className="group inline-flex items-center gap-2 rounded-full bg-red-500 px-[18px] py-[11px] font-mono text-[13px] font-semibold text-[#140404] shadow-[0_10px_30px_rgba(239,68,68,0.25)] transition-[translate,box-shadow] duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_40px_rgba(239,68,68,0.4)] disabled:pointer-events-none disabled:opacity-60"
         >
           {pending ? "Sending…" : "Send"}
+          <span aria-hidden className="transition-transform duration-300 group-hover:translate-x-0.5">
+            →
+          </span>
         </button>
-        <p role="status" aria-live="polite" className="font-mono text-xs">
-          {state.status === "sent" && <span className="text-primary">&gt; Message sent. I&apos;ll get back to you soon.</span>}
-          {state.status === "error" && <span className="text-rose-500">&gt; {state.message}</span>}
-        </p>
       </div>
     </form>
   );

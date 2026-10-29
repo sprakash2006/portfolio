@@ -13,7 +13,7 @@ export function generateStaticParams() {
   return certifications.map((c) => ({ slug: c.slug }));
 }
 
-export async function generateMetadata({ params }: PageProps<"/certifications/[slug]">): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps<"/certificates/[slug]">): Promise<Metadata> {
   const { slug } = await params;
   const cert = certifications.find((c) => c.slug === slug);
   if (!cert) return {};
@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: PageProps<"/certifications/[s
 
 const heading = "font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground";
 
-export default async function CertificationPage({ params }: PageProps<"/certifications/[slug]">) {
+export default async function CertificationPage({ params }: PageProps<"/certificates/[slug]">) {
   const { slug } = await params;
   const index = certifications.findIndex((c) => c.slug === slug);
   if (index === -1) notFound();
@@ -126,7 +126,7 @@ export default async function CertificationPage({ params }: PageProps<"/certific
 
         {certifications.length > 1 && (
           <nav className="border-t border-border/40 pt-6 text-right">
-            <Link href={`/certifications/${next.slug}`} className="group inline-block">
+            <Link href={`/certificates/${next.slug}`} className="group inline-block">
               <span className="block font-mono text-[11px] uppercase tracking-wider text-muted-foreground">Next →</span>
               <span className="text-sm font-semibold transition-colors group-hover:text-primary sm:text-base">
                 {next.title}

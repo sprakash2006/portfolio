@@ -55,6 +55,15 @@ export const ExternalIcon = (p: IconProps) => (
   </svg>
 );
 
+// Medium's three-ellipse mark, filled
+export const MediumIcon = (p: IconProps) => (
+  <svg {...base(p)} fill="currentColor" stroke="none">
+    <ellipse cx="6.5" cy="12" rx="6.5" ry="7" />
+    <ellipse cx="17" cy="12" rx="3.3" ry="6.6" />
+    <ellipse cx="22.2" cy="12" rx="1.3" ry="6" />
+  </svg>
+);
+
 export const ChevronDownIcon = (p: IconProps) => (
   <svg {...base(p)}>
     <path d="m6 9 6 6 6-6" />
@@ -122,37 +131,6 @@ export const CloseIcon = (p: IconProps) => (
 export const CheckIcon = (p: IconProps) => (
   <svg {...base(p)}>
     <path d="M20 6 9 17l-5-5" />
-  </svg>
-);
-
-
-export const EclipseIcon = (p: IconProps) => (
-  <svg {...base(p)}>
-    <circle cx="12" cy="12" r="10" />
-    <path d="M12 2a7 7 0 1 0 10 10" />
-  </svg>
-);
-
-export const SunsetIcon = (p: IconProps) => (
-  <svg {...base(p)}>
-    <path d="M12 10V2" />
-    <path d="m4.93 10.93 1.41 1.41" />
-    <path d="M2 18h2" />
-    <path d="M20 18h2" />
-    <path d="m19.07 10.93-1.41 1.41" />
-    <path d="M22 22H2" />
-    <path d="m16 6-4 4-4-4" />
-    <path d="M16 18a4 4 0 0 0-8 0" />
-  </svg>
-);
-
-
-
-export const SparklesIcon = (p: IconProps) => (
-  <svg {...base(p)}>
-    <path d="M9.94 15.5A2 2 0 0 0 8.5 14.06l-6.13-1.58a.5.5 0 0 1 0-.96L8.5 9.94A2 2 0 0 0 9.94 8.5l1.58-6.13a.5.5 0 0 1 .96 0L14.06 8.5A2 2 0 0 0 15.5 9.94l6.13 1.58a.5.5 0 0 1 0 .96L15.5 14.06a2 2 0 0 0-1.44 1.44l-1.58 6.13a.5.5 0 0 1-.96 0z" />
-    <path d="M20 3v4" />
-    <path d="M22 5h-4" />
   </svg>
 );
 

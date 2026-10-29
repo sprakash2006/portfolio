@@ -1,20 +1,22 @@
 @import "tailwindcss";
 
-/* Dark-family themes; drives the dark: variant */
-@custom-variant dark (&:where(.dark, .deep-dark, .midnight, .dark *, .deep-dark *, .midnight *));
+/* Two themes, applied as a class on <html>; these drive the dark: and light: variants */
+@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant light (&:where(.light, .light *));
 
-/* Five themes, applied as a class on <html>. Light is the fallback. */
+/* Light is the fallback */
 :root,
 .light {
   color-scheme: light;
-  --background: hsl(0 0% 100%);
-  --foreground: hsl(240 10% 3.9%);
+  /* Warm off-white paper with pure white cards, so cards read as raised surfaces */
+  --background: hsl(36 25% 97%);
+  --foreground: hsl(20 14% 8%);
   --card: hsl(0 0% 100%);
-  --primary: hsl(240 5.9% 10%);
-  --primary-foreground: hsl(0 0% 98%);
-  --muted: hsl(240 4.8% 95.9%);
-  --muted-foreground: hsl(240 3.8% 46.1%);
-  --border: hsl(240 5.9% 90%);
+  --primary: hsl(20 14% 8%);
+  --primary-foreground: hsl(36 25% 97%);
+  --muted: hsl(32 18% 92%);
+  --muted-foreground: hsl(20 6% 38%);
+  --border: hsl(30 12% 86%);
 }
 
 .dark {
@@ -30,44 +32,6 @@
 }
 
 
-.deep-dark {
-  color-scheme: dark;
-  --background: hsl(220 20% 4%);
-  --foreground: hsl(200 25% 88%);
-  --card: hsl(220 20% 9%);
-  --primary: hsl(170 90% 50%);
-  --primary-foreground: hsl(220 20% 4%);
-  --muted: hsl(220 15% 12%);
-  --muted-foreground: hsl(200 15% 60%);
-  --border: hsl(220 15% 12%);
-}
-
-.sunset {
-  color-scheme: light;
-  --background: hsl(30 30% 98%);
-  --foreground: hsl(20 30% 15%);
-  --card: hsl(30 25% 96%);
-  --primary: hsl(25 95% 50%);
-  --primary-foreground: hsl(0 0% 100%);
-  --muted: hsl(30 20% 90%);
-  --muted-foreground: hsl(20 20% 40%);
-  --border: hsl(30 20% 85%);
-}
-
-
-
-.midnight {
-  color-scheme: dark;
-  --background: hsl(230 25% 8%);
-  --foreground: hsl(220 25% 90%);
-  --card: hsl(230 25% 12%);
-  --primary: hsl(260 85% 65%);
-  --primary-foreground: hsl(0 0% 100%);
-  --muted: hsl(230 20% 15%);
-  --muted-foreground: hsl(220 20% 70%);
-  --border: hsl(230 20% 15%);
-}
-
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -82,17 +46,15 @@
   --font-jakarta: var(--font-jakarta);
   --font-pixel: var(--font-pixel);
   --font-mono: var(--font-mono);
-  --animate-pixel-pulse: pixel-pulse 1.2s ease-in-out infinite;
+  --animate-loader-word: loader-word 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) both;
   --animate-fade-up: fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-@keyframes pixel-pulse {
-  0%,
-  100% {
-    opacity: 0.12;
-  }
-  50% {
-    opacity: 0.95;
+/* Page loader: each word rises into place */
+@keyframes loader-word {
+  from {
+    opacity: 0;
+    transform: translateY(40%);
   }
 }
 
@@ -107,8 +69,8 @@
   stroke-dasharray: 700;
   stroke-dashoffset: 700;
   animation:
-    sign-draw 4.5s cubic-bezier(0.45, 0, 0.25, 1) 1.2s forwards,
-    sign-fill 1.2s ease 5.2s forwards;
+    sign-draw 4.5s cubic-bezier(0.45, 0, 0.25, 1) 1.9s forwards,
+    sign-fill 1.2s ease 5.9s forwards;
 }
 
 @keyframes sign-draw {
@@ -135,9 +97,44 @@
   }
 }
 
+/* Projects showcase: the new project slides in from the side of the tab you picked */
+@keyframes project-from-right {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+}
+
+@keyframes project-from-left {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+}
+
+.project-from-right {
+  animation: project-from-right 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.project-from-left {
+  animation: project-from-left 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-from-right,
+  .project-from-left {
+    animation: none;
+  }
+}
+
+/* Page scrollbar hidden; scrolling still works */
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 5rem;
+  scrollbar-width: none;
+}
+html::-webkit-scrollbar {
+  display: none;
 }
 
 body {
@@ -161,27 +158,86 @@ body {
     linear-gradient(180deg, rgb(255 255 255 / 0.04) 1px, transparent 0);
 }
 
-:is(.light, .sunset) .bg-grid-pattern {
+.light .bg-grid-pattern {
   background-image:
-    linear-gradient(90deg, rgb(15 23 42 / 0.12) 1px, transparent 0),
-    linear-gradient(180deg, rgb(15 23 42 / 0.12) 1px, transparent 0);
+    linear-gradient(90deg, rgb(41 28 20 / 0.07) 1px, transparent 0),
+    linear-gradient(180deg, rgb(41 28 20 / 0.07) 1px, transparent 0);
 }
 
-/* Activity heatmap shades: empty cells use the muted tone, active ones step up to the accent */
+/* Activity heatmap shades: empty cells are a faint wash of the text colour, active ones step up
+   to --heat (red for GitHub, amber for LeetCode, set on the heatmap) */
 .heat-0 {
-  background: color-mix(in oklab, var(--muted) 70%, transparent);
+  background: color-mix(in oklab, var(--foreground) 5%, transparent);
 }
 .heat-1 {
-  background: color-mix(in oklab, var(--primary) 30%, var(--muted));
+  background: color-mix(in oklab, var(--heat, #ef4444) 25%, transparent);
 }
 .heat-2 {
-  background: color-mix(in oklab, var(--primary) 55%, var(--muted));
+  background: color-mix(in oklab, var(--heat, #ef4444) 45%, transparent);
 }
 .heat-3 {
-  background: color-mix(in oklab, var(--primary) 78%, var(--muted));
+  background: color-mix(in oklab, var(--heat, #ef4444) 70%, transparent);
 }
 .heat-4 {
-  background: var(--primary);
+  background: var(--heat, #ef4444);
+}
+
+/* Hero: giant outlined words scrolling behind the photo; edges fade into the page */
+/* Edges fade out, and a round hole the size of the photo badge (--hero-hole radius, set on the
+   element) keeps the words from passing behind the ring text; the page background shows through. */
+.hero-rows {
+  mask-image:
+    radial-gradient(circle at center, transparent var(--hero-hole), #000 calc(var(--hero-hole) + 1px)),
+    linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  mask-composite: intersect;
+}
+.hero-outline {
+  color: transparent;
+  -webkit-text-stroke: 1.2px color-mix(in oklab, var(--foreground) 20%, transparent);
+}
+.hero-track {
+  animation: hero-marquee 40s linear infinite;
+}
+.hero-track-reverse {
+  animation-direction: reverse;
+  animation-duration: 48s;
+}
+.hero-ring {
+  animation: hero-spin 18s linear infinite;
+}
+
+@keyframes hero-marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes hero-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Education: big outlined score that fills red from the bottom up once .edu-num-filled is
+   added (when it scrolls into view). The red is a background clipped to the glyphs, so it
+   lines up exactly; the grey outline fades away as it fills. */
+.edu-num {
+  color: transparent;
+  -webkit-text-stroke: 1.5px color-mix(in oklab, var(--foreground) 35%, transparent);
+  background: linear-gradient(var(--color-red-500), var(--color-red-500)) no-repeat bottom / 100% 0%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  transition:
+    background-size 1.6s cubic-bezier(0.3, 0.9, 0.3, 1),
+    -webkit-text-stroke-color 0.6s ease 1s;
+}
+.edu-num-filled {
+  background-size: 100% 100%;
+  -webkit-text-stroke-color: transparent;
+}
+
+/* Activity card: the @handle link fades in when the tab changes (remounted via key) */
+.activity-handle {
+  animation: fade-up 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 /* Scrolls normally but shows no scrollbar */
@@ -207,5 +263,9 @@ body {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+  .hero-track,
+  .hero-ring {
+    animation: none;
   }
 }

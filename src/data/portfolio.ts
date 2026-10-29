@@ -27,23 +27,57 @@ export const profile = {
   },
 };
 
+// Hero: three rows of big scrolling words behind the photo, and the text circling the photo.
+// "solid" words are filled, "accent" words are red, the rest are outlines.
+export type HeroWord = { text: string; style?: "solid" | "accent" };
+
+export const heroRows: HeroWord[][] = [
+  [{ text: "Full-stack" }, { text: "Developer", style: "solid" }, { text: "Builder" }, { text: "Founder", style: "accent" }],
+  [{ text: "Web" }, { text: "Mobile", style: "solid" }, { text: "AI" }, { text: "On-chain" }, { text: "Design", style: "solid" }],
+  [{ text: "Next.js" }, { text: "Solidity", style: "accent" }, { text: "Flutter" }, { text: "Node", style: "solid" }, { text: "Postgres" }],
+];
+
+export const heroBadge = ["Open to work", "Based in Pune", "Full-stack", "CTO @ MediChain"];
+
+// Phrases in the About text that light up red (instead of white) as it's read on scroll
+export const aboutHighlights = [
+  "Full-Stack Developer",
+  "VIT Pune",
+  "CTO and co-founder",
+  "MediChain",
+  "AI features",
+  "The GP Edge",
+  "400+",
+  "movies",
+  "cricket",
+  "rap",
+];
+
+// {photo} marks where the hero photo lands in the text as you scroll down (see ScrollRead)
 export const about = [
-  "I'm a Full-Stack Developer and Computer Engineering student at VIT Pune who enjoys turning ideas into products people actually use. As CTO and co-founder of MediChain, I lead the technology behind a platform that puts patients in control of their medical records.",
+  "I'm {photo} Prakash Swami, a Full-Stack Developer and Computer Engineering student at VIT Pune who enjoys turning ideas into products people actually use. As CTO and co-founder of MediChain, I lead the technology behind a platform that puts patients in control of their medical records.",
   "I work across the stack with React, Next.js, Node.js and PostgreSQL, and I like building AI features with LLMs, LangChain and RAG. During my internship at Career Craftly, I built The GP Edge for a client in Australia, owning the system design and backend development with Next.js, TypeScript, PostgreSQL and the Gemini API. With 400+ LeetCode problems solved, my fundamentals in data structures and algorithms stay sharp.",
   "Away from the keyboard, I'm usually watching movies, playing cricket, listening to rap or trying out something new in tech.",
 ];
 
+// score/unit: the big number shown beside each entry; result: what it is, in small type next
+// to the period; focus: shown as tags
 export const education = [
   {
     period: "2024 — 2028",
     title: "B.Tech in Computer Engineering",
-    place: "VIT Pune · CGPA 8.84",
-    focus: "Data structures & algorithms, DBMS, operating systems, OOP, Agile",
+    place: "VIT Pune",
+    score: "8.84",
+    result: "CGPA",
+    focus: "DSA, DBMS, Operating systems, OOP, Agile",
   },
   {
     period: "2024",
     title: "HSC (Class XII)",
-    place: "Rajarshi Shahu Jr College, Latur · 82.34%",
+    place: "Rajarshi Shahu Jr College, Latur",
+    score: "82",
+    unit: "%",
+    result: "82.34%",
     focus: "Science",
   },
 ];
@@ -51,6 +85,7 @@ export const education = [
 export type Experience = {
   role: string;
   org: string;
+  short?: string; // the name shown big on the card when org is long
   period?: string;
   logo?: string; // square image in /public/experience/; falls back to the org's first letter
   metrics?: { value: string; label: string }[];
@@ -88,46 +123,94 @@ export const experience: Experience[] = [
   {
     role: "Website Secretary",
     org: "Indus Connect (ICON), VIT Pune",
+    short: "Indus Connect",
     logo: "/experience/icon.png",
     period: "Sept 2025",
     points: [
       "Led development of the official ICON club website, coordinating the web team and event updates.",
       "Managed and updated website content regularly to keep information accurate and engaging.",
       "Collaborated with the technical and design teams to keep the site fast, responsive and easy to navigate.",
+      "Documented the site's structure and update process so future web teams could maintain it easily.",
     ],
   },
 ];
 
-export const skills = [
+// logo: an SVG in /public/skills/ (Simple Icons, CC0), shown grey and turning `color` on hover;
+// no color = the brand is black/white, so it turns the theme's text colour. Skills without a
+// logo show their initials.
+export type Skill = { name: string; logo?: string; color?: string };
+
+export const skills: { title: string; blurb: string; items: Skill[] }[] = [
   {
     title: "Languages",
     blurb: "The foundations.",
-    items: ["JavaScript", "TypeScript", "C++", "Python", "SQL"],
+    items: [
+      { name: "JavaScript", logo: "javascript", color: "#F7DF1E" },
+      { name: "TypeScript", logo: "typescript", color: "#3178C6" },
+      { name: "C++", logo: "cplusplus", color: "#00599C" },
+      { name: "Python", logo: "python", color: "#3776AB" },
+      { name: "SQL", logo: "mysql", color: "#4479A1" },
+    ],
   },
   {
     title: "Frontend",
     blurb: "Responsive interfaces for web and mobile.",
-    items: ["React.js", "Next.js", "React Native", "HTML5", "CSS3", "Responsive UI"],
+    items: [
+      { name: "React.js", logo: "react", color: "#61DAFB" },
+      { name: "Next.js", logo: "nextdotjs" },
+      { name: "React Native", logo: "react", color: "#61DAFB" },
+      { name: "HTML5", logo: "html5", color: "#E34F26" },
+      { name: "CSS3", logo: "css3", color: "#1572B6" },
+      { name: "Responsive UI" },
+    ],
   },
   {
     title: "Backend & Databases",
     blurb: "APIs, auth and data.",
-    items: ["Node.js", "Express.js", "REST APIs", "PostgreSQL", "Supabase", "Firebase", "Redis"],
+    items: [
+      { name: "Node.js", logo: "nodedotjs", color: "#5FA04E" },
+      { name: "Express.js", logo: "express" },
+      { name: "REST APIs" },
+      { name: "PostgreSQL", logo: "postgresql", color: "#4169E1" },
+      { name: "Supabase", logo: "supabase", color: "#3FCF8E" },
+      { name: "Firebase", logo: "firebase", color: "#FFCA28" },
+      { name: "Redis", logo: "redis", color: "#FF4438" },
+    ],
   },
   {
     title: "AI / LLM",
     blurb: "Shipping LLM-powered features.",
-    items: ["LangChain", "LangGraph", "OpenAI API", "Gemini API", "RAG", "ChromaDB", "Prompt Engineering"],
+    items: [
+      { name: "LangChain", logo: "langchain" },
+      { name: "LangGraph", logo: "langchain" },
+      { name: "OpenAI API", logo: "openai" },
+      { name: "Gemini API", logo: "googlegemini", color: "#8E75B2" },
+      { name: "RAG" },
+      { name: "ChromaDB" },
+      { name: "Prompt Engineering" },
+    ],
   },
   {
     title: "Data Science",
     blurb: "Analysis and modelling.",
-    items: ["NumPy", "Pandas", "Matplotlib", "Supervised Learning"],
+    items: [
+      { name: "NumPy", logo: "numpy", color: "#4DABCF" },
+      { name: "Pandas", logo: "pandas", color: "#E70488" },
+      { name: "Matplotlib" },
+      { name: "Supervised Learning", logo: "scikitlearn", color: "#F7931E" },
+    ],
   },
   {
     title: "Developer Tools",
     blurb: "The everyday kit.",
-    items: ["Git", "GitHub", "Postman", "Clerk", "VS Code", "Agile / Scrum"],
+    items: [
+      { name: "Git", logo: "git", color: "#F05032" },
+      { name: "GitHub", logo: "github" },
+      { name: "Postman", logo: "postman", color: "#FF6C37" },
+      { name: "Clerk", logo: "clerk", color: "#6C47FF" },
+      { name: "VS Code" },
+      { name: "Agile / Scrum", logo: "jira", color: "#0052CC" },
+    ],
   },
 ];
 
@@ -145,6 +228,8 @@ export type Project = {
   tags: string[];
   code?: string;
   live?: string;
+  medium?: string; // Medium article about the project
+  video?: string; // short muted demo clip for the home page card, e.g. /projects/<slug>/demo.mp4; falls back to the screenshots
   // Detail page
   year: string;
   category: string;
@@ -345,6 +430,7 @@ export type Certification = {
   slug: string; // URL of the detail page: /certifications/<slug>
   title: string;
   issuer: string;
+  topic: string; // groups the home-page list; one of certificationTopics
   logo?: string; // square issuer logo in /public/certifications/logos/; falls back to the issuer's first letter
   url?: string; // verification link
   // Detail page
@@ -354,12 +440,17 @@ export type Certification = {
   image?: { src: string; alt: string; width: number; height: number }; // the certificate itself (pixel size sets the frame), e.g. /public/certifications/<slug>.png; missing shows a placeholder
 };
 
+// Topics the home page groups certifications under, in display order (the first opens by default);
+// a topic with no certificates is skipped
+export const certificationTopics = ["AI & LLMs", "Web Development", "Data Science", "Blockchain", "Soft Skills"];
+
 // Detail-page fields (date, learned, skills) are placeholders marked TODO; add image once you have it.
 export const certifications: Certification[] = [
   {
     slug: "full-stack-web-development-bootcamp",
     title: "Complete Full Stack Web Development Bootcamp",
     issuer: "The App Brewery · Udemy",
+    topic: "Web Development",
     logo: "/certifications/logos/udemy.png",
     url: "https://www.udemy.com/certificate/UC-444c13cb-7c3e-4f48-bb1d-1813939a3765/",
     date: "July 18, 2025",
@@ -383,6 +474,7 @@ export const certifications: Certification[] = [
     slug: "ai-agents-langchain-llm-apps",
     title: "AI Agents: Automation & Business with LangChain & LLM Apps",
     issuer: "Arnold Oberleiter · Udemy",
+    topic: "AI & LLMs",
     logo: "/certifications/logos/udemy.png",
     url: "https://www.udemy.com/certificate/UC-9f13ca10-a431-4f09-88a7-2877aeebb3d4/",
     date: "February 19, 2026",
@@ -406,6 +498,7 @@ export const certifications: Certification[] = [
     slug: "job-ready-data-science",
     title: "The Ultimate Job Ready Data Science Course",
     issuer: "CodeWithHarry",
+    topic: "Data Science",
     logo: "/certifications/logos/codewithharry-logo.png",
     date: "October 21, 2025",
     image: {
@@ -427,6 +520,7 @@ export const certifications: Certification[] = [
     slug: "blockchain-revolution-financial-services",
     title: "Blockchain Revolution in Financial Services Specialization",
     issuer: "INSEAD · Coursera",
+    topic: "Blockchain",
     logo: "/certifications/logos/insead.png",
     url: "https://coursera.org/verify/specialization/UBWWZUDUYK3F",
     date: "October 21, 2026",
@@ -448,6 +542,7 @@ export const certifications: Certification[] = [
     slug: "prompt-engineering-bootcamp",
     title: "Prompt Engineering Bootcamp",
     issuer: "LetsUpgrade",
+    topic: "AI & LLMs",
     logo: "/certifications/logos/letsupgrade.png",
     url: "https://verify.letsupgrade.in/certificate/LUEPEAPR125933",
     date: "August 7, 2025",
@@ -469,6 +564,7 @@ export const certifications: Certification[] = [
     slug: "fly-scholar",
     title: "FLY-Scholar (Finding the Leader in You)",
     issuer: "Competitiveness Mindset Institute, USA",
+    topic: "Soft Skills",
     logo: "/certifications/logos/cmi.png",
     date: "January 2026",
     image: {

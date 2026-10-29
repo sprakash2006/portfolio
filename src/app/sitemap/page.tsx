@@ -20,7 +20,6 @@ const groups: { title: string; links: { href: string; label: string }[] }[] = [
       { href: "/#skills", label: "Skills & Toolbox" },
       { href: "/#projects", label: "Featured Projects" },
       { href: "/#activity", label: "Activity" },
-      { href: "/#picture", label: "Wikipedia Picture of the Day" },
       { href: "/#contact", label: "Contact" },
       { href: "/cv", label: "CV" },
     ],
@@ -28,7 +27,7 @@ const groups: { title: string; links: { href: string; label: string }[] }[] = [
   { title: "Projects", links: projects.map((p) => ({ href: `/projects/${p.slug}`, label: p.title })) },
   {
     title: "Certifications",
-    links: certifications.map((c) => ({ href: `/certifications/${c.slug}`, label: c.title })),
+    links: certifications.map((c) => ({ href: `/certificates/${c.slug}`, label: c.title })),
   },
 ];
 

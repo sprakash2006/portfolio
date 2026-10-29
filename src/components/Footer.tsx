@@ -1,54 +1,85 @@
 import { profile } from "@/data/portfolio";
 import ContactForm from "./ContactForm";
-import { LeetcodeIcon, GithubIcon, LinkedinIcon, MailIcon, PhoneIcon } from "./icons";
+import { GithubIcon, LinkedinIcon, MailIcon, PhoneIcon } from "./icons";
+import { SectionHeading } from "./Section";
 
-const social = "rounded-md border border-border/40 p-2 transition-colors hover:border-primary/30 hover:text-foreground";
+const handle = (url: string) => url.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
 
-// Site footer doubling as the contact section (the navbar's Contact link targets #contact).
+// Every way to reach me, one card each (no hover hint; the icon turning red is enough)
+const methods = [
+  { label: "Email", value: profile.email, href: `mailto:${profile.email}`, icon: MailIcon, external: false },
+  {
+    label: "LinkedIn",
+    value: handle(profile.socials.linkedin).replace("linkedin.com/", ""),
+    href: profile.socials.linkedin,
+    icon: LinkedinIcon,
+    external: true,
+  },
+  { label: "GitHub", value: `@${profile.handles.github}`, href: profile.socials.github, icon: GithubIcon, external: true },
+  { label: "Call", value: profile.phone, href: `tel:${profile.phone.replace(/\s/g, "")}`, icon: PhoneIcon, external: false },
+];
+
+const nav = [
+  { href: "#about", label: "About" },
+  { href: "#education", label: "Education" },
+  { href: "#experience", label: "Experience" },
+  { href: "#skills", label: "Skills" },
+  { href: "#projects", label: "Projects" },
+  { href: "#activity", label: "Activity" },
+];
+
+// Site footer doubling as the contact section (the navbar's Contact link targets #contact):
+// a card per contact method, the message form in one wide card, then a slim bottom bar.
 export default function Footer() {
   return (
-    <footer id="contact" className="mx-auto w-full max-w-[50.625rem] px-4 sm:px-6">
-      <div className="border-t border-border/40 pb-6 pt-12 sm:pb-8 sm:pt-16">
-        <div className="mb-6 flex items-center gap-3 sm:mb-8">
-          <h2 className="shrink-0 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            <span className="text-red-500">{"// "}</span>
-            Contact
-          </h2>
-          <div className="h-px flex-1 bg-border/40" />
+    <footer id="contact" className="mx-auto w-full max-w-[68rem] px-4 sm:px-6">
+      <div className="border-t border-border/40 pt-12 sm:pt-16">
+        <SectionHeading label="Contact" />
+
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+          {methods.map(({ label, value, href, icon: Icon, external }) => (
+            <a
+              key={label}
+              href={href}
+              {...(external ? { target: "_blank", rel: "noreferrer" } : {})}
+              // Compact: icon on the left, name and value beside it
+              className="group relative flex min-h-[85px] items-center gap-3.5 overflow-hidden rounded-[20px] border border-border bg-card px-4 py-3 transition-[border-color,translate] duration-300 hover:-translate-y-1 hover:border-red-500/50"
+            >
+              <span className="flex size-[42px] shrink-0 items-center justify-center rounded-xl border border-border transition-colors duration-300 group-hover:border-red-500 group-hover:bg-red-500 group-hover:text-[#140404]">
+                <Icon className="size-[18px]" />
+              </span>
+              <span className="min-w-0">
+                <span className="block font-display text-lg font-bold leading-tight">{label}</span>
+                <span className="mt-0.5 block break-all font-mono text-xs text-muted-foreground">{value}</span>
+              </span>
+            </a>
+          ))}
         </div>
 
-        <div className="grid gap-8 sm:grid-cols-[1fr_1.2fr]">
-          <div className="space-y-3">
-            <h3 className="font-display text-3xl font-bold tracking-tight">Let&apos;s build together.</h3>
-            <p className="text-sm leading-relaxed text-muted-foreground">
-              I&apos;m looking for web development and software developer internships, and I&apos;m open to freelance gigs
-              and interesting collaborations. Have a project in mind? Drop me a message.
+        <div className="mt-3.5 grid gap-[26px] rounded-[20px] border border-border bg-card p-[22px] md:grid-cols-[240px_1fr]">
+          <div>
+            <h3 className="font-display text-[22px] font-bold leading-[1.15]">Or send a message here.</h3>
+            <p className="mt-2.5 text-[13px] leading-relaxed text-muted-foreground">
+              It lands straight in my inbox. I usually reply within a day.
             </p>
-            <a
-              href={`mailto:${profile.email}`}
-              className="inline-flex items-center gap-1.5 break-all font-mono text-xs text-foreground hover:text-primary"
-            >
-              <MailIcon className="h-3.5 w-3.5 shrink-0" /> {profile.email}
-            </a>
-            <a
-              href={`tel:${profile.phone.replace(/\s/g, "")}`}
-              className="flex items-center gap-1.5 font-mono text-xs text-foreground hover:text-primary"
-            >
-              <PhoneIcon className="h-3.5 w-3.5 shrink-0" /> {profile.phone}
-            </a>
-            <div className="flex gap-2 text-muted-foreground">
-              <a href={profile.socials.github} target="_blank" rel="noreferrer" aria-label="GitHub" className={social}>
-                <GithubIcon className="h-4 w-4" />
-              </a>
-              <a href={profile.socials.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn" className={social}>
-                <LinkedinIcon className="h-4 w-4" />
-              </a>
-              <a href={profile.socials.leetcode} target="_blank" rel="noreferrer" aria-label="LeetCode" className={social}>
-                <LeetcodeIcon className="h-4 w-4" />
-              </a>
-            </div>
           </div>
           <ContactForm />
+        </div>
+
+        <div className="mt-10 flex flex-wrap items-center justify-between gap-3.5 border-t border-border py-[22px] font-mono text-xs text-muted-foreground sm:pb-[26px]">
+          <span>
+            © {new Date().getFullYear()} {profile.name}
+          </span>
+          <nav aria-label="Footer" className="flex flex-wrap gap-[18px]">
+            {nav.map((n) => (
+              <a key={n.href} href={n.href} className="transition-colors hover:text-foreground">
+                {n.label}
+              </a>
+            ))}
+          </nav>
+          <a href="#top" className="transition-colors hover:text-red-500">
+            Back to top ↑
+          </a>
         </div>
       </div>
     </footer>

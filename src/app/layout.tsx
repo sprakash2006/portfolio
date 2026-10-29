@@ -4,6 +4,7 @@ import { DEFAULT_THEME, themeScript } from "@/lib/themes";
 import Background from "@/components/Background";
 import Navbar from "@/components/Navbar";
 import ScrollToTop from "@/components/ScrollToTop";
+import SmoothScroll from "@/components/SmoothScroll";
 import "./globals.css";
 
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
@@ -40,6 +41,7 @@ export default function RootLayout({
         <Navbar />
         {children}
         <ScrollToTop />
+        <SmoothScroll />
       </body>
     </html>
   );

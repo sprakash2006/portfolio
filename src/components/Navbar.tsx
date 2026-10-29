@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { profile } from "@/data/portfolio";
 import { CloseIcon, FileIcon, GithubIcon, LinkedinIcon, MenuIcon } from "./icons";
 import MusicToggle from "./MusicToggle";
@@ -40,8 +40,9 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState<string | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
-
-  // Track scroll position and the current section (re-run on navigation between pages)
+  const barRef = useRef<HTMLDivElement>(null);
+  // Track scroll position, the current section and the red scroll-progress bar
+  // (re-run on navigation between pages)
   useEffect(() => {
     let frame = 0;
     const update = () => {
@@ -49,6 +50,9 @@ export default function Navbar() {
       frame = requestAnimationFrame(() => {
         setScrolled(window.scrollY > 8);
         setActive(currentSection());
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = max > 0 ? Math.min(1, window.scrollY / max) : 0;
+        if (barRef.current) barRef.current.style.transform = `scaleX(${progress})`;
       });
     };
     update();
@@ -77,9 +81,17 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 w-full px-3 pt-3 sm:px-4">
+      {/* Scroll progress (stands in for the hidden page scrollbar): a thin red line across the
+          very top of the screen that grows from left to right as the page scrolls down */}
+      <div
+        ref={barRef}
+        aria-hidden
+        style={{ transform: "scaleX(0)" }}
+        className="pointer-events-none fixed inset-x-0 top-0 z-[60] h-0.5 origin-left bg-red-500 transition-transform duration-150 ease-out"
+      />
       <div className="relative mx-auto max-w-[48.875rem]">
         <nav
-          className={`flex h-12 items-center justify-between gap-4 rounded-2xl border border-border/60 bg-background/70 pl-4 pr-2 backdrop-blur-md transition-shadow duration-300 sm:pl-5 ${
+          className={`relative flex h-12 items-center justify-between gap-4 rounded-2xl border border-border/60 bg-background/70 pl-4 pr-2 backdrop-blur-md transition-shadow duration-300 sm:pl-5 ${
             scrolled || menuOpen ? "shadow-lg shadow-black/20" : "shadow-sm"
           }`}
         >
@@ -95,16 +107,11 @@ export default function Navbar() {
                   key={l.id}
                   href={`/#${l.id}`}
                   aria-current={current ? "location" : undefined}
-                  className={`group relative py-1 transition-colors duration-200 hover:text-foreground ${
-                    current ? "text-foreground" : "text-muted-foreground/80"
+                  className={`py-1 transition-colors duration-200 ${
+                    current ? "text-red-500" : "text-muted-foreground/80 hover:text-foreground"
                   }`}
                 >
                   {l.label}
-                  <span
-                    className={`absolute inset-x-0 -bottom-0.5 h-px origin-left transition-transform duration-300 ${
-                      current ? "scale-x-100 bg-primary" : "scale-x-0 bg-foreground group-hover:scale-x-100"
-                    }`}
-                  />
                 </a>
               );
             })}
