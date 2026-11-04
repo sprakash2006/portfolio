@@ -3,7 +3,7 @@
 // glow tints the top of the page background.
 
 export const THEMES = [
-  { value: "dark", label: "Dark", glow: "rgb(148 163 184 / 0.10)" },
+  { value: "dark", label: "Dark", glow: "transparent" },
   // A faint red glow so the light page matches the red accent
   { value: "light", label: "Light", glow: "rgb(239 68 68 / 0.07)" },
 ] as const;

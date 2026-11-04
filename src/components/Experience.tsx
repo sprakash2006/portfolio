@@ -4,11 +4,20 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { experience } from "@/data/portfolio";
 
-// Card colours, in order: red, the theme's card colour, then off-white sand
+// Card colours, in order: red, the theme's card colour, then off-white sand. In light mode the
+// second and third turn near-black so they stand out from the pale page instead of washing out.
 const themes = [
   { card: "bg-red-500 text-[#140404]", muted: "text-[#3b0a0a]", chip: "border-[#3b0a0a]/40" },
-  { card: "bg-card text-foreground", muted: "text-muted-foreground", chip: "border-border" },
-  { card: "bg-stone-300 text-stone-900", muted: "text-stone-600", chip: "border-stone-500/50" },
+  {
+    card: "bg-card text-foreground light:bg-neutral-950 light:text-neutral-50",
+    muted: "text-muted-foreground light:text-neutral-400",
+    chip: "border-border light:border-white/15",
+  },
+  {
+    card: "bg-stone-300 text-stone-900 light:bg-stone-900 light:text-stone-100",
+    muted: "text-stone-600 light:text-stone-400",
+    chip: "border-stone-500/50 light:border-stone-100/20",
+  },
 ];
 
 // One full-width card per role. On md+ screens each card sticks under the navbar and the next

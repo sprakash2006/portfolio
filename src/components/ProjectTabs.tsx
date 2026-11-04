@@ -223,6 +223,24 @@ export default function ProjectTabs() {
     return () => io.disconnect();
   }, []);
 
+  // Phones: swipe the card sideways to go to the next / previous project. Vertical swipes are
+  // left alone so the page still scrolls normally.
+  const swipe = useRef<{ x: number; y: number } | null>(null);
+  const onTouchStart = (e: React.TouchEvent) => {
+    const t = e.touches[0];
+    swipe.current = { x: t.clientX, y: t.clientY };
+  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    const start = swipe.current;
+    swipe.current = null;
+    if (!start) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - start.x;
+    const dy = t.clientY - start.y;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5)
+      pick(active + (dx < 0 ? 1 : -1));
+  };
+
   const onTabKey = (e: React.KeyboardEvent) => {
     if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
     e.preventDefault();
@@ -289,6 +307,8 @@ export default function ProjectTabs() {
 
         <div
           ref={stage}
+          onTouchStart={onTouchStart}
+          onTouchEnd={onTouchEnd}
           className="overflow-hidden rounded-[24px] border border-border/60 bg-card p-4"
         >
           <div
@@ -296,7 +316,7 @@ export default function ProjectTabs() {
             id="project-panel"
             role="tabpanel"
             aria-labelledby={`project-tab-${p.slug}`}
-            className={`grid gap-6 md:min-h-[26rem] md:grid-cols-[1.2fr_1fr] md:gap-9 ${
+            className={`grid grid-cols-1 gap-6 md:min-h-[26rem] md:grid-cols-[1.2fr_1fr] md:gap-9 ${
               dir === "right" ? "project-from-right" : "project-from-left"
             }`}
           >
@@ -388,6 +408,7 @@ export default function ProjectTabs() {
             />
           </span>
           <span className="hidden shrink-0 md:inline">Scroll to browse ↓</span>
+          <span className="shrink-0 md:hidden">← Swipe →</span>
         </div>
       </div>
     </div>

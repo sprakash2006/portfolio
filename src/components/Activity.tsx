@@ -25,7 +25,7 @@ function Summary({ github, leetcode }: { github: GithubActivity | null; leetcode
   );
   const lc = leetcode && (
     <>
-      solved <b className="font-bold text-amber-500">{plural(leetcode.solved.all, "problem")}</b> on LeetCode
+      solved <b className="font-bold text-green-500">{plural(leetcode.solved.all, "problem")}</b> on LeetCode
     </>
   );
   return (
@@ -73,7 +73,7 @@ export default async function Activity() {
               <Heatmap
                 days={leetcode.days}
                 unit="submission"
-                color="#ef4444"
+                color="#22c55e"
                 label={`${leetcode.submissions} LeetCode submissions in the past year`}
               />
             ) : (
@@ -90,7 +90,7 @@ export default async function Activity() {
               <Heatmap
                 days={github.days}
                 unit="contribution"
-                color="#22c55e"
+                color="#ef4444"
                 label={`${github.total} GitHub contributions in the past year`}
               />
             ) : (

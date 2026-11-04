@@ -92,7 +92,9 @@ export default function ActivityTabs({ tabs, className }: { tabs: ActivityTab[];
       </div>
 
       <div
-        className="mt-3.5 grid overflow-hidden transition-[height] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
+        // grid-cols-1 is minmax(0,1fr): without it the column grows to the full heatmap width
+        // and the card clips it, so the heatmap's own sideways scroll never kicks in on phones
+        className="mt-3.5 grid grid-cols-1 overflow-hidden transition-[height] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
         style={height === null ? undefined : { height }}
       >
         {tabs.map((t, i) => {
@@ -109,7 +111,7 @@ export default function ActivityTabs({ tabs, className }: { tabs: ActivityTab[];
               aria-labelledby={`tab-${t.id}`}
               aria-hidden={!selected}
               inert={!selected}
-              className={`col-start-1 row-start-1 space-y-4 self-start transition-[transform,opacity] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
+              className={`col-start-1 row-start-1 min-w-0 space-y-4 self-start transition-[transform,opacity] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
                 selected ? "opacity-100" : "pointer-events-none opacity-0"
               }`}
               style={{ transform: `translateX(${offset})` }}

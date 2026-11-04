@@ -21,14 +21,14 @@
 
 .dark {
   color-scheme: dark;
-  --background: hsl(240 10% 3.9%);
+  --background: hsl(0 0% 1.5%);
   --foreground: hsl(0 0% 98%);
-  --card: hsl(240 10% 5.5%);
+  --card: hsl(0 0% 4.5%);
   --primary: hsl(0 0% 98%);
-  --primary-foreground: hsl(240 5.9% 10%);
-  --muted: hsl(240 3.7% 15.9%);
-  --muted-foreground: hsl(240 5% 64.9%);
-  --border: hsl(240 3.7% 15.9%);
+  --primary-foreground: hsl(0 0% 9%);
+  --muted: hsl(0 0% 14%);
+  --muted-foreground: hsl(0 0% 64%);
+  --border: hsl(0 0% 14%);
 }
 
 
@@ -165,7 +165,7 @@ body {
 }
 
 /* Activity heatmap shades: empty cells are a faint wash of the text colour, active ones step up
-   to --heat (red for GitHub, amber for LeetCode, set on the heatmap) */
+   to --heat (red for GitHub, green for LeetCode, set on the heatmap) */
 .heat-0 {
   background: color-mix(in oklab, var(--foreground) 5%, transparent);
 }

@@ -36,7 +36,8 @@ export default function Footer() {
       <div className="border-t border-border/40 pt-12 sm:pt-16">
         <SectionHeading label="Contact" />
 
-        <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+        {/* On wide screens Email gets the extra width (its address is the longest) and Call the least */}
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,0.85fr)]">
           {methods.map(({ label, value, href, icon: Icon, external }) => (
             <a
               key={label}
