@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Footer concepts</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@500;700;900&display=swap" rel="stylesheet" />
+<style>
+  :root { --bg:#0a0a0a; --fg:#ededed; --mu:#8a8a8a; --card:#111113; --bd:rgba(255,255,255,.09); --red:#ef4444; --green:#22c55e; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--fg); font-family:Inter,sans-serif; overflow-x:clip; }
+  body::before { content:''; position:fixed; inset:0; z-index:-1; background-size:32px 32px; background-image:linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 0),linear-gradient(180deg,rgba(255,255,255,.03) 1px,transparent 0); }
+  section { min-height:100vh; padding:90px 20px 0; border-bottom:4px solid #1a1a1c; position:relative; display:flex; flex-direction:column; justify-content:flex-end; align-items:center; }
+  .wrap { width:100%; max-width:1040px; }
+  .tag { position:absolute; top:24px; left:24px; right:24px; font:500 12px 'JetBrains Mono'; color:var(--mu); }
+  .tag b { color:var(--red); font-weight:500; }
+  .label { font:600 12px 'JetBrains Mono'; letter-spacing:.1em; text-transform:uppercase; color:var(--mu); margin-bottom:26px; display:flex; align-items:center; gap:12px; }
+  .label span { color:var(--red); } .label::after { content:''; flex:1; height:1px; background:var(--bd); }
+  a { color:inherit; text-decoration:none; }
+  .mono { font-family:'JetBrains Mono',monospace; } .mu { color:var(--mu); }
+  .field { width:100%; border:1px solid var(--bd); background:rgba(17,17,19,.6); border-radius:12px; padding:11px 13px; color:var(--fg); font:14px Inter; outline:none; transition:border-color .2s; resize:none; }
+  .field::placeholder { color:#5e5e5e; } .field:focus { border-color:rgba(239,68,68,.55); }
+  .send { all:unset; cursor:pointer; display:inline-flex; align-items:center; gap:8px; background:var(--red); color:#140404; font:600 13px 'JetBrains Mono'; padding:11px 18px; border-radius:999px; transition:transform .25s, box-shadow .25s; box-shadow:0 10px 30px rgba(239,68,68,.25); }
+  .send:hover { transform:translateY(-2px); box-shadow:0 16px 40px rgba(239,68,68,.4); } .send .ar { transition:transform .25s; } .send:hover .ar { transform:translateX(3px); }
+  .soc { display:flex; gap:8px; }
+  .soc a { width:40px; height:40px; border-radius:50%; border:1px solid var(--bd); display:flex; align-items:center; justify-content:center; color:var(--mu); transition:.25s; }
+  .soc a:hover { border-color:rgba(239,68,68,.6); color:var(--fg); background:rgba(239,68,68,.06); transform:translateY(-2px); }
+  .soc svg { width:16px; height:16px; }
+  .avail { display:inline-flex; align-items:center; gap:8px; font:500 12px 'JetBrains Mono'; color:var(--green); border:1px solid rgba(34,197,94,.3); background:rgba(34,197,94,.07); padding:5px 11px; border-radius:999px; }
+  .avail i { width:7px; height:7px; border-radius:50%; background:var(--green); box-shadow:0 0 0 0 rgba(34,197,94,.6); animation:ping 2s infinite; }
+  @keyframes ping { 70% { box-shadow:0 0 0 8px rgba(34,197,94,0); } 100% { box-shadow:0 0 0 0 rgba(34,197,94,0); } }
+  .bar { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; padding:22px 0 26px; border-top:1px solid var(--bd); font:12px 'JetBrains Mono'; color:var(--mu); }
+  .bar nav { display:flex; gap:18px; flex-wrap:wrap; } .bar nav a:hover { color:var(--fg); }
+  .top { all:unset; cursor:pointer; display:inline-flex; gap:6px; align-items:center; transition:color .2s; } .top:hover { color:var(--red); }
+  .copy { all:unset; cursor:pointer; font:11px 'JetBrains Mono'; color:var(--mu); border:1px solid var(--bd); border-radius:8px; padding:4px 9px; transition:.2s; } .copy:hover { color:var(--fg); border-color:rgba(239,68,68,.5); }
+  #index { position:fixed; right:18px; top:50%; transform:translateY(-50%); z-index:50; display:flex; flex-direction:column; gap:10px; }
+  #index a { font:500 11px 'JetBrains Mono'; color:var(--mu); text-align:right; } #index a:hover { color:var(--fg); }
+
+  /* 01 big CTA */
+  .cta h2 { font:900 clamp(48px,8.5vw,120px)/.9 Outfit; letter-spacing:-.045em; margin-bottom:34px; } .cta h2 span { color:var(--red); }
+  .cta-grid { display:grid; grid-template-columns:1fr 1.1fr; gap:50px; margin-bottom:56px; }
+  .mail-big { display:inline-flex; align-items:center; gap:12px; font:700 clamp(20px,2.4vw,28px) Outfit; position:relative; padding-bottom:6px; }
+  .mail-big::after { content:''; position:absolute; left:0; right:0; bottom:0; height:2px; background:var(--red); transform:scaleX(.25); transform-origin:left; transition:transform .5s cubic-bezier(.2,.8,.2,1); }
+  .mail-big:hover::after { transform:scaleX(1); }
+  .form { display:grid; gap:10px; } .form .two { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+
+  /* 02 giant name */
+  .gn-top { display:grid; grid-template-columns:1.2fr 1fr 1fr; gap:40px; margin-bottom:40px; }
+  .gn-top h3 { font:700 26px/1.15 Outfit; letter-spacing:-.02em; margin-bottom:14px; }
+  .gn-top h4 { font:600 11px 'JetBrains Mono'; color:var(--mu); letter-spacing:.1em; text-transform:uppercase; margin-bottom:14px; }
+  .gn-top ul { list-style:none; display:grid; gap:9px; font:14px Inter; } .gn-top ul a { color:#bdbdbd; transition:color .2s; } .gn-top ul a:hover { color:var(--red); }
+  .giant { width:100vw; margin-left:calc(50% - 50vw); overflow:hidden; line-height:.78; text-align:center; font:900 21vw/.78 Outfit; letter-spacing:-.06em; white-space:nowrap; color:transparent; -webkit-text-stroke:1px rgba(255,255,255,.14); background:linear-gradient(180deg,rgba(239,68,68,.0),rgba(239,68,68,0)); position:relative; user-select:none; }
+  .giant span { background:linear-gradient(90deg,var(--red),#f87171); -webkit-background-clip:text; background-clip:text; background-size:0% 100%; background-repeat:no-repeat; transition:background-size 1.4s cubic-bezier(.2,.8,.2,1); }
+  .giant.in span { background-size:100% 100%; }
+  .gn-bar { display:flex; justify-content:space-between; font:12px 'JetBrains Mono'; color:var(--mu); padding:18px 0 22px; }
+
+  /* 03 terminal */
+  .term { border:1px solid var(--bd); border-radius:14px; overflow:hidden; background:#0c0c0e; margin-bottom:50px; box-shadow:0 40px 90px rgba(0,0,0,.55); }
+  .term-top { display:flex; align-items:center; gap:8px; padding:10px 14px; border-bottom:1px solid var(--bd); font:12px 'JetBrains Mono'; color:var(--mu); }
+  .term-top i { width:11px; height:11px; border-radius:50%; background:#2a2a2a; } .term-top i:first-child { background:var(--red); } .term-top span { margin:0 auto; }
+  .term-body { padding:22px 24px; font:14px/1.9 'JetBrains Mono'; color:#cfcfcf; }
+  .term-body .p { color:var(--red); } .term-body .k { color:var(--mu); } .term-body .g { color:var(--green); }
+  .term-body .ln { display:flex; gap:10px; align-items:center; }
+  .term-body input, .term-body textarea { flex:1; background:transparent; border:0; border-bottom:1px dashed rgba(255,255,255,.14); color:var(--fg); font:14px 'JetBrains Mono'; outline:none; padding:2px 0; caret-color:var(--red); resize:none; }
+  .term-body input:focus, .term-body textarea:focus { border-bottom-color:var(--red); }
+  .term-body .run { all:unset; cursor:pointer; color:#140404; background:var(--red); padding:3px 12px; border-radius:6px; font:600 13px 'JetBrains Mono'; margin-top:10px; }
+  .term-links a { color:var(--fg); border-bottom:1px solid rgba(239,68,68,.5); } .term-links a:hover { color:var(--red); }
+
+  /* 04 red card + form + columns */
+  .rc { display:grid; grid-template-columns:1fr 1.1fr; gap:16px; margin-bottom:40px; }
+  .redcard { background:var(--red); color:#140404; border-radius:26px; padding:32px; display:flex; flex-direction:column; position:relative; overflow:hidden; }
+  .redcard::after { content:'✉'; position:absolute; right:-10px; bottom:-40px; font-size:200px; color:rgba(20,4,4,.08); }
+  .redcard h3 { font:900 clamp(34px,4vw,52px)/.95 Outfit; letter-spacing:-.035em; margin:18px 0 14px; }
+  .redcard p { color:#3b0a0a; font-size:14.5px; line-height:1.6; max-width:340px; }
+  .redcard .rl { margin-top:auto; padding-top:24px; display:grid; gap:8px; font:600 13px 'JetBrains Mono'; }
+  .redcard .rl a { display:flex; justify-content:space-between; padding:10px 0; border-top:1px solid rgba(20,4,4,.2); } .redcard .rl a:hover span:last-child { transform:translate(3px,-3px); } .redcard .rl a span:last-child { transition:transform .25s; }
+  .redcard .pill { align-self:flex-start; background:#140404; color:var(--red); font:600 11px 'JetBrains Mono'; padding:5px 11px; border-radius:999px; display:inline-flex; gap:7px; align-items:center; } .redcard .pill i { width:7px; height:7px; border-radius:50%; background:var(--green); }
+  .formcard { border:1px solid var(--bd); border-radius:26px; background:var(--card); padding:28px; display:grid; gap:10px; align-content:start; }
+  .formcard h4 { font:700 20px Outfit; margin-bottom:6px; }
+  .cols { display:grid; grid-template-columns:1.4fr repeat(3,1fr); gap:30px; padding:34px 0; border-top:1px solid var(--bd); }
+  .cols h5 { font:600 11px 'JetBrains Mono'; color:var(--mu); letter-spacing:.1em; text-transform:uppercase; margin-bottom:12px; }
+  .cols ul { list-style:none; display:grid; gap:8px; font-size:13.5px; } .cols ul a { color:#bdbdbd; } .cols ul a:hover { color:var(--red); }
+  .cols .brand { font:700 18px Outfit; display:flex; align-items:center; gap:10px; } .cols .brand b { width:30px; height:30px; border-radius:8px; background:var(--red); color:#140404; display:flex; align-items:center; justify-content:center; font:900 14px Outfit; }
+
+  /* 05 chat */
+  .chat { max-width:640px; margin:0 auto 50px; display:flex; flex-direction:column; gap:10px; }
+  .msg { max-width:80%; padding:12px 16px; border-radius:18px; font-size:15px; line-height:1.5; opacity:0; transform:translateY(10px); transition:opacity .4s, transform .4s cubic-bezier(.2,.8,.2,1); }
+  .msg.in { opacity:1; transform:none; }
+  .msg.me { align-self:flex-start; background:var(--card); border:1px solid var(--bd); border-bottom-left-radius:6px; }
+  .msg.you { align-self:flex-end; background:var(--red); color:#140404; border-bottom-right-radius:6px; }
+  .who { display:flex; align-items:center; gap:10px; font:12px 'JetBrains Mono'; color:var(--mu); margin-bottom:4px; }
+  .who .av { width:30px; height:30px; border-radius:50%; background:linear-gradient(135deg,#ef4444,#7f1d1d); display:flex; align-items:center; justify-content:center; color:#fff; font:700 12px Outfit; }
+  .typing { align-self:flex-start; display:none; gap:4px; padding:14px 16px; background:var(--card); border:1px solid var(--bd); border-radius:18px; } .typing.on { display:flex; }
+  .typing i { width:6px; height:6px; border-radius:50%; background:var(--mu); animation:bob 1s infinite; } .typing i:nth-child(2) { animation-delay:.15s; } .typing i:nth-child(3) { animation-delay:.3s; }
+  @keyframes bob { 50% { transform:translateY(-4px); } }
+  .compose { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px; } .compose textarea { grid-column:1 / -1; }
+  .compose .row { grid-column:1 / -1; display:flex; justify-content:space-between; align-items:center; }
+  .quick { display:flex; gap:6px; flex-wrap:wrap; } .quick button { all:unset; cursor:pointer; font:12px Inter; border:1px solid var(--bd); border-radius:999px; padding:6px 11px; color:#cfcfcf; transition:.2s; } .quick button:hover { border-color:rgba(239,68,68,.6); color:var(--fg); }
+
+  /* 06 split marquee */
+  .mq { width:100vw; margin-left:calc(50% - 50vw); overflow:hidden; border-top:1px solid var(--bd); border-bottom:1px solid var(--bd); padding:18px 0; margin-bottom:56px; }
+  .mq-t { display:flex; gap:40px; width:max-content; animation:mq 30s linear infinite; font:900 clamp(40px,6vw,80px)/1 Outfit; letter-spacing:-.04em; white-space:nowrap; }
+  .mq-t span.o { color:transparent; -webkit-text-stroke:1px rgba(255,255,255,.3); } .mq-t span.r { color:var(--red); }
+  .mq:hover .mq-t { animation-play-state:paused; }
+  @keyframes mq { to { transform:translateX(-50%); } }
+  .sp { display:grid; grid-template-columns:1fr 1fr; gap:60px; margin-bottom:50px; }
+  .sp .rows a { display:flex; justify-content:space-between; align-items:center; padding:16px 0; border-bottom:1px solid var(--bd); font:600 15px Inter; transition:padding .3s, color .3s; }
+  .sp .rows a:hover { padding-left:10px; color:var(--red); } .sp .rows a span:last-child { font:12px 'JetBrains Mono'; color:var(--mu); }
+  .sp .rows a:first-child { border-top:1px solid var(--bd); }
+
+  @media (max-width:860px) {
+    #index { display:none; }
+    .cta-grid, .gn-top, .rc, .sp { grid-template-columns:1fr; } .cols { grid-template-columns:1fr 1fr; } .form .two, .compose { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+<nav id="index"><a href="#x1">01 big CTA</a><a href="#x2">02 giant name</a><a href="#x3">03 terminal</a><a href="#x4">04 red card</a><a href="#x5">05 chat</a><a href="#x6">06 marquee</a></nav>
+
+<!-- 1 -->
+<section id="x1"><div class="tag"><b>01</b> — big CTA · huge "Let's build together", big email with copy, form beside it, a slim bar with time in Pune</div>
+  <div class="wrap cta">
+    <div class="label"><span>//</span> Contact</div>
+    <h2>Let's build<br/>something <span>together.</span></h2>
+    <div class="cta-grid">
+      <div>
+        <div class="avail" style="margin-bottom:20px"><i></i>Open to internships &amp; freelance</div>
+        <p class="mu" style="font-size:15px;line-height:1.7;margin-bottom:22px;max-width:400px">I'm looking for web and software developer internships, and I'm open to freelance gigs and interesting collaborations.</p>
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><a class="mail-big" href="#">prakashswami.dev@gmail.com ↗</a><button class="copy" data-copy>Copy</button></div>
+        <div class="mono mu" style="font-size:13px;margin:12px 0 22px">+91 8767690131</div>
+        <div class="soc" data-soc></div>
+      </div>
+      <form class="form" onsubmit="return false"><div class="two"><input class="field" placeholder="Your name"><input class="field" placeholder="Your email"></div><textarea class="field" rows="6" placeholder="Tell me about your project…"></textarea><div><button class="send">Send message <span class="ar">→</span></button></div></form>
+    </div>
+    <div class="bar"><span>© <span data-year></span> Prakash Swami</span><nav data-nav></nav><span>Pune · <span data-clock></span></span><button class="top" data-top>Back to top ↑</button></div>
+  </div>
+</section>
+
+<!-- 2 -->
+<section id="x2"><div class="tag"><b>02</b> — giant name · contact and links up top, your name huge across the bottom; it fills red when it scrolls in</div>
+  <div class="wrap">
+    <div class="label"><span>//</span> Contact</div>
+    <div class="gn-top">
+      <div><h3>Have a project in mind?<br/>Let's talk.</h3><form class="form" onsubmit="return false"><input class="field" placeholder="Your email"><textarea class="field" rows="3" placeholder="Message"></textarea><div><button class="send">Send <span class="ar">→</span></button></div></form></div>
+      <div><h4>Navigate</h4><ul data-list="nav"></ul></div>
+      <div><h4>Connect</h4><ul data-list="soc"></ul><div class="avail" style="margin-top:22px"><i></i>Available</div></div>
+    </div>
+  </div>
+  <div class="giant" id="giant"><span>PRAKASH</span></div>
+  <div class="wrap gn-bar"><span>© <span data-year></span> · Built with Next.js</span><span>Pune <span data-clock></span></span><button class="top" data-top>↑ Top</button></div>
+</section>
+
+<!-- 3 -->
+<section id="x3"><div class="tag"><b>03</b> — terminal · the contact form as a terminal session; fits the developer vibe</div>
+  <div class="wrap">
+    <div class="label"><span>//</span> Contact</div>
+    <div class="term"><div class="term-top"><i></i><i></i><i></i><span>prakash@portfolio: ~/contact</span></div>
+      <div class="term-body" id="tb">
+        <div><span class="p">➜</span> <span class="k">~</span> whoami</div>
+        <div>Prakash Swami · Full-Stack Developer · Pune, India <span class="g">● open to internships</span></div>
+        <div style="margin-top:8px"><span class="p">➜</span> <span class="k">~</span> contact --links</div>
+        <div class="term-links">email <a href="#">prakashswami.dev@gmail.com</a> · github <a href="#">sprakash2006</a> · linkedin <a href="#">prakash-swami</a></div>
+        <div style="margin-top:8px"><span class="p">➜</span> <span class="k">~</span> ./send-message</div>
+        <div class="ln"><span class="k">? name ›</span><input placeholder="Ada Lovelace"></div>
+        <div class="ln"><span class="k">? email ›</span><input placeholder="ada@example.com"></div>
+        <div class="ln" style="align-items:flex-start"><span class="k">? message ›</span><textarea rows="2" placeholder="Hi Prakash, …"></textarea></div>
+        <button class="run" id="run">↵ send</button>
+        <div id="out" style="margin-top:8px"></div>
+      </div>
+    </div>
+    <div class="bar"><span>© <span data-year></span> Prakash Swami</span><nav data-nav></nav><button class="top" data-top>cd ~ ↑</button></div>
+  </div>
+</section>
+
+<!-- 4 -->
+<section id="x4"><div class="tag"><b>04</b> — red card · like your Experience cards: a red "let's talk" card with quick links, the form beside it, and a proper column footer below</div>
+  <div class="wrap">
+    <div class="label"><span>//</span> Contact</div>
+    <div class="rc">
+      <div class="redcard"><span class="pill"><i></i>Open to internships</span><h3>Let's build<br/>together.</h3><p>Web and software developer internships, freelance gigs and interesting collaborations.</p>
+        <div class="rl"><a href="#"><span>prakashswami.dev@gmail.com</span><span>↗</span></a><a href="#"><span>LinkedIn</span><span>↗</span></a><a href="#"><span>Résumé (PDF)</span><span>↗</span></a></div></div>
+      <form class="formcard" onsubmit="return false"><h4>Send a message</h4><input class="field" placeholder="Your name"><input class="field" placeholder="Your email"><textarea class="field" rows="5" placeholder="Tell me about your project…"></textarea><div><button class="send">Send message <span class="ar">→</span></button></div></form>
+    </div>
+    <div class="cols">
+      <div><div class="brand"><b>PS</b>Prakash Swami</div><p class="mu" style="font-size:13px;line-height:1.6;margin-top:12px;max-width:260px">Full-Stack Developer · B.Tech Computer Engineering, VIT Pune.</p><div class="soc" data-soc style="margin-top:16px"></div></div>
+      <div><h5>Pages</h5><ul data-list="nav"></ul></div>
+      <div><h5>Projects</h5><ul><li><a href="#">MediChain</a></li><li><a href="#">The GP Edge</a></li><li><a href="#">SolarMitra</a></li><li><a href="#">PaperTrail</a></li></ul></div>
+      <div><h5>More</h5><ul><li><a href="#">Résumé</a></li><li><a href="#">Sitemap</a></li><li><a href="#">Source code</a></li></ul></div>
+    </div>
+    <div class="bar"><span>© <span data-year></span> Prakash Swami · Pune <span data-clock></span></span><button class="top" data-top>Back to top ↑</button></div>
+  </div>
+</section>
+
+<!-- 5 -->
+<section id="x5"><div class="tag"><b>05</b> — chat · a friendly conversation; messages pop in when you scroll here, you reply in the box</div>
+  <div class="wrap">
+    <div class="label"><span>//</span> Contact</div>
+    <div class="chat" id="chat">
+      <div class="who"><span class="av">PS</span>Prakash · usually replies within a day</div>
+      <div class="msg me">Hey there 👋</div>
+      <div class="msg me">I'm looking for web &amp; software developer internships, and I'm open to freelance work.</div>
+      <div class="msg me">Got a project or a role in mind? Send me a message below, or email <b>prakashswami.dev@gmail.com</b>.</div>
+      <div class="typing" id="typing"><i></i><i></i><i></i></div>
+      <form class="compose" onsubmit="return false"><div class="row" style="margin-bottom:4px"><div class="quick"><button type="button">💼 Internship</button><button type="button">🛠 Freelance</button><button type="button">👋 Just saying hi</button></div></div><input class="field" placeholder="Your name"><input class="field" placeholder="Your email"><textarea class="field" rows="3" placeholder="Write a message…"></textarea><div class="row"><div class="soc" data-soc></div><button class="send">Send <span class="ar">→</span></button></div></form>
+    </div>
+    <div class="bar"><span>© <span data-year></span> Prakash Swami</span><nav data-nav></nav><button class="top" data-top>Back to top ↑</button></div>
+  </div>
+</section>
+
+<!-- 6 -->
+<section id="x6"><div class="tag"><b>06</b> — marquee · a slow scrolling "Let's work together" band, then links as rows on the left and the form on the right</div>
+  <div class="wrap">
+    <div class="label"><span>//</span> Contact</div>
+    <div class="mq"><div class="mq-t" id="mqt"></div></div>
+    <div class="sp">
+      <div class="rows"><a href="#"><span>Email</span><span>prakashswami.dev@gmail.com ↗</span></a><a href="#"><span>LinkedIn</span><span>prakash-swami ↗</span></a><a href="#"><span>GitHub</span><span>sprakash2006 ↗</span></a><a href="#"><span>LeetCode</span><span>sprakash_001 ↗</span></a><a href="#"><span>Résumé</span><span>PDF ↗</span></a></div>
+      <form class="form" onsubmit="return false"><div class="avail" style="justify-self:start;margin-bottom:6px"><i></i>Open to internships &amp; freelance</div><div class="two"><input class="field" placeholder="Your name"><input class="field" placeholder="Your email"></div><textarea class="field" rows="5" placeholder="Tell me about your project…"></textarea><div><button class="send">Send message <span class="ar">→</span></button></div></form>
+    </div>
+    <div class="bar"><span>© <span data-year></span> Prakash Swami</span><span>Pune · <span data-clock></span></span><button class="top" data-top>Back to top ↑</button></div>
+  </div>
+</section>
+
+<script>
+const $$ = (s) => [...document.querySelectorAll(s)];
+const ICON = {
+  gh: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-6 0-1.2.5-2.3 1.2-3.1-.1-.4-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.7 1.6.2 2.8.1 3.2.8.8 1.2 1.9 1.2 3.1 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .5z"/></svg>',
+  li: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.75h4v11H3zm7 0h3.8v1.6h.06c.53-1 1.84-2.06 3.79-2.06 4.05 0 4.8 2.67 4.8 6.13v6.33h-4v-5.6c0-1.34-.03-3.06-1.86-3.06-1.87 0-2.16 1.46-2.16 2.96v5.7h-4z"/></svg>',
+  lc: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 1.6a1.4 1.4 0 0 0-2 .1L4.7 9a5.3 5.3 0 0 0 0 7.2l4.2 4.5a5.3 5.3 0 0 0 7.5.3l2.4-2.3a1.4 1.4 0 1 0-1.9-2l-2.4 2.3a2.5 2.5 0 0 1-3.5-.2l-4.2-4.5a2.5 2.5 0 0 1 0-3.4l6.7-7.3a1.4 1.4 0 0 0 0-2zM9.7 12.4a1.4 1.4 0 0 0 0 2.8h9.6a1.4 1.4 0 0 0 0-2.8z"/></svg>',
+  ml: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>',
+};
+const NAV = ['About', 'Education', 'Experience', 'Skills', 'Projects', 'Activity'];
+$$('[data-soc]').forEach((el) => el.innerHTML = ['gh', 'li', 'lc', 'ml'].map((k) => `<a href="#" aria-label="${k}">${ICON[k]}</a>`).join(''));
+$$('[data-nav]').forEach((el) => el.innerHTML = NAV.map((n) => `<a href="#">${n}</a>`).join(''));
+$$('[data-list="nav"]').forEach((el) => el.innerHTML = NAV.map((n) => `<li><a href="#">${n}</a></li>`).join(''));
+$$('[data-list="soc"]').forEach((el) => el.innerHTML = ['Email', 'LinkedIn', 'GitHub', 'LeetCode', 'Résumé'].map((n) => `<li><a href="#">${n} ↗</a></li>`).join(''));
+$$('[data-year]').forEach((el) => el.textContent = new Date().getFullYear());
+$$('[data-top]').forEach((b) => b.onclick = () => scrollTo({ top: 0, behavior: 'smooth' }));
+$$('[data-copy]').forEach((b) => b.onclick = () => { navigator.clipboard?.writeText('prakashswami.dev@gmail.com'); b.textContent = 'Copied ✓'; setTimeout(() => b.textContent = 'Copy', 1600); });
+// Local time in Pune, ticking
+const clock = () => $$('[data-clock]').forEach((el) => el.textContent = new Date().toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit' }) + ' IST');
+clock(); setInterval(clock, 30000);
+// Giant name fills in once
+new IntersectionObserver(([e], o) => { if (e.isIntersecting) { e.target.classList.add('in'); o.disconnect(); } }, { threshold: 0.4 }).observe(document.getElementById('giant'));
+// Terminal send
+document.getElementById('run').onclick = () => { document.getElementById('out').innerHTML = '<span class="g">✓ message sent.</span> <span class="k">I\'ll reply within a day.</span>'; };
+// Chat messages pop in one by one
+new IntersectionObserver(([e], o) => { if (!e.isIntersecting) return; o.disconnect(); const msgs = $$('#chat .msg'), ty = document.getElementById('typing'); let k = 0; const next = () => { if (k >= msgs.length) { ty.classList.remove('on'); return; } ty.classList.add('on'); setTimeout(() => { msgs[k++].classList.add('in'); next(); }, 700); }; next(); }, { threshold: 0.4 }).observe(document.getElementById('chat'));
+$$('.quick button').forEach((b) => b.onclick = () => { const t = b.closest('form').querySelector('textarea'); t.value = b.textContent.slice(2).trim() + ' — '; t.focus(); });
+// Marquee
+document.getElementById('mqt').innerHTML = Array(2).fill(`<span>Let's work together</span><span class="r">✦</span><span class="o">Open to internships</span><span class="r">✦</span><span>Say hello</span><span class="r">✦</span>`).join('');
+</script>
+</body>
+</html>

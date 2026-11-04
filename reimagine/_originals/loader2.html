@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Loader concepts II</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@500;700;900&family=Sacramento&family=Press+Start+2P&display=swap" rel="stylesheet" />
+<style>
+  :root { --bg:#0a0a0a; --fg:#ededed; --mu:#8a8a8a; --card:#111113; --bd:rgba(255,255,255,.09); --red:#ef4444; --green:#22c55e; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:#050505; color:var(--fg); font-family:Inter,sans-serif; padding:40px 20px 80px; }
+  h1 { font:900 34px Outfit; letter-spacing:-.02em; text-align:center; margin-bottom:6px; } h1 span { color:var(--red); }
+  .sub { text-align:center; color:var(--mu); font:13px 'JetBrains Mono'; margin-bottom:40px; }
+  .grid { display:grid; grid-template-columns:repeat(2,1fr); gap:30px; max-width:1300px; margin:0 auto; }
+  .item h2 { font:600 13px 'JetBrains Mono'; color:var(--mu); margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; gap:10px; } .item h2 b { color:var(--red); font-weight:600; }
+  .item p { font-size:13px; color:var(--mu); margin-top:10px; line-height:1.55; }
+  .replay { all:unset; cursor:pointer; font:600 11px 'JetBrains Mono'; color:var(--fg); border:1px solid var(--bd); padding:5px 11px; border-radius:999px; } .replay:hover { border-color:var(--red); color:var(--red); }
+  /* a fake viewport with the hero behind each loader */
+  .stage { position:relative; aspect-ratio:16/10; border-radius:14px; overflow:hidden; border:1px solid var(--bd); background:var(--bg); }
+  .stage::before { content:''; position:absolute; inset:0; background-size:24px 24px; background-image:linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 0),linear-gradient(180deg,rgba(255,255,255,.03) 1px,transparent 0); }
+  .hero { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; }
+  .hero .rows { font:900 64px/0.9 Outfit; color:transparent; -webkit-text-stroke:1px rgba(255,255,255,.15); text-transform:uppercase; letter-spacing:-.03em; text-align:center; }
+  .hero img { position:absolute; width:92px; height:92px; border-radius:50%; object-fit:cover; border:2px solid var(--red); }
+  .hero .nm { position:absolute; left:22px; bottom:20px; font:400 46px Sacramento; } .hero .nm span { color:var(--red); }
+  .nav { position:absolute; top:12px; left:50%; transform:translateX(-50%); width:70%; height:30px; border-radius:999px; border:1px solid var(--bd); background:rgba(17,17,19,.8); }
+  .ov { position:absolute; inset:0; z-index:5; }
+
+  /* 01 signature */
+  .l1 { background:var(--bg); display:flex; align-items:center; justify-content:center; transition:clip-path .9s cubic-bezier(.77,0,.18,1); clip-path:inset(0 0 0 0); }
+  .l1.out { clip-path:inset(0 0 100% 0); }
+  .l1 svg { width:70%; overflow:visible; }
+  .l1 text { font:400 92px Sacramento; fill:transparent; stroke:#ededed; stroke-width:.7; stroke-dasharray:1200; stroke-dashoffset:1200; }
+  .l1.play text { animation:draw 1.6s ease forwards, fillw .5s 1.3s forwards; } .l1.play tspan.r { animation:fillr .5s 1.3s forwards; stroke:var(--red); }
+  @keyframes draw { to { stroke-dashoffset:0; } } @keyframes fillw { to { fill:#ededed; } } @keyframes fillr { to { fill:var(--red); } }
+  .l1 .line { position:absolute; bottom:28%; left:50%; height:1px; width:0; background:var(--red); transform:translateX(-50%); } .l1.play .line { animation:lw 1.4s .2s ease forwards; } @keyframes lw { to { width:46%; } }
+
+  /* 02 counter curtain */
+  .l2 { background:var(--bg); transition:transform .9s cubic-bezier(.77,0,.18,1); }
+  .l2.out { transform:translateY(-100%); }
+  .l2 .n { position:absolute; left:6%; bottom:9%; font:900 120px/0.8 Outfit; letter-spacing:-.05em; font-variant-numeric:tabular-nums; } .l2 .n span { color:var(--red); font-size:.45em; vertical-align:top; }
+  .l2 .bar { position:absolute; left:6%; right:6%; bottom:6%; height:1px; background:rgba(255,255,255,.1); } .l2 .bar i { display:block; height:100%; width:0; background:var(--red); }
+  .l2 .tl { position:absolute; left:6%; top:9%; font:12px 'JetBrains Mono'; color:var(--mu); } .l2 .tr { position:absolute; right:6%; top:9%; font:12px 'JetBrains Mono'; color:var(--mu); text-align:right; }
+  .l2 .words { position:absolute; right:6%; bottom:9%; font:600 14px 'JetBrains Mono'; color:var(--fg); height:18px; overflow:hidden; } .l2 .words div { transition:transform .35s cubic-bezier(.2,.8,.2,1); } .l2 .words span { display:block; height:18px; }
+
+  /* 03 pixel dissolve */
+  .l3 { display:grid; grid-template-columns:repeat(24,1fr); grid-auto-rows:1fr; }
+  .l3 i { background:var(--bg); transition:opacity .25s; } .l3 i.r { background:#1a0b0b; }
+  .l3 .mid { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; transition:opacity .3s; }
+  .l3 .mid img { width:54px; image-rendering:pixelated; animation:bob 1s steps(2) infinite; } @keyframes bob { 50% { transform:translateY(-4px); } }
+  .l3 .mid span { font:10px 'Press Start 2P'; color:var(--mu); }
+  .l3 .mid .pb { width:160px; height:10px; border:2px solid #333; padding:1px; } .l3 .mid .pb i { display:block; height:100%; width:0; background:repeating-linear-gradient(90deg,var(--red) 0 6px,#b91c1c 6px 8px); }
+
+  /* 04 terminal boot */
+  .l4 { background:var(--bg); padding:8% 9%; font:13px/1.9 'JetBrains Mono'; color:#bdbdbd; transition:opacity .5s, filter .5s; }
+  .l4.out { opacity:0; filter:blur(6px); }
+  .l4 .ok { color:var(--green); } .l4 .p { color:var(--red); } .l4 .k { color:var(--mu); }
+  .l4 .cur { display:inline-block; width:8px; height:14px; background:var(--red); vertical-align:-2px; animation:blink 1s steps(1) infinite; } @keyframes blink { 50% { opacity:0; } }
+
+  /* 05 split words */
+  .l5 { pointer-events:none; }
+  .l5 .half { position:absolute; left:0; right:0; height:50.5%; background:var(--bg); transition:transform .9s cubic-bezier(.77,0,.18,1); }
+  .l5 .half.t { top:0; border-bottom:1px solid rgba(239,68,68,.6); } .l5 .half.b { bottom:0; }
+  .l5.out .half.t { transform:translateY(-100%); } .l5.out .half.b { transform:translateY(100%); }
+  .l5 .w { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font:900 72px/1 Outfit; letter-spacing:-.04em; text-transform:uppercase; transition:opacity .2s; }
+  .l5 .w span { display:inline-block; animation:wpop .3s cubic-bezier(.2,.8,.2,1); } @keyframes wpop { from { transform:translateY(40%); opacity:0; } }
+  .l5 .w .dot { color:var(--red); }
+
+  /* 06 logo ring */
+  .l6 { background:var(--bg); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; transition:opacity .6s; }
+  .l6.out { opacity:0; }
+  .l6 .ring { position:relative; width:130px; height:130px; transition:transform .7s cubic-bezier(.7,0,.2,1); } .l6.zoom .ring { transform:scale(.7); }
+  .l6 svg { position:absolute; inset:0; transform:rotate(-90deg); } .l6 circle { fill:none; stroke-width:2; } .l6 .tr { stroke:rgba(255,255,255,.08); } .l6 .pr { stroke:var(--red); stroke-linecap:round; stroke-dasharray:377; stroke-dashoffset:377; }
+  .l6 img { position:absolute; inset:28px; width:74px; height:74px; object-fit:contain; animation:breathe 1.6s ease-in-out infinite; } @keyframes breathe { 50% { transform:scale(1.06); } }
+  .l6 .pc { font:500 12px 'JetBrains Mono'; color:var(--mu); font-variant-numeric:tabular-nums; }
+
+
+  /* 07 iris */
+  .l7 { background:var(--bg); -webkit-mask:radial-gradient(circle at 50% 50%, transparent var(--r,0px), #000 calc(var(--r,0px) + 1px)); mask:radial-gradient(circle at 50% 50%, transparent var(--r,0px), #000 calc(var(--r,0px) + 1px)); }
+  .l7 .dot { position:absolute; left:50%; top:50%; width:10px; height:10px; margin:-5px; border-radius:50%; background:var(--red); box-shadow:0 0 30px var(--red); transition:opacity .3s; }
+  .l7 .ringl { position:absolute; left:50%; top:50%; width:0; height:0; border-radius:50%; border:1.5px solid var(--red); transform:translate(-50%,-50%); }
+  .l7 .cap { position:absolute; left:0; right:0; top:calc(50% + 70px); text-align:center; font:12px 'JetBrains Mono'; color:var(--mu); letter-spacing:.2em; transition:opacity .3s; }
+
+  /* 08 colour panels */
+  .l8 { pointer-events:none; }
+  .l8 .pn { position:absolute; inset:0; transition:transform .8s cubic-bezier(.77,0,.18,1); }
+  .l8 .pn.a { background:var(--bg); z-index:3; display:flex; align-items:center; justify-content:center; font:900 56px Outfit; letter-spacing:-.04em; } .l8 .pn.a span { color:var(--red); }
+  .l8 .pn.b { background:var(--red); z-index:2; } .l8 .pn.c { background:#d6d3d1; z-index:1; }
+  .l8.go .pn.a { transform:translateY(-100%); } .l8.go .pn.b { transform:translateY(-100%); transition-delay:.12s; } .l8.go .pn.c { transform:translateY(-100%); transition-delay:.24s; }
+
+  /* 09 decode */
+  .l9 { background:var(--bg); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; transition:opacity .5s, letter-spacing .6s; }
+  .l9 .dec { font:900 64px/1 'JetBrains Mono'; letter-spacing:.04em; } .l9 .dec .r { color:var(--red); }
+  .l9 .sub9 { font:12px 'JetBrains Mono'; color:var(--mu); letter-spacing:.3em; }
+  .l9.out { opacity:0; letter-spacing:.3em; }
+
+  /* 10 heatmap fill */
+  .l10 { background:var(--bg); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; transition:opacity .4s; }
+  .l10 .hm { display:grid; grid-auto-flow:column; grid-template-rows:repeat(7,11px); grid-auto-columns:11px; gap:3px; }
+  .l10 .hm i { border-radius:2px; background:rgba(255,255,255,.05); transition:background .2s, transform .45s cubic-bezier(.6,0,.4,1), opacity .45s; }
+  .l10 .hm i.on1 { background:rgba(239,68,68,.35); } .l10 .hm i.on2 { background:rgba(239,68,68,.65); } .l10 .hm i.on3 { background:var(--red); }
+  .l10 .hm.fly i { transform:translateY(-60px) scale(.3); opacity:0; }
+  .l10 .c10 { font:12px 'JetBrains Mono'; color:var(--mu); } .l10 .c10 b { color:var(--fg); }
+  .l10.out { opacity:0; }
+
+  /* 11 jsx tag */
+  .l11 { background:var(--bg); display:flex; align-items:center; justify-content:center; font:700 54px 'JetBrains Mono'; transition:background .4s .3s; }
+  .l11 .lt, .l11 .gt { color:var(--red); transition:transform .7s cubic-bezier(.77,0,.18,1); }
+  .l11 .mid { display:inline-block; white-space:pre; color:var(--fg); transition:opacity .3s; }
+  .l11 .cur { display:inline-block; width:4px; height:50px; background:var(--red); vertical-align:middle; animation:blink 1s steps(1) infinite; margin-left:4px; }
+  .l11.open .lt { transform:translateX(-60vw); } .l11.open .gt { transform:translateX(60vw); }
+  .l11.open .mid { opacity:0; } .l11.open { background:transparent; }
+
+  /* 12 stripes */
+  .l12 { display:flex; pointer-events:none; }
+  .l12 .st { flex:1; background:var(--bg); transition:transform .7s cubic-bezier(.77,0,.18,1); }
+  .l12 .st:nth-child(odd) { border-right:1px solid rgba(239,68,68,.2); }
+  .l12 .nm12 { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font:400 64px Sacramento; transition:opacity .25s; } .l12 .nm12 span { color:var(--red); }
+  .l12.go .st { transform:translateY(101%); }
+
+  @media (max-width:900px) { .grid { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<h1>Loader <span>concepts</span></h1>
+<div class="sub">each plays in a mini screen with the hero behind it · press Replay · all about 1.5–2 s</div>
+<div class="grid">
+  <div class="item"><h2><span><b>01</b> — signature (kept)</span><button class="replay" data-play="1">↻ Replay</button></h2><div class="stage" id="s1"></div><p>Your name signs itself in the hero's handwriting, a red line draws under it, then the screen wipes up.</p></div>
+  <div class="item"><h2><span><b>05</b> — split words (kept)</span><button class="replay" data-play="5">↻ Replay</button></h2><div class="stage" id="s5"></div><p>Design. Build. Ship. then your name; the screen splits along a red line and the halves slide apart.</p></div>
+  <div class="item"><h2><span><b>06</b> — logo ring (kept)</span><button class="replay" data-play="6">↻ Replay</button></h2><div class="stage" id="s6"></div><p>Your skull breathing inside a red ring that fills with the percentage; it shrinks and the screen fades.</p></div>
+  <div class="item"><h2><span><b>07</b> — iris</span><button class="replay" data-play="7">↻ Replay</button></h2><div class="stage" id="s7"></div><p>A red dot pulses in the dark, a ring grows from it, then the darkness opens outward like a camera iris, right where your photo sits.</p></div>
+  <div class="item"><h2><span><b>08</b> — colour panels</span><button class="replay" data-play="8">↻ Replay</button></h2><div class="stage" id="s8"></div><p>Your initials, then three panels sweep up one after another in your Experience card colours: dark, red, sand.</p></div>
+  <div class="item"><h2><span><b>09</b> — decode</span><button class="replay" data-play="9">↻ Replay</button></h2><div class="stage" id="s9"></div><p>Random characters scramble and lock into PRAKASH letter by letter, like a hacker decode, then it spreads out and fades.</p></div>
+  <div class="item"><h2><span><b>10</b> — heatmap fill</span><button class="replay" data-play="10">↻ Replay</button></h2><div class="stage" id="s10"></div><p>A small contribution grid fills up in red like your Activity heatmap, then the squares fly up and away.</p></div>
+  <div class="item"><h2><span><b>11</b> — JSX tag</span><button class="replay" data-play="11">↻ Replay</button></h2><div class="stage" id="s11"></div><p>&lt;Prakash /&gt; types itself in code, then the red brackets slide apart to the edges and open the page.</p></div>
+  <div class="item"><h2><span><b>12</b> — stripes</span><button class="replay" data-play="12">↻ Replay</button></h2><div class="stage" id="s12"></div><p>Your signature in the middle, then the screen drops away in vertical stripes one after another, left to right.</p></div>
+</div>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const HERO = `<div class="nav"></div><div class="hero"><div class="rows">Full-stack<br/>Developer<br/>Builder</div><img src="prakash-v6.jpg" alt=""><div class="nm"><span>P</span>rakash <span>S</span>wami</div></div>`;
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+const timers = {};
+const stage = (n, html) => { const s = $('#s' + n); s.innerHTML = HERO + `<div class="ov">${html}</div>`; return s.querySelector('.ov'); };
+
+const plays = {
+  1: async () => {
+    const o = stage(1, `<div class="ov l1"><svg viewBox="0 0 520 140"><text x="10" y="100"><tspan class="r">P</tspan>rakash <tspan class="r">S</tspan>wami</text></svg><span class="line"></span></div>`).firstElementChild;
+    await wait(50); o.classList.add('play'); await wait(1900); o.classList.add('out');
+  },
+  2: async () => {
+    const o = stage(2, `<div class="ov l2"><div class="tl">PRAKASH SWAMI</div><div class="tr">PORTFOLIO<br/>${new Date().getFullYear()}</div><div class="n"><b id="n2">0</b><span>%</span></div><div class="words"><div id="w2"><span>Designing</span><span>Building</span><span>Shipping</span><span>Welcome</span></div></div><div class="bar"><i id="b2"></i></div></div>`).firstElementChild;
+    const t0 = performance.now(), D = 1600;
+    await new Promise((res) => { const f = (t) => { const p = Math.min(1, (t - t0) / D), e = 1 - Math.pow(1 - p, 2); o.querySelector('#n2').textContent = Math.round(e * 100); o.querySelector('#b2').style.width = e * 100 + '%'; o.querySelector('#w2').style.transform = `translateY(${-Math.min(3, Math.floor(p * 4)) * 18}px)`; p < 1 ? requestAnimationFrame(f) : res(); }; requestAnimationFrame(f); });
+    await wait(200); o.classList.add('out');
+  },
+  3: async () => {
+    const cells = Array.from({ length: 24 * 15 }, () => `<i class="${Math.random() < .12 ? 'r' : ''}"></i>`).join('');
+    const o = stage(3, `<div class="ov l3">${cells}<div class="mid"><img src="logo-skull.png" alt=""><div class="pb"><i id="pb3"></i></div><span>LOADING</span></div></div>`).firstElementChild;
+    const s = o.closest('.stage'); o.style.gridTemplateRows = `repeat(15, ${s.clientHeight / 15}px)`;
+    for (let k = 0; k <= 10; k++) { o.querySelector('#pb3').style.width = k * 10 + '%'; await wait(110); }
+    o.querySelector('.mid').style.opacity = 0;
+    const is = [...o.querySelectorAll('i')].filter((i) => !i.closest('.mid')).sort(() => Math.random() - .5);
+    is.forEach((c, k) => setTimeout(() => c.style.opacity = 0, 150 + k * 1.6));
+  },
+  4: async () => {
+    const o = stage(4, `<div class="ov l4" id="t4"></div>`).firstElementChild;
+    const lines = [['<span class="p">prakash@portfolio</span> <span class="k">~</span> npm run hello', 220], ['<span class="k">›</span> loading projects ......... <span class="ok">8 ok</span>', 160], ['<span class="k">›</span> fetching github + leetcode <span class="ok">ok</span>', 160], ['<span class="k">›</span> warming up the coffee ... <span class="ok">ok</span>', 160], ['<span class="k">›</span> theme: dark · red', 140], ['<span class="ok">✓ ready</span> in 1.2s <span class="cur"></span>', 400]];
+    for (const [l, d] of lines) { o.insertAdjacentHTML('beforeend', `<div>${l}</div>`); await wait(d); }
+    o.classList.add('out');
+  },
+  5: async () => {
+    const o = stage(5, `<div class="ov l5"><div class="half t"></div><div class="half b"></div><div class="w" id="w5"></div></div>`).firstElementChild;
+    const w = o.querySelector('#w5');
+    for (const word of ['Design<span class="dot">.</span>', 'Build<span class="dot">.</span>', 'Ship<span class="dot">.</span>', 'Prakash<span class="dot">.</span>']) { w.innerHTML = `<span>${word}</span>`; await wait(word.startsWith('Prakash') ? 520 : 300); }
+    w.style.opacity = 0; await wait(120); o.classList.add('out');
+  },
+  6: async () => {
+    const o = stage(6, `<div class="ov l6"><div class="ring"><svg viewBox="0 0 130 130"><circle class="tr" cx="65" cy="65" r="60"/><circle class="pr" id="r6" cx="65" cy="65" r="60"/></svg><img src="logo-skull.png" alt=""></div><div class="pc" id="p6">0%</div></div>`).firstElementChild;
+    const t0 = performance.now(), D = 1400;
+    await new Promise((res) => { const f = (t) => { const p = Math.min(1, (t - t0) / D), e = 1 - Math.pow(1 - p, 2); o.querySelector('#r6').style.strokeDashoffset = 377 * (1 - e); o.querySelector('#p6').textContent = Math.round(e * 100) + '%'; p < 1 ? requestAnimationFrame(f) : res(); }; requestAnimationFrame(f); });
+    o.classList.add('zoom'); await wait(350); o.classList.add('out');
+  },
+
+  7: async () => {
+    const o = stage(7, `<div class="ov l7"><span class="dot"></span><span class="ringl"></span><div class="cap">LOADING</div></div>`).firstElementChild;
+    const ring = o.querySelector('.ringl'), dot = o.querySelector('.dot');
+    let t0 = performance.now();
+    await new Promise((res) => { const f = (t) => { const p = Math.min(1, (t - t0) / 900), e = 1 - Math.pow(1 - p, 3); ring.style.width = ring.style.height = e * 92 + 'px'; p < 1 ? requestAnimationFrame(f) : res(); }; requestAnimationFrame(f); });
+    dot.style.opacity = 0; o.querySelector('.cap').style.opacity = 0;
+    const R = Math.hypot(o.clientWidth, o.clientHeight) / 2 + 20; t0 = performance.now();
+    await new Promise((res) => { const f = (t) => { const p = Math.min(1, (t - t0) / 800), e = p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2; const r = 46 + e * R; o.style.setProperty('--r', r + 'px'); ring.style.width = ring.style.height = r * 2 + 'px'; ring.style.opacity = 1 - p; p < 1 ? requestAnimationFrame(f) : res(); }; requestAnimationFrame(f); });
+  },
+  8: async () => {
+    const o = stage(8, `<div class="ov l8"><div class="pn a">P<span>.</span>S<span>.</span></div><div class="pn b"></div><div class="pn c"></div></div>`).firstElementChild;
+    await wait(900); o.classList.add('go');
+  },
+  9: async () => {
+    const o = stage(9, `<div class="ov l9"><div class="dec" id="d9"></div><div class="sub9">FULL-STACK DEVELOPER</div></div>`).firstElementChild;
+    const target = 'PRAKASH', CH = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#$%&@<>/', el = o.querySelector('#d9');
+    const t0 = performance.now(), D = 1300;
+    await new Promise((res) => { const f = () => { const p = Math.min(1, (performance.now() - t0) / D), locked = Math.floor(p * (target.length + 1)); el.innerHTML = target.split('').map((c, k) => k < locked ? `<span class="${k === 0 ? 'r' : ''}">${c}</span>` : CH[Math.floor(Math.random() * CH.length)]).join(''); p < 1 ? setTimeout(f, 45) : res(); }; f(); });
+    await wait(350); o.classList.add('out');
+  },
+  10: async () => {
+    const o = stage(10, `<div class="ov l10"><div class="hm" id="h10">${'<i></i>'.repeat(7 * 26)}</div><div class="c10"><b id="c10">0</b> contributions loaded</div></div>`).firstElementChild;
+    const cells = [...o.querySelectorAll('#h10 i')];
+    for (let w = 0; w < 26; w++) { for (let d = 0; d < 7; d++) { const r = Math.random(); if (r > .3) cells[w * 7 + d].className = r > .85 ? 'on3' : r > .6 ? 'on2' : 'on1'; } o.querySelector('#c10').textContent = Math.round((w + 1) / 26 * 514); await wait(45); }
+    await wait(200); cells.forEach((c, k) => c.style.transitionDelay = (Math.floor(k / 7) * 14 + (k % 7) * 10) + 'ms'); o.querySelector('#h10').classList.add('fly'); await wait(700); o.classList.add('out');
+  },
+  11: async () => {
+    const o = stage(11, `<div class="ov l11"><span class="lt">&lt;</span><span class="mid" id="m11"></span><span class="cur"></span><span class="gt">/&gt;</span></div>`).firstElementChild;
+    const m = o.querySelector('#m11'); for (const ch of 'Prakash ') { m.textContent += ch; await wait(85); }
+    await wait(300); o.querySelector('.cur').remove(); o.classList.add('open'); await wait(900); o.style.display = 'none';
+  },
+  12: async () => {
+    const o = stage(12, `<div class="ov l12">${'<div class="st"></div>'.repeat(10)}<div class="nm12"><span>P</span>rakash <span>S</span>wami</div></div>`).firstElementChild;
+    o.querySelectorAll('.st').forEach((st, k) => st.style.transitionDelay = k * 55 + 'ms');
+    await wait(1000); o.querySelector('.nm12').style.opacity = 0; await wait(120); o.classList.add('go');
+  },
+};
+document.querySelectorAll('[data-play]').forEach((b) => b.onclick = () => plays[b.dataset.play]());
+// Play each when it scrolls into view the first time
+document.querySelectorAll('.stage').forEach((s) => new IntersectionObserver(([e], o) => { if (e.isIntersecting) { plays[s.id.slice(1)](); o.disconnect(); } }, { threshold: 0.6 }).observe(s));
+// Show the covered state before playing
+Object.keys(plays).forEach((k) => { if ($('#s' + k) && !$('#s' + k).innerHTML) $('#s' + k).innerHTML = HERO + '<div class="ov" style="background:var(--bg)"></div>'; });
+</script>
+</body>
+</html>

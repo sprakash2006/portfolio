@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>About concepts</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@500;700;900&family=Press+Start+2P&family=Sacramento&display=swap" rel="stylesheet" />
+<style>
+  :root { --bg:#0a0a0a; --fg:#ededed; --mu:#8a8a8a; --card:#111113; --bd:rgba(255,255,255,.09); --red:#ef4444; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--fg); font-family:Inter,sans-serif; overflow-x:hidden; }
+  body::before { content:''; position:fixed; inset:0; z-index:-1; background-size:32px 32px; background-image:linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 0),linear-gradient(180deg,rgba(255,255,255,.03) 1px,transparent 0); }
+  section { min-height:100vh; padding:90px 20px 70px; border-bottom:1px solid var(--bd); position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .wrap { width:100%; max-width:810px; }
+  .tag { position:absolute; top:24px; left:24px; font:500 12px 'JetBrains Mono'; color:var(--mu); }
+  .tag b { color:var(--red); font-weight:500; }
+  .label { font:600 11px 'JetBrains Mono'; letter-spacing:.12em; text-transform:uppercase; color:var(--mu); margin-bottom:18px; display:flex; align-items:center; gap:10px; }
+  .label::before { content:''; width:18px; height:1px; background:var(--red); }
+  .mono { font-family:'JetBrains Mono',monospace; }
+  .card { background:var(--card); border:1px solid var(--bd); border-radius:16px; }
+  .red { color:var(--red); }
+  #index { position:fixed; right:18px; top:50%; transform:translateY(-50%); z-index:50; display:flex; flex-direction:column; gap:10px; }
+  #index a { font:500 11px 'JetBrains Mono'; color:var(--mu); text-decoration:none; text-align:right; }
+  #index a:hover { color:var(--fg); }
+
+  /* 1 scroll read */
+  #s1 { min-height:220vh; justify-content:flex-start; }
+  .read-sticky { position:sticky; top:12vh; width:100%; max-width:900px; }
+  .read { font:600 clamp(26px,3.6vw,44px)/1.3 Outfit; letter-spacing:-.015em; }
+  .read span { color:#262626; transition:color .25s; }
+  .read span.on { color:var(--fg); } .read span.on.k { color:var(--red); }
+  .read img { width:1.1em; height:1.1em; border-radius:50%; object-fit:cover; vertical-align:-.2em; margin:0 .1em; border:2px solid var(--bd); }
+
+  /* 2 chat */
+  .phone { max-width:520px; margin:0 auto; padding:0; overflow:hidden; }
+  .ph-h { display:flex; align-items:center; gap:12px; padding:14px 18px; border-bottom:1px solid var(--bd); }
+  .ph-h img { width:38px; height:38px; border-radius:50%; object-fit:cover; }
+  .ph-b { height:420px; overflow-y:auto; padding:18px; display:flex; flex-direction:column; gap:8px; scrollbar-width:none; }
+  .msg { max-width:80%; padding:10px 14px; border-radius:18px; font-size:14.5px; line-height:1.5; animation:pop .3s cubic-bezier(.2,1.4,.4,1) both; }
+  .msg.me { background:#1c1c1f; border-bottom-left-radius:6px; align-self:flex-start; }
+  .msg.you { background:var(--red); color:#fff; border-bottom-right-radius:6px; align-self:flex-end; }
+  @keyframes pop { from { opacity:0; transform:scale(.85) translateY(8px); } }
+  .typing { display:flex; gap:4px; padding:14px; } .typing i { width:7px; height:7px; border-radius:50%; background:var(--mu); animation:bob 1s infinite; }
+  .typing i:nth-child(2) { animation-delay:.15s; } .typing i:nth-child(3) { animation-delay:.3s; }
+  @keyframes bob { 50% { transform:translateY(-4px); opacity:.4; } }
+  .chips { display:flex; flex-wrap:wrap; gap:8px; padding:14px 18px; border-top:1px solid var(--bd); }
+  .chips button { font:500 13px Inter; color:var(--fg); background:transparent; border:1px solid var(--bd); border-radius:99px; padding:7px 13px; cursor:pointer; }
+  .chips button:hover { border-color:var(--red); color:var(--red); }
+  .chips button:disabled { opacity:.3; pointer-events:none; }
+
+  /* 3 git log */
+  .log { padding:22px 8px 22px 0; font:13.5px/1 'JetBrains Mono'; }
+  .commit { display:grid; grid-template-columns:60px 1fr; cursor:pointer; }
+  .graph { position:relative; }
+  .graph::before { content:''; position:absolute; left:28px; top:0; bottom:0; width:2px; background:#2a2a2a; }
+  .commit:first-child .graph::before { top:50%; } .commit:last-child .graph::before { bottom:50%; }
+  .graph i { position:absolute; left:22px; top:18px; width:14px; height:14px; border-radius:50%; background:var(--bg); border:2px solid var(--mu); transition:.2s; }
+  .commit.br .graph::after { content:''; position:absolute; left:29px; top:0; bottom:0; width:24px; border:2px solid #2a2a2a; border-left:0; border-radius:0 14px 14px 0; }
+  .commit:hover .graph i, .commit.open .graph i { border-color:var(--red); background:var(--red); box-shadow:0 0 0 5px rgba(239,68,68,.15); }
+  .c-body { padding:16px 18px 16px 0; border-bottom:1px dashed var(--bd); }
+  .c-top { display:flex; gap:12px; align-items:baseline; flex-wrap:wrap; }
+  .hash { color:#e5b567; } .ref { font-size:11px; padding:2px 7px; border-radius:6px; border:1px solid; }
+  .msgline { color:var(--fg); font-size:14px; }
+  .c-more { max-height:0; overflow:hidden; transition:max-height .35s ease; font:14px/1.6 Inter; color:#a3a3a3; }
+  .commit.open .c-more { max-height:200px; margin-top:10px; }
+
+  /* 4 character sheet */
+  .rpg { display:grid; grid-template-columns:240px 1fr; gap:0; overflow:hidden; }
+  .rpg-l { padding:24px; border-right:1px solid var(--bd); text-align:center; background:linear-gradient(180deg,rgba(239,68,68,.08),transparent 60%); }
+  .rpg-l img { width:150px; height:150px; border-radius:14px; object-fit:cover; image-rendering:auto; border:2px solid var(--red); box-shadow:6px 6px 0 rgba(239,68,68,.25); }
+  .px { font-family:'Press Start 2P',monospace; }
+  .rpg-r { padding:24px 26px; }
+  .stat { display:grid; grid-template-columns:110px 1fr 44px; gap:12px; align-items:center; margin:10px 0; font:12px 'JetBrains Mono'; }
+  .bar { height:12px; background:#1b1b1b; border:1px solid var(--bd); display:flex; gap:2px; padding:2px; }
+  .bar b { flex:1; background:#262626; transition:background .2s; } .bar b.f { background:var(--red); }
+  .inv { display:grid; grid-template-columns:repeat(6,1fr); gap:6px; }
+  .inv div { aspect-ratio:1; border:1px solid var(--bd); background:#151515; display:grid; place-items:center; font:10px 'JetBrains Mono'; color:var(--mu); text-align:center; padding:3px; transition:.15s; }
+  .inv div:hover { border-color:var(--red); color:var(--fg); transform:translateY(-2px); }
+  .xp { height:8px; background:#1b1b1b; border-radius:4px; overflow:hidden; } .xp i { display:block; height:100%; width:0; background:linear-gradient(90deg,#b91c1c,var(--red)); transition:width 1.6s cubic-bezier(.2,.8,.2,1); }
+
+  /* 5 card deck */
+  .deck-wrap { display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:center; }
+  .deck { position:relative; height:400px; perspective:1200px; }
+  .dcard { position:absolute; inset:0; margin:auto; width:300px; height:380px; border-radius:22px; border:1px solid rgba(255,255,255,.12); background:#141416; padding:26px; display:flex; flex-direction:column; transition:transform .55s cubic-bezier(.2,.8,.2,1),opacity .55s; cursor:pointer; user-select:none; box-shadow:0 30px 60px rgba(0,0,0,.5); }
+  .dcard .n { font:900 90px/1 Outfit; color:rgba(255,255,255,.05); position:absolute; right:18px; bottom:6px; }
+  .dcard h3 { font:700 28px/1.15 Outfit; margin:14px 0 12px; letter-spacing:-.01em; }
+  .dcard p { color:#a3a3a3; font-size:14.5px; line-height:1.6; }
+  .dcard .k { font:500 11px 'JetBrains Mono'; color:var(--red); letter-spacing:.1em; text-transform:uppercase; }
+  .dots { display:flex; gap:6px; margin-top:22px; } .dots i { width:22px; height:3px; border-radius:2px; background:#2a2a2a; transition:.3s; } .dots i.on { background:var(--red); }
+
+  /* 6 split slider */
+  .split { position:relative; height:460px; border-radius:20px; overflow:hidden; border:1px solid var(--bd); user-select:none; touch-action:none; cursor:ew-resize; }
+  .side { position:absolute; inset:0; padding:36px 40px; display:flex; flex-direction:column; justify-content:center; }
+  .side.code { background:#0e0e10; }
+  .side.life { background:#ef4444; color:#140505; clip-path:inset(0 0 0 var(--cut,50%)); }
+  .side h3 { font:900 clamp(40px,6vw,72px)/0.95 Outfit; letter-spacing:-.03em; text-transform:uppercase; }
+  .side p { font-size:15px; line-height:1.65; max-width:340px; margin-top:16px; }
+  .side.code p { color:#a3a3a3; } .side.life p { color:#3b0a0a; }
+  .side.life .inner { margin-left:auto; text-align:right; display:flex; flex-direction:column; align-items:flex-end; }
+  .handle { position:absolute; top:0; bottom:0; left:var(--cut,50%); width:2px; background:#fff; transform:translateX(-1px); z-index:3; }
+  .handle span { position:absolute; top:50%; left:50%; width:52px; height:52px; margin:-26px; border-radius:50%; overflow:hidden; border:3px solid #fff; box-shadow:0 8px 24px rgba(0,0,0,.4); }
+  .handle img { width:100%; height:100%; object-fit:cover; }
+  .pills { display:flex; flex-wrap:wrap; gap:6px; margin-top:18px; }
+  .pills span { font:500 12px 'JetBrains Mono'; padding:4px 10px; border-radius:99px; border:1px solid currentColor; opacity:.8; }
+
+  @media (max-width:760px) { .rpg, .deck-wrap { grid-template-columns:1fr; } .rpg-l { border-right:0; border-bottom:1px solid var(--bd); } #index { display:none; } .inv { grid-template-columns:repeat(4,1fr); } }
+</style>
+</head>
+<body>
+<nav id="index"><a href="#s1">01 scroll read</a><a href="#s2">02 chat</a><a href="#s3">03 git log</a><a href="#s4">04 character</a><a href="#s5">05 card deck</a><a href="#s6">06 code / life</a></nav>
+
+<!-- 1 -->
+<section id="s1">
+  <div class="tag"><b>01</b> — scroll read · scroll slowly, words light up as you read</div>
+  <div class="read-sticky">
+    <div class="label">About me</div>
+    <p class="read" id="read"></p>
+  </div>
+</section>
+
+<!-- 2 -->
+<section id="s2">
+  <div class="tag"><b>02</b> — chat · tap the questions</div>
+  <div class="wrap">
+    <div class="label">About me</div>
+    <div class="card phone">
+      <div class="ph-h"><img src="me.jpg" alt="" /><div><div style="font-weight:600;font-size:15px">Prakash</div><div class="mono" style="font-size:11px;color:#22c55e">● online · usually replies instantly</div></div></div>
+      <div class="ph-b" id="chat"></div>
+      <div class="chips" id="chips"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 3 -->
+<section id="s3">
+  <div class="tag"><b>03</b> — git log · click a commit</div>
+  <div class="wrap">
+    <div class="label">About me</div>
+    <div class="mono" style="color:var(--mu);font-size:13px;margin-bottom:6px"><span class="red">❯</span> git log --graph --life prakash</div>
+    <div class="card log" id="log"></div>
+  </div>
+</section>
+
+<!-- 4 -->
+<section id="s4">
+  <div class="tag"><b>04</b> — character sheet · hover the inventory</div>
+  <div class="wrap">
+    <div class="label">About me</div>
+    <div class="card rpg">
+      <div class="rpg-l">
+        <img src="me.jpg" alt="" />
+        <div class="px" style="font-size:13px;margin:18px 0 8px;line-height:1.5">PRAKASH</div>
+        <div class="mono" style="font-size:12px;color:var(--mu)">Class: Full-Stack Dev</div>
+        <div class="mono" style="font-size:12px;color:var(--mu)">Guild: MediChain (CTO)</div>
+        <div class="mono" style="font-size:12px;color:var(--mu)">Home: Pune</div>
+        <div class="px red" style="font-size:10px;margin-top:16px">LVL 20</div>
+        <div class="xp" style="margin-top:8px"><i id="xp"></i></div>
+        <div class="mono" style="font-size:10px;color:var(--mu);margin-top:6px">XP → B.Tech 2028</div>
+      </div>
+      <div class="rpg-r">
+        <div class="px" style="font-size:10px;color:var(--mu);margin-bottom:6px">STATS</div>
+        <div id="stats"></div>
+        <div class="px" style="font-size:10px;color:var(--mu);margin:22px 0 10px">INVENTORY</div>
+        <div class="inv"><div>Next.js</div><div>React</div><div>Node</div><div>Postgres</div><div>Solidity</div><div>Flutter</div><div>TS</div><div>Python</div><div>Gemini</div><div>Lang-Chain</div><div>IPFS</div><div>Docker</div></div>
+        <div class="px" style="font-size:10px;color:var(--mu);margin:22px 0 10px">PASSIVE PERKS</div>
+        <div class="mono" style="font-size:12.5px;line-height:1.9;color:#bdbdbd">
+          🏏 Cricket — <span style="color:var(--mu)">+10 team play</span><br>
+          🎬 Movies — <span style="color:var(--mu)">+10 storytelling</span><br>
+          🎧 Rap — <span style="color:var(--mu)">+10 flow state</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 -->
+<section id="s5">
+  <div class="tag"><b>05</b> — card deck · click the card to deal the next</div>
+  <div class="wrap deck-wrap">
+    <div>
+      <div class="label">About me</div>
+      <div style="font:700 44px/1.05 Outfit;letter-spacing:-.02em">Five things<br>to know <span class="red">about me.</span></div>
+      <p style="color:#a3a3a3;margin-top:16px;line-height:1.65;font-size:15px">A full-stack developer who likes turning ideas into products people actually use. Deal the deck for the rest.</p>
+      <div class="dots" id="dots"></div>
+    </div>
+    <div class="deck" id="deck"></div>
+  </div>
+</section>
+
+<!-- 6 -->
+<section id="s6">
+  <div class="tag"><b>06</b> — code / life · drag the photo left and right</div>
+  <div class="wrap">
+    <div class="label">About me</div>
+    <div class="split" id="split">
+      <div class="side code">
+        <div class="mono red" style="font-size:12px;margin-bottom:12px">// at the keyboard</div>
+        <h3>Builds<br>products.</h3>
+        <p>CTO and co-founder of MediChain. Works across React, Next.js, Node.js and PostgreSQL, ships AI features with LLMs and RAG, and keeps DSA sharp with 400+ LeetCode problems.</p>
+        <div class="pills" style="color:#a3a3a3"><span>Next.js</span><span>Node</span><span>Solidity</span><span>LLMs</span></div>
+      </div>
+      <div class="side life"><div class="inner">
+        <div class="mono" style="font-size:12px;margin-bottom:12px">away from it //</div>
+        <h3>Plays<br>cricket.</h3>
+        <p>Usually watching movies, playing cricket, listening to rap, or trying out something new in tech. B.Tech at VIT Pune, from Latur.</p>
+        <div class="pills"><span>Cricket</span><span>Movies</span><span>Rap</span><span>Pune</span></div>
+      </div></div>
+      <div class="handle" id="handle"><span><img src="me.jpg" alt="" draggable="false" /></span></div>
+    </div>
+  </div>
+</section>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const seen = (el, fn, t = .35) => new IntersectionObserver((e, o) => { if (e[0].isIntersecting) { fn(); o.disconnect(); } }, { threshold: t }).observe(el);
+
+/* 1 scroll read */
+(() => {
+  const text = "I'm Prakash <img> a *full-stack* *developer* and Computer Engineering student at *VIT* *Pune* who turns ideas into products people actually use. As *CTO* and *co-founder* of *MediChain,* I lead the tech behind a platform that puts patients in control of their medical records. I build with React, Next.js, Node and Postgres, ship *AI* features with LLMs and RAG, and keep my fundamentals sharp with *400+* LeetCode problems. Off the keyboard: movies, cricket and rap.";
+  const el = $('#read');
+  el.innerHTML = text.split(' ').map((w) => w === '<img>' ? '<span><img src="me.jpg" alt=""></span>' : w.startsWith('*') ? `<span class="k">${w.replace(/\*/g, '')}</span>` : `<span>${w}</span>`).join(' ');
+  const spans = [...el.children], sec = $('#s1');
+  const tick = () => {
+    const r = sec.getBoundingClientRect();
+    const p = Math.min(1, Math.max(0, -r.top / (r.height - innerHeight) * 1.15));
+    const n = Math.round(p * spans.length);
+    spans.forEach((s, i) => s.classList.toggle('on', i < n));
+  };
+  addEventListener('scroll', tick, { passive: true }); tick();
+})();
+
+/* 2 chat */
+(() => {
+  const chat = $('#chat'), chips = $('#chips');
+  const qa = [
+    ['Who are you?', ["Hey! I'm Prakash 👋", "Full-stack developer and Computer Engineering student at VIT Pune."]],
+    ['What are you building?', ["I'm CTO and co-founder of MediChain.", "It puts patients in control of their medical records: Flutter app, React portal, Node backend and smart contracts on Polygon."]],
+    ['Your stack?', ["React, Next.js, Node.js and PostgreSQL day to day.", "And AI features with LLMs, LangChain and RAG 🤖"]],
+    ['Any experience?', ["Interned at Career Craftly and built The GP Edge for a client in Australia.", "I owned the system design and the backend."]],
+    ['DSA?', ["400+ LeetCode problems solved 💪"]],
+    ['Off the keyboard?', ["Movies, cricket, rap 🏏🎬🎧", "Or trying something new in tech, honestly."]],
+  ];
+  const add = (cls, html) => { const d = document.createElement('div'); d.className = 'msg ' + cls; d.innerHTML = html; chat.appendChild(d); chat.scrollTop = chat.scrollHeight; return d; };
+  const reply = async (lines) => {
+    for (const l of lines) {
+      const t = document.createElement('div'); t.className = 'msg me typing'; t.innerHTML = '<i></i><i></i><i></i>'; chat.appendChild(t); chat.scrollTop = chat.scrollHeight;
+      await new Promise((r) => setTimeout(r, 650 + l.length * 8)); t.remove(); add('me', l);
+    }
+  };
+  qa.forEach(([q, a], i) => {
+    const b = document.createElement('button'); b.textContent = q; chips.appendChild(b);
+    b.onclick = async () => { [...chips.children].forEach((c) => (c.disabled = true)); add('you', q); await reply(a); b.remove(); [...chips.children].forEach((c) => (c.disabled = false)); };
+  });
+  seen($('#s2'), () => reply(["Hey 👋 ask me anything below."]));
+})();
+
+/* 3 git log */
+(() => {
+  const commits = [
+    ['a1f9e2c', 'HEAD → main', 'feat: co-founded MediChain, now CTO', "Leading the tech behind a platform that puts patients in control of their medical records — Flutter, React, Node.js, Solidity on Polygon, IPFS.", 'red'],
+    ['7c3d0b1', 'internship', 'feat: built The GP Edge at Career Craftly', "Full-stack SaaS for GPs in Australia. Owned system design and backend: Next.js, TypeScript, PostgreSQL, Gemini API.", '#60a5fa', true],
+    ['4e8a77f', '', 'perf: solved 400+ LeetCode problems', "Keeping data structures and algorithms sharp, one daily problem at a time."],
+    ['2b6c915', '', 'feat: added AI to the stack', "LLMs, LangChain and RAG — building AI features into real products."],
+    ['9d04ae3', 'tag: v2024', 'init: started B.Tech CE at VIT Pune', "Computer Engineering, 2024 — 2028. CGPA 8.84.", '#e5b567'],
+    ['0000001', '', 'chore: cricket, movies, rap (always running)', "The background processes that never get killed."],
+  ];
+  $('#log').innerHTML = commits.map(([h, ref, m, more, col, br]) => `
+    <div class="commit${br ? ' br' : ''}"><div class="graph"><i></i></div><div class="c-body">
+      <div class="c-top"><span class="hash">${h}</span>${ref ? `<span class="ref" style="color:${col === 'red' ? 'var(--red)' : col};border-color:currentColor">${ref}</span>` : ''}<span class="msgline">${m}</span></div>
+      <div class="c-more">${more}</div></div></div>`).join('');
+  document.querySelectorAll('.commit').forEach((c) => (c.onclick = () => c.classList.toggle('open')));
+  document.querySelector('.commit').classList.add('open');
+})();
+
+/* 4 character sheet */
+(() => {
+  const stats = [['Frontend', 9], ['Backend', 9], ['AI / LLM', 7], ['Blockchain', 7], ['DSA', 8], ['Cricket', 6]];
+  $('#stats').innerHTML = stats.map(([n, v]) => `<div class="stat"><span>${n}</span><div class="bar" data-v="${v}">${'<b></b>'.repeat(10)}</div><span class="red">${v * 10}</span></div>`).join('');
+  seen($('#s4'), () => {
+    $('#xp').style.width = '50%';
+    document.querySelectorAll('.bar').forEach((bar, bi) => [...bar.children].forEach((b, i) => { if (i < +bar.dataset.v) setTimeout(() => b.classList.add('f'), bi * 120 + i * 60); }));
+  });
+})();
+
+/* 5 deck */
+(() => {
+  const cards = [
+    ['Who', "Full-stack developer", "Computer Engineering student at VIT Pune who turns ideas into products people actually use."],
+    ['Now', "CTO @ MediChain", "Leading the tech behind a platform that puts patients in control of their medical records."],
+    ['Stack', "React · Next.js · Node · Postgres", "Plus AI features with LLMs, LangChain and RAG, and Solidity on Polygon."],
+    ['Shipped', "The GP Edge", "Built at Career Craftly for a client in Australia — owned system design and backend."],
+    ['Off-duty', "Movies, cricket, rap", "Or trying out something new in tech. Also: 400+ LeetCode problems."],
+  ];
+  const deck = $('#deck'), dots = $('#dots'); let top = 0;
+  deck.innerHTML = cards.map(([k, h, p], i) => `<div class="dcard"><span class="k">${k}</span><h3>${h}</h3><p>${p}</p><span class="n">0${i + 1}</span></div>`).join('');
+  dots.innerHTML = cards.map(() => '<i></i>').join('');
+  const els = [...deck.children];
+  const layout = () => els.forEach((el, i) => {
+    const pos = (i - top + cards.length) % cards.length;
+    el.style.zIndex = 10 - pos;
+    el.style.transform = `translate(${pos * 14}px, ${pos * -10}px) rotate(${pos * 3}deg) scale(${1 - pos * .04})`;
+    el.style.opacity = pos > 3 ? 0 : 1 - pos * .15;
+    [...dots.children][i].classList.toggle('on', i === top);
+  });
+  deck.onclick = () => {
+    const el = els[top]; el.style.transform = 'translate(-130%, 40px) rotate(-22deg)'; el.style.opacity = 0;
+    setTimeout(() => { top = (top + 1) % cards.length; layout(); }, 320);
+  };
+  layout();
+})();
+
+/* 6 split */
+(() => {
+  const s = $('#split'); let drag = false;
+  const set = (x) => { const r = s.getBoundingClientRect(); s.style.setProperty('--cut', Math.min(92, Math.max(8, ((x - r.left) / r.width) * 100)) + '%'); };
+  s.addEventListener('pointerdown', (e) => { drag = true; s.setPointerCapture(e.pointerId); set(e.clientX); });
+  s.addEventListener('pointermove', (e) => drag && set(e.clientX));
+  s.addEventListener('pointerup', () => (drag = false));
+  seen(s, () => { let t = 0; const id = setInterval(() => { t += .06; s.style.setProperty('--cut', 50 + Math.sin(t) * 18 * Math.max(0, 1 - t / 7) + '%'); if (t > 7) clearInterval(id); }, 16); });
+})();
+</script>
+</body>
+</html>

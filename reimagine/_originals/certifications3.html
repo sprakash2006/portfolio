@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Certifications by topic</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@500;700;900&display=swap" rel="stylesheet" />
+<style>
+  :root { --bg:#0a0a0a; --fg:#ededed; --mu:#8a8a8a; --card:#111113; --bd:rgba(255,255,255,.09); --red:#ef4444; --green:#22c55e; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--fg); font-family:Inter,sans-serif; overflow-x:clip; }
+  body::before { content:''; position:fixed; inset:0; z-index:-1; background-size:32px 32px; background-image:linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 0),linear-gradient(180deg,rgba(255,255,255,.03) 1px,transparent 0); }
+  section { min-height:100vh; padding:100px 20px 90px; border-bottom:1px solid var(--bd); position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .wrap { width:100%; max-width:1040px; }
+  .tag { position:absolute; top:24px; left:24px; right:24px; font:500 12px 'JetBrains Mono'; color:var(--mu); }
+  .tag b { color:var(--red); font-weight:500; }
+  .label { font:600 12px 'JetBrains Mono'; letter-spacing:.1em; text-transform:uppercase; color:var(--mu); margin-bottom:26px; display:flex; align-items:center; gap:12px; }
+  .label span { color:var(--red); } .label::after { content:''; flex:1; height:1px; background:var(--bd); }
+  a { color:inherit; text-decoration:none; }
+  .logo { width:34px; height:34px; border-radius:9px; background:#fff; object-fit:contain; border:1px solid var(--bd); flex:none; }
+  .t { font:700 15.5px/1.3 Outfit; letter-spacing:-.01em; }
+  .iss { font:12px Inter; color:var(--mu); margin-top:3px; }
+  .date { font:11px 'JetBrains Mono'; color:var(--mu); }
+  .ver { display:inline-flex; align-items:center; gap:4px; font:600 10px 'JetBrains Mono'; color:var(--green); border:1px solid rgba(34,197,94,.35); background:rgba(34,197,94,.08); padding:2px 7px; border-radius:999px; white-space:nowrap; }
+  .ic { display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:10px; background:rgba(239,68,68,.1); border:1px solid rgba(239,68,68,.3); color:var(--red); font:700 14px 'JetBrains Mono'; flex:none; }
+  .th { background:#f4f1ea; overflow:hidden; } .th img { width:100%; height:100%; object-fit:cover; object-position:top; display:block; transition:transform .6s cubic-bezier(.2,.8,.2,1); }
+  .fade { opacity:0; transform:translateY(14px); transition:opacity .6s, transform .6s cubic-bezier(.2,.8,.2,1); } .fade.in { opacity:1; transform:none; }
+  #index { position:fixed; right:18px; top:50%; transform:translateY(-50%); z-index:50; display:flex; flex-direction:column; gap:10px; }
+  #index a { font:500 11px 'JetBrains Mono'; color:var(--mu); text-align:right; } #index a:hover { color:var(--fg); }
+
+  /* 01 topic rows */
+  .tr { display:grid; grid-template-columns:260px 1fr; gap:30px; padding:26px 0; border-top:1px solid var(--bd); }
+  .tr:last-child { border-bottom:1px solid var(--bd); }
+  .tr h3 { font:900 30px/1 Outfit; letter-spacing:-.03em; margin:14px 0 8px; } .tr h3::first-letter { color:var(--red); }
+  .tr .cnt { font:11px 'JetBrains Mono'; color:var(--mu); }
+  .tr .items { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+  .tc { display:flex; gap:12px; padding:10px; border:1px solid var(--bd); border-radius:14px; background:var(--card); transition:border-color .3s, transform .3s; }
+  .tc:hover { border-color:rgba(239,68,68,.45); transform:translateY(-3px); } .tc:hover .th img { transform:scale(1.06); }
+  .tc .th { width:104px; aspect-ratio:4/3; border-radius:8px; flex:none; }
+
+  /* 02 topic chips + grid */
+  .chips { position:relative; display:inline-flex; flex-wrap:wrap; gap:2px; padding:4px; border:1px solid var(--bd); border-radius:999px; margin-bottom:22px; }
+  .chips button { all:unset; position:relative; z-index:1; cursor:pointer; padding:7px 14px; font:500 12px 'JetBrains Mono'; color:var(--mu); border-radius:999px; transition:color .25s; }
+  .chips button em { font-style:normal; opacity:.6; margin-left:5px; }
+  .chips button.on { color:#140404; } .chips button:not(.on):hover { color:var(--fg); }
+  .chips .pill { position:absolute; top:4px; height:calc(100% - 8px); background:var(--red); border-radius:999px; transition:left .35s cubic-bezier(.2,.8,.2,1), width .35s cubic-bezier(.2,.8,.2,1); }
+  .cg { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .cgc { display:flex; flex-direction:column; border:1px solid var(--bd); border-radius:18px; background:var(--card); padding:12px; transition:border-color .3s, transform .3s; animation:pop .45s cubic-bezier(.2,.8,.2,1) both; }
+  .cgc:hover { border-color:rgba(239,68,68,.45); transform:translateY(-4px); } .cgc:hover .th img { transform:scale(1.05); }
+  .cgc .th { aspect-ratio:4/3; border-radius:10px; position:relative; }
+  .cgc .topic { position:absolute; left:10px; top:10px; font:600 10px 'JetBrains Mono'; background:rgba(10,10,10,.82); color:var(--fg); padding:4px 9px; border-radius:999px; }
+  .cgc .bd { display:flex; gap:12px; padding:14px 4px 4px; }
+  @keyframes pop { from { opacity:0; transform:translateY(10px) scale(.98); } }
+
+  /* 03 kanban columns */
+  .kb { display:grid; grid-template-columns:repeat(5,1fr); gap:12px; align-items:start; }
+  .col { border:1px solid var(--bd); border-radius:18px; background:rgba(17,17,19,.6); padding:12px; }
+  .col .hd { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+  .col .hd b { font:700 14px Outfit; } .col .hd span { margin-left:auto; font:11px 'JetBrains Mono'; color:var(--mu); background:rgba(255,255,255,.05); padding:1px 7px; border-radius:999px; }
+  .col .ic { width:28px; height:28px; font-size:12px; border-radius:8px; }
+  .kc { display:block; border:1px solid var(--bd); border-radius:12px; background:var(--card); overflow:hidden; margin-bottom:10px; transition:border-color .3s, transform .3s; }
+  .kc:hover { border-color:rgba(239,68,68,.45); transform:translateY(-3px); }
+  .kc .th { aspect-ratio:16/10; } .kc .bd { padding:10px 11px 12px; } .kc .t { font-size:13px; } .kc .row { display:flex; justify-content:space-between; align-items:center; margin-top:8px; }
+
+  /* 04 accordion */
+  .acc { border-top:1px solid var(--bd); }
+  .ai { border-bottom:1px solid var(--bd); }
+  .ai-h { all:unset; box-sizing:border-box; cursor:pointer; width:100%; display:grid; grid-template-columns:50px 1fr auto 30px; gap:18px; align-items:center; padding:22px 6px; }
+  .ai-h .n { font:500 12px 'JetBrains Mono'; color:var(--mu); transition:color .3s; }
+  .ai-h h3 { font:900 clamp(26px,3.4vw,42px)/1 Outfit; letter-spacing:-.03em; color:rgba(237,237,237,.55); transition:color .3s; }
+  .ai-h .logos { display:flex; } .ai-h .logos img { width:30px; height:30px; border-radius:50%; background:#fff; object-fit:contain; border:2px solid var(--bg); margin-left:-8px; }
+  .ai-h .pl { width:14px; height:14px; position:relative; justify-self:end; } .ai-h .pl::before, .ai-h .pl::after { content:''; position:absolute; left:0; right:0; top:50%; height:1.5px; background:var(--red); transition:transform .4s; } .ai-h .pl::after { transform:rotate(90deg); }
+  .ai:hover h3, .ai.open h3 { color:var(--fg); } .ai.open .n { color:var(--red); } .ai.open .pl::after { transform:rotate(0); }
+  .ai.open h3::first-letter { color:var(--red); }
+  .ai-b { display:grid; grid-template-rows:0fr; transition:grid-template-rows .6s cubic-bezier(.2,.8,.2,1); } .ai.open .ai-b { grid-template-rows:1fr; } .ai-b > div { overflow:hidden; }
+  .ai-in { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; padding:0 6px 26px 74px; }
+  .ai-in a { display:flex; gap:14px; align-items:center; padding:10px; border:1px solid var(--bd); border-radius:14px; background:var(--card); transition:border-color .3s; } .ai-in a:hover { border-color:rgba(239,68,68,.45); }
+  .ai-in .th { width:120px; aspect-ratio:4/3; border-radius:8px; flex:none; }
+
+  /* 05 topic bento */
+  .tb { display:grid; grid-template-columns:repeat(6,1fr); grid-auto-rows:minmax(180px,auto); gap:14px; }
+  .tile { border:1px solid var(--bd); border-radius:20px; background:var(--card); padding:18px; display:flex; flex-direction:column; position:relative; overflow:hidden; }
+  .tile.big { grid-column:span 4; grid-row:span 2; background:linear-gradient(160deg,rgba(239,68,68,.14),var(--card) 55%); }
+  .tile.mid { grid-column:span 2; grid-row:span 2; } .tile.sm { grid-column:span 2; }
+  .tile .hd { display:flex; align-items:center; gap:12px; } .tile h3 { font:900 24px/1 Outfit; letter-spacing:-.02em; } .tile .cnt { margin-left:auto; font:900 44px/1 Outfit; color:rgba(255,255,255,.06); }
+  .tile .list { margin-top:auto; display:grid; gap:10px; padding-top:16px; }
+  .tile.big .list { grid-template-columns:1fr 1fr; }
+  .tile .ce { display:block; border-radius:12px; overflow:hidden; border:1px solid var(--bd); background:#151517; transition:border-color .3s, transform .3s; }
+  .tile .ce:hover { border-color:rgba(239,68,68,.45); transform:translateY(-3px); } .tile .ce:hover .th img { transform:scale(1.05); }
+  .tile .ce .th { aspect-ratio:16/9; } .tile .ce .bd { padding:10px 12px; }
+  .tile.sm .ce .th { display:none; }
+
+  /* 06 editorial index */
+  .ix { display:grid; grid-template-columns:1fr 340px; gap:40px; align-items:start; }
+  .ix-g { padding:18px 0; border-top:1px solid var(--bd); }
+  .ix-g h3 { display:flex; align-items:baseline; gap:10px; font:500 11px 'JetBrains Mono'; color:var(--red); letter-spacing:.12em; text-transform:uppercase; margin-bottom:6px; } .ix-g h3 span { color:var(--mu); }
+  .ix-r { display:grid; grid-template-columns:auto 1fr auto; gap:14px; align-items:baseline; padding:10px 0; }
+  .ix-r .t { font:700 clamp(18px,2vw,22px)/1.2 Outfit; color:rgba(237,237,237,.6); transition:color .3s, transform .4s cubic-bezier(.2,.8,.2,1); }
+  .ix-r .dots { border-bottom:1px dotted rgba(255,255,255,.16); transform:translateY(-5px); min-width:20px; }
+  .ix-r .date { white-space:nowrap; }
+  .ix-r:hover .t, .ix-r.on .t { color:var(--fg); transform:translateX(6px); }
+  .ix-prev { position:sticky; top:90px; }
+  .ix-prev .fr { border:1px solid var(--bd); border-radius:18px; background:var(--card); padding:12px; }
+  .ix-prev .th { aspect-ratio:4/3; border-radius:10px; } .ix-prev .th img { animation:fi .45s ease; } @keyframes fi { from { opacity:0; } }
+  .ix-prev .bd { padding:12px 4px 4px; display:flex; gap:12px; align-items:center; }
+
+  @media (max-width:860px) {
+    #index { display:none; }
+    .tr { grid-template-columns:1fr; gap:14px; } .tr .items, .ai-in { grid-template-columns:1fr; } .ai-in { padding-left:6px; }
+    .cg { grid-template-columns:1fr 1fr; }
+    .kb { grid-template-columns:1fr 1fr; }
+    .tb { grid-template-columns:1fr 1fr; } .tile { grid-column:span 2 !important; grid-row:auto !important; } .tile.big .list { grid-template-columns:1fr; }
+    .ix { grid-template-columns:1fr; } .ix-prev { display:none; }
+    .ai-h { grid-template-columns:30px 1fr 30px; } .ai-h .logos { display:none; }
+  }
+</style>
+</head>
+<body>
+<nav id="index"><a href="#x1">01 topic rows</a><a href="#x2">02 topic filter</a><a href="#x3">03 columns</a><a href="#x4">04 accordion</a><a href="#x5">05 topic bento</a><a href="#x6">06 editorial index</a></nav>
+
+<section id="x1"><div class="tag"><b>01</b> — topic rows · each topic is a row: icon, big name and count on the left, its certificates as cards on the right</div>
+  <div class="wrap"><div class="label"><span>//</span> Certifications</div><div id="s1"></div></div></section>
+
+<section id="x2"><div class="tag"><b>02</b> — topic filter · topics as a pill switch (like your Activity tabs); certificates with their image below</div>
+  <div class="wrap"><div class="label"><span>//</span> Certifications</div><div class="chips" id="chips"><span class="pill"></span></div><div class="cg" id="cg"></div></div></section>
+
+<section id="x3"><div class="tag"><b>03</b> — columns · one column per topic, like a board; each certificate a small card with its image</div>
+  <div class="wrap"><div class="label"><span>//</span> Certifications</div><div class="kb" id="s3"></div></div></section>
+
+<section id="x4"><div class="tag"><b>04</b> — accordion · big topic names with the issuer logos; click a topic to open its certificates</div>
+  <div class="wrap"><div class="label"><span>//</span> Certifications</div><div class="acc" id="s4"></div></div></section>
+
+<section id="x5"><div class="tag"><b>05</b> — topic bento · each topic is a tile, sized by how many certificates it has (AI biggest)</div>
+  <div class="wrap"><div class="label"><span>//</span> Certifications</div><div class="tb" id="s5"></div></div></section>
+
+<section id="x6"><div class="tag"><b>06</b> — editorial index · a contents-page list grouped by topic; hover a title to preview the certificate on the right</div>
+  <div class="wrap"><div class="label"><span>//</span> Certifications</div><div class="ix"><div id="s6"></div><div class="ix-prev" id="ixP"></div></div></div></section>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const C = [
+  { s:'full-stack-web-development-bootcamp', t:'Complete Full Stack Web Development Bootcamp', i:'The App Brewery · Udemy', p:'Udemy', l:'udemy.png', v:true, d:'2025-07-18', topic:'Web Development' },
+  { s:'ai-agents-langchain-llm-apps', t:'AI Agents: Automation & Business with LangChain & LLM Apps', i:'Arnold Oberleiter · Udemy', p:'Udemy', l:'udemy.png', v:false, d:'2026-02-19', topic:'AI & LLMs' },
+  { s:'job-ready-data-science', t:'The Ultimate Job Ready Data Science Course', i:'CodeWithHarry', p:'CodeWithHarry', l:'codewithharry-logo.png', v:false, d:'2025-10-21', topic:'Data Science' },
+  { s:'blockchain-revolution-financial-services', t:'Blockchain Revolution in Financial Services Specialization', i:'INSEAD · Coursera', p:'Coursera', l:'insead.png', v:true, d:'2026-10-21', topic:'Blockchain' },
+  { s:'prompt-engineering-bootcamp', t:'Prompt Engineering Bootcamp', i:'LetsUpgrade', p:'LetsUpgrade', l:'letsupgrade.png', v:true, d:'2025-08-07', topic:'AI & LLMs' },
+  { s:'fly-scholar', t:'FLY-Scholar (Finding the Leader in You)', i:'Competitiveness Mindset Institute, USA', p:'CMI', l:'cmi.png', v:false, d:'2026-01-01', topic:'Leadership' },
+];
+const TOPICS = [
+  { name:'AI & LLMs', ic:'✦', blurb:'Agents, LangChain and prompting' },
+  { name:'Web Development', ic:'</>', blurb:'Full-stack, front to back' },
+  { name:'Data Science', ic:'▥', blurb:'Python, NumPy, Pandas, ML' },
+  { name:'Blockchain', ic:'⛓', blurb:'DeFi and financial services' },
+  { name:'Leadership', ic:'★', blurb:'Initiative and problem solving' },
+];
+C.forEach((c) => { c.img = `cert/${c.s}.jpg`; c.logo = `cert/logos/${c.l}`; c.date = new Date(c.d).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }); });
+TOPICS.forEach((t) => t.list = C.filter((c) => c.topic === t.name));
+const ver = (c) => c.v ? '<span class="ver">✓ Verified</span>' : '';
+const logo = (c) => `<img class="logo" src="${c.logo}" alt="">`;
+const n2 = (k) => String(k).padStart(2, '0');
+const plural = (n) => `${n} certificate${n === 1 ? '' : 's'}`;
+
+/* 01 topic rows */
+$('#s1').innerHTML = TOPICS.map((t) => `<div class="tr fade"><div><span class="ic">${t.ic}</span><h3>${t.name}</h3><div class="cnt">${plural(t.list.length)} · ${t.blurb}</div></div><div class="items">${t.list.map((c) => `<a class="tc" href="#"><div class="th"><img src="${c.img}" alt=""></div><div style="min-width:0"><div class="t">${c.t}</div><div class="iss">${c.i}</div><div style="display:flex;gap:8px;align-items:center;margin-top:8px"><span class="date">${c.date}</span>${ver(c)}</div></div></a>`).join('')}</div></div>`).join('');
+
+/* 02 topic filter */
+(() => {
+  const el = $('#chips');
+  el.insertAdjacentHTML('beforeend', `<button data-t="">All<em>${C.length}</em></button>` + TOPICS.map((t) => `<button data-t="${t.name}">${t.name}<em>${t.list.length}</em></button>`).join(''));
+  const pill = el.querySelector('.pill'), btns = [...el.querySelectorAll('button')];
+  const pick = (b) => {
+    btns.forEach((x) => x.classList.toggle('on', x === b)); pill.style.left = b.offsetLeft + 'px'; pill.style.width = b.offsetWidth + 'px'; pill.style.top = b.offsetTop + 'px';
+    const list = C.filter((c) => !b.dataset.t || c.topic === b.dataset.t);
+    $('#cg').innerHTML = list.map((c, k) => `<a class="cgc" href="#" style="animation-delay:${k * 50}ms"><div class="th" style="aspect-ratio:4/3"><img src="${c.img}" alt=""><span class="topic">${TOPICS.find((t) => t.name === c.topic).ic} ${c.topic}</span></div><div class="bd">${logo(c)}<div style="min-width:0"><div class="t">${c.t}</div><div class="iss">${c.i}</div><div style="display:flex;gap:8px;align-items:center;margin-top:8px"><span class="date">${c.date}</span>${ver(c)}</div></div></div></a>`).join('');
+  };
+  btns.forEach((b) => b.onclick = () => pick(b)); pick(btns[0]);
+})();
+
+/* 03 columns */
+$('#s3').innerHTML = TOPICS.map((t) => `<div class="col fade"><div class="hd"><span class="ic">${t.ic}</span><b>${t.name}</b><span>${t.list.length}</span></div>${t.list.map((c) => `<a class="kc" href="#"><div class="th"><img src="${c.img}" alt=""></div><div class="bd"><div class="t">${c.t}</div><div class="row"><span class="date">${c.date}</span>${c.v ? '<span class="ver">✓</span>' : ''}</div></div></a>`).join('')}</div>`).join('');
+
+/* 04 accordion */
+(() => {
+  $('#s4').innerHTML = TOPICS.map((t, k) => `<div class="ai${k === 0 ? ' open' : ''}"><button class="ai-h"><span class="n">${n2(k + 1)}</span><h3>${t.name}</h3><span class="logos">${[...new Set(t.list.map((c) => c.logo))].map((l) => `<img src="${l}" alt="">`).join('')}</span><span class="pl"></span></button><div class="ai-b"><div><div class="ai-in">${t.list.map((c) => `<a href="#"><div class="th"><img src="${c.img}" alt=""></div><div style="min-width:0"><div class="t">${c.t}</div><div class="iss">${c.i}</div><div style="display:flex;gap:8px;align-items:center;margin-top:8px"><span class="date">${c.date}</span>${ver(c)}</div></div></a>`).join('')}</div></div></div></div>`).join('');
+  document.querySelectorAll('.ai-h').forEach((h) => h.onclick = () => { const it = h.parentElement, was = it.classList.contains('open'); document.querySelectorAll('.ai').forEach((x) => x.classList.remove('open')); if (!was) it.classList.add('open'); });
+})();
+
+/* 05 topic bento */
+(() => {
+  const size = ['big', 'mid', 'sm', 'sm', 'sm'];
+  $('#s5').innerHTML = TOPICS.map((t, k) => `<div class="tile ${size[k]} fade"><div class="hd"><span class="ic">${t.ic}</span><div><h3>${t.name}</h3><div class="iss">${t.blurb}</div></div><span class="cnt">${n2(t.list.length)}</span></div><div class="list">${t.list.map((c) => `<a class="ce" href="#"><div class="th"><img src="${c.img}" alt=""></div><div class="bd"><div class="t" style="font-size:14px">${c.t}</div><div style="display:flex;gap:8px;align-items:center;margin-top:6px"><span class="date">${c.p} · ${c.date}</span>${c.v ? '<span class="ver">✓</span>' : ''}</div></div></a>`).join('')}</div></div>`).join('');
+})();
+
+/* 06 editorial index */
+(() => {
+  $('#s6').innerHTML = TOPICS.map((t) => `<div class="ix-g fade"><h3>${t.ic} ${t.name} <span>· ${t.list.length}</span></h3>${t.list.map((c) => `<a class="ix-r" href="#" data-s="${c.s}"><span class="t">${c.t}</span><span class="dots"></span><span class="date">${c.p} · ${c.date}</span></a>`).join('')}</div>`).join('');
+  const rows = [...document.querySelectorAll('.ix-r')];
+  const show = (s) => { const c = C.find((x) => x.s === s); rows.forEach((r) => r.classList.toggle('on', r.dataset.s === s)); $('#ixP').innerHTML = `<div class="fr"><div class="th"><img src="${c.img}" alt=""></div><div class="bd">${logo(c)}<div style="min-width:0;flex:1"><div class="iss" style="margin:0">${c.i}</div><div style="display:flex;gap:8px;align-items:center;margin-top:5px"><span class="date">${c.date}</span>${ver(c)}</div></div></div></div>`; };
+  rows.forEach((r) => r.addEventListener('mouseenter', () => show(r.dataset.s))); show(rows[0].dataset.s);
+})();
+
+const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: 0.12 });
+document.querySelectorAll('.fade').forEach((el, k) => { el.style.transitionDelay = (k % 3) * 80 + 'ms'; io.observe(el); });
+</script>
+</body>
+</html>

@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>About concepts round three</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@500;700;900&family=Sacramento&display=swap" rel="stylesheet" />
+<style>
+  :root { --bg:#0a0a0a; --fg:#ededed; --mu:#8a8a8a; --card:#111113; --bd:rgba(255,255,255,.09); --red:#ef4444; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--fg); font-family:Inter,sans-serif; overflow-x:clip; }
+  body::before { content:''; position:fixed; inset:0; z-index:-1; background-size:32px 32px; background-image:linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 0),linear-gradient(180deg,rgba(255,255,255,.03) 1px,transparent 0); }
+  section { min-height:100vh; padding:90px 20px 70px; border-bottom:1px solid var(--bd); position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .wrap { width:100%; max-width:810px; }
+  .tag { position:absolute; top:24px; left:24px; font:500 12px 'JetBrains Mono'; color:var(--mu); z-index:5; }
+  .tag b { color:var(--red); font-weight:500; }
+  .label { font:600 11px 'JetBrains Mono'; letter-spacing:.12em; text-transform:uppercase; color:var(--mu); margin-bottom:18px; display:flex; align-items:center; gap:10px; }
+  .label::before { content:''; width:18px; height:1px; background:var(--red); }
+  .mono { font-family:'JetBrains Mono',monospace; }
+  .red { color:var(--red); }
+  .sig { font-family:Sacramento,cursive; line-height:1; }
+  #index { position:fixed; right:18px; top:50%; transform:translateY(-50%); z-index:50; display:flex; flex-direction:column; gap:10px; }
+  #index a { font:500 11px 'JetBrains Mono'; color:var(--mu); text-decoration:none; text-align:right; }
+  #index a:hover { color:var(--fg); }
+  #index a.kept { color:#c4c4c4; }
+
+  /* 1 scroll read (kept) */
+  #s1 { min-height:220vh; justify-content:flex-start; }
+  .read-sticky { position:sticky; top:12vh; width:100%; max-width:900px; }
+  .read { font:600 clamp(26px,3.6vw,44px)/1.3 Outfit; letter-spacing:-.015em; }
+  .read span { color:#262626; transition:color .25s; }
+  .read span.on { color:var(--fg); } .read span.on.k { color:var(--red); }
+  .read img { width:1.1em; height:1.1em; border-radius:50%; object-fit:cover; vertical-align:-.2em; margin:0 .1em; border:2px solid var(--bd); }
+
+  /* 5 deck (kept) */
+  .deck-wrap { display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:center; }
+  .deck { position:relative; height:400px; }
+  .dcard { position:absolute; inset:0; margin:auto; width:300px; height:380px; border-radius:22px; border:1px solid rgba(255,255,255,.12); background:#141416; padding:26px; display:flex; flex-direction:column; transition:transform .55s cubic-bezier(.2,.8,.2,1),opacity .55s; cursor:pointer; user-select:none; box-shadow:0 30px 60px rgba(0,0,0,.5); }
+  .dcard .n { font:900 90px/1 Outfit; color:rgba(255,255,255,.05); position:absolute; right:18px; bottom:6px; }
+  .dcard h3 { font:700 28px/1.15 Outfit; margin:14px 0 12px; letter-spacing:-.01em; }
+  .dcard p { color:#a3a3a3; font-size:14.5px; line-height:1.6; }
+  .dcard .k { font:500 11px 'JetBrains Mono'; color:var(--red); letter-spacing:.1em; text-transform:uppercase; }
+  .dots { display:flex; gap:6px; margin-top:22px; } .dots i { width:22px; height:3px; border-radius:2px; background:#2a2a2a; transition:.3s; } .dots i.on { background:var(--red); }
+
+
+  /* F vinyl */
+  .player { display:grid; grid-template-columns:300px 1fr; gap:36px; align-items:center; }
+  .vinyl { position:relative; width:300px; height:300px; border-radius:50%; background:repeating-radial-gradient(circle,#0c0c0c 0 2px,#161616 2px 4px); box-shadow:0 30px 60px rgba(0,0,0,.6), inset 0 0 0 1px rgba(255,255,255,.06); animation:spin 5s linear infinite; animation-play-state:paused; }
+  .vinyl.on { animation-play-state:running; }
+  .vinyl::after { content:''; position:absolute; inset:0; border-radius:50%; background:conic-gradient(from 30deg,transparent 0 20%,rgba(255,255,255,.07) 25%,transparent 30% 70%,rgba(255,255,255,.05) 75%,transparent 80%); }
+  .vinyl .lbl { position:absolute; inset:96px; border-radius:50%; overflow:hidden; border:6px solid var(--red); }
+  .vinyl .lbl img { width:100%; height:100%; object-fit:cover; }
+  .vinyl .hole { position:absolute; left:50%; top:50%; width:10px; height:10px; margin:-5px; border-radius:50%; background:var(--bg); z-index:2; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .tracks { list-style:none; border-top:1px solid var(--bd); }
+  .tracks li { display:grid; grid-template-columns:28px 1fr auto; gap:14px; align-items:center; padding:12px 6px; border-bottom:1px solid var(--bd); cursor:pointer; font-size:15px; transition:background .15s; }
+  .tracks li:hover { background:rgba(255,255,255,.03); }
+  .tracks li .no { font:12px 'JetBrains Mono'; color:var(--mu); }
+  .tracks li.on .no { color:var(--red); }
+  .tracks li.on { color:var(--red); }
+  .tracks li .d { font:12px 'JetBrains Mono'; color:var(--mu); }
+  .eq { display:inline-flex; gap:2px; align-items:end; height:12px; } .eq i { width:3px; background:var(--red); animation:eq .8s ease-in-out infinite; }
+  .eq i:nth-child(2) { animation-delay:.2s; } .eq i:nth-child(3) { animation-delay:.4s; }
+  @keyframes eq { 0%,100% { height:3px; } 50% { height:12px; } }
+  .lyric { min-height:84px; margin-top:20px; font:600 22px/1.4 Outfit; letter-spacing:-.01em; }
+  .lyric span { opacity:0; display:inline-block; transform:translateY(8px); animation:in .4s forwards; }
+  @keyframes in { to { opacity:1; transform:none; } }
+
+  /* G scoreboard */
+  .board { background:#0b0d0b; border:1px solid rgba(255,255,255,.12); border-radius:14px; padding:22px 24px; font-family:'JetBrains Mono'; box-shadow:inset 0 0 60px rgba(0,0,0,.6); }
+  .board-h { display:flex; justify-content:space-between; align-items:center; font-size:12px; color:var(--mu); letter-spacing:.12em; margin-bottom:16px; }
+  .score { display:flex; align-items:baseline; gap:14px; margin-bottom:18px; }
+  .digits { display:flex; gap:4px; }
+  .flip { width:46px; height:64px; background:#151515; border:1px solid #262626; border-radius:6px; display:grid; place-items:center; font:700 44px 'JetBrains Mono'; color:#fbbf24; position:relative; overflow:hidden; }
+  .flip::after { content:''; position:absolute; left:0; right:0; top:50%; height:1px; background:#000; }
+  .bat { display:grid; grid-template-columns:1fr 70px 60px 60px; gap:8px; padding:10px 0; border-top:1px dashed #262626; font-size:13.5px; align-items:center; }
+  .bat .h { color:var(--mu); font-size:11px; letter-spacing:.1em; }
+  .bat .n { color:#fbbf24; text-align:right; font-weight:700; }
+  .bat .s { color:var(--mu); font-size:12px; }
+  .bat.star .nm::after { content:' *'; color:var(--red); }
+  .ticker { margin-top:14px; border-top:1px solid #262626; padding-top:12px; white-space:nowrap; overflow:hidden; font-size:12.5px; color:#a3a3a3; }
+  .ticker div { display:inline-block; animation:tk 26s linear infinite; }
+  @keyframes tk { from { transform:translateX(30%); } to { transform:translateX(-100%); } }
+
+  /* H terminal */
+  .term { background:#0c0c0d; border:1px solid var(--bd); border-radius:14px; overflow:hidden; box-shadow:0 30px 80px rgba(0,0,0,.5); }
+  .term-h { display:flex; gap:7px; padding:12px 14px; border-bottom:1px solid var(--bd); align-items:center; }
+  .term-h i { width:11px; height:11px; border-radius:50%; background:#2a2a2a; } .term-h i:first-child { background:var(--red); }
+  .term-h span { margin-left:10px; font:12px 'JetBrains Mono'; color:var(--mu); }
+  .term-b { height:380px; overflow-y:auto; padding:16px 18px; font:13.5px/1.7 'JetBrains Mono'; scrollbar-width:none; }
+  .term-b .p { color:var(--red); } .term-b .m { color:var(--mu); } .term-b .y { color:#fbbf24; }
+  .term-in { display:flex; gap:8px; align-items:center; }
+  .term-in input { flex:1; background:transparent; border:0; outline:0; color:var(--fg); font:13.5px 'JetBrains Mono'; caret-color:var(--red); }
+  .cmds { display:flex; flex-wrap:wrap; gap:6px; padding:12px 18px; border-top:1px solid var(--bd); }
+  .cmds button { font:12px 'JetBrains Mono'; color:var(--mu); background:#141414; border:1px solid var(--bd); border-radius:6px; padding:5px 10px; cursor:pointer; }
+  .cmds button:hover { color:var(--red); border-color:var(--red); }
+
+  /* I physics */
+  .phys { display:grid; grid-template-columns:1fr 1.2fr; gap:30px; align-items:center; }
+  .pit { position:relative; height:420px; border:1px solid var(--bd); border-radius:18px; overflow:hidden; background:#0d0d0e; cursor:grab; }
+  .pit canvas { position:absolute; inset:0; }
+  .chip { position:absolute; left:0; top:0; padding:9px 16px; border-radius:99px; font:600 15px Inter; white-space:nowrap; pointer-events:none; user-select:none; border:1px solid rgba(255,255,255,.14); background:#1a1a1c; }
+  .chip.r { background:var(--red); color:#fff; border-color:var(--red); } .chip.w { background:#ededed; color:#0a0a0a; }
+  .chip.o { background:transparent; color:#bdbdbd; }
+
+  /* J split-flap */
+  .sf { background:#090909; border:1px solid rgba(255,255,255,.1); border-radius:14px; padding:22px; }
+  .sf-row { display:grid; grid-template-columns:120px 1fr; gap:16px; align-items:center; padding:8px 0; }
+  .sf-row .k { font:500 11px 'JetBrains Mono'; color:var(--mu); letter-spacing:.12em; }
+  .cells { display:flex; gap:3px; flex-wrap:wrap; }
+  .cell { width:24px; height:34px; background:#161616; border-radius:3px; display:grid; place-items:center; font:700 18px 'JetBrains Mono'; color:#f5f5f5; position:relative; overflow:hidden; box-shadow:inset 0 -1px 0 rgba(255,255,255,.04); }
+  .cell::after { content:''; position:absolute; left:0; right:0; top:50%; height:1px; background:#000; }
+  .cell.r { color:var(--red); }
+  .cell.flip-a { animation:fl .08s linear; }
+  @keyframes fl { 50% { transform:scaleY(.2); } }
+  .sf-top { display:flex; justify-content:space-between; font:12px 'JetBrains Mono'; color:var(--mu); margin-bottom:12px; }
+
+  @media (max-width:760px) { .player, .phys { grid-template-columns:1fr; } .vinyl { margin:0 auto; } .bat { grid-template-columns:1fr 50px 50px; } .bat .s:last-child { display:none; } .sf-row { grid-template-columns:1fr; gap:6px; } .cell { width:18px; height:26px; font-size:14px; } }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+</head>
+<body>
+<nav id="index">
+  <a href="#s1" class="kept">01 scroll read ★</a><a href="#s5" class="kept">05 card deck ★</a>
+  <a href="#f">F vinyl</a><a href="#g">G scorecard</a><a href="#h">H terminal</a><a href="#i">I gravity</a><a href="#j">J flap board</a>
+</nav>
+<!-- kept 1 -->
+<section id="s1">
+  <div class="tag"><b>01</b> — scroll read (kept) · words light up as you scroll</div>
+  <div class="read-sticky"><div class="label">About me</div><p class="read" id="read"></p></div>
+</section>
+
+<!-- kept 5 -->
+<section id="s5">
+  <div class="tag"><b>05</b> — card deck (kept) · click the card</div>
+  <div class="wrap deck-wrap">
+    <div>
+      <div class="label">About me</div>
+      <div style="font:700 44px/1.05 Outfit;letter-spacing:-.02em">Five things<br>to know <span class="red">about me.</span></div>
+      <p style="color:#a3a3a3;margin-top:16px;line-height:1.65;font-size:15px">A full-stack developer who likes turning ideas into products people actually use. Deal the deck for the rest.</p>
+      <div class="dots" id="dots"></div>
+    </div>
+    <div class="deck" id="deck"></div>
+  </div>
+</section>
+
+
+<!-- F -->
+<section id="f">
+  <div class="tag"><b>F</b> — side A / side B · click a track</div>
+  <div class="wrap">
+    <div class="label">About me</div>
+    <div class="player">
+      <div class="vinyl" id="vinyl"><div class="lbl"><img src="me.jpg" alt="" /></div><div class="hole"></div></div>
+      <div>
+        <div class="mono" style="font-size:12px;color:var(--mu)">LP · 2006 — present</div>
+        <div style="font:900 40px/1 Outfit;letter-spacing:-.02em;margin:6px 0 2px">Prakash Swami</div>
+        <div style="color:var(--mu);font-size:14px;margin-bottom:18px">Full-stack developer · Pune</div>
+        <ul class="tracks" id="tracks"></ul>
+        <div class="lyric" id="lyric"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- G -->
+<section id="g">
+  <div class="tag"><b>G</b> — scorecard · your career as a cricket innings</div>
+  <div class="wrap">
+    <div class="label">About me</div>
+    <div class="board">
+      <div class="board-h"><span>☠ PRAKASH XI · 1ST INNINGS</span><span><span class="red">●</span> LIVE · PUNE</span></div>
+      <div class="score"><div class="digits" id="digits"></div><div><div style="font:700 22px 'JetBrains Mono';color:#fbbf24">/ 0</div><div style="font-size:11px;color:var(--mu)">NOT OUT · STILL BATTING</div></div></div>
+      <div class="bat"><span class="h">BATTER</span><span class="h" style="text-align:right">RUNS</span><span class="h">SINCE</span><span class="h">ROLE</span></div>
+      <div class="bat star"><span class="nm">MediChain</span><span class="n">CTO</span><span class="s">2025</span><span class="s">co-founder</span></div>
+      <div class="bat"><span class="nm">LeetCode</span><span class="n" data-c="400">0</span><span class="s">2024</span><span class="s">problems</span></div>
+      <div class="bat"><span class="nm">The GP Edge</span><span class="n">SHIP</span><span class="s">2026</span><span class="s">backend</span></div>
+      <div class="bat"><span class="nm">VIT Pune</span><span class="n" data-c="884" data-d="2">0</span><span class="s">2024</span><span class="s">CGPA</span></div>
+      <div class="ticker"><div>FULL-STACK DEVELOPER AT THE CREASE ✦ REACT · NEXT.JS · NODE · POSTGRES ✦ AI WITH LLMs, LANGCHAIN AND RAG ✦ OFF THE FIELD: MOVIES, CRICKET (FOR REAL) AND RAP ✦ TURNS IDEAS INTO PRODUCTS PEOPLE ACTUALLY USE ✦</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- H -->
+<section id="h">
+  <div class="tag"><b>H</b> — terminal · type a command or tap one</div>
+  <div class="wrap">
+    <div class="label">About me</div>
+    <div class="term">
+      <div class="term-h"><i></i><i></i><i></i><span>guest@prakash.dev: ~</span></div>
+      <div class="term-b" id="tb"><div class="m">Welcome. Type <span class="y">help</span> to see what I can tell you.</div><div class="term-in"><span class="p">❯</span><input id="ti" autocomplete="off" spellcheck="false" aria-label="command" /></div></div>
+      <div class="cmds" id="cmds"></div>
+    </div>
+  </div>
+</section>
+
+<!-- I -->
+<section id="i">
+  <div class="tag"><b>I</b> — gravity · words drop in; grab and throw them</div>
+  <div class="wrap phys">
+    <div>
+      <div class="label">About me</div>
+      <p style="font:600 26px/1.35 Outfit;letter-spacing:-.01em">I'm a <span class="red">full-stack developer</span> who turns ideas into products people actually use.</p>
+      <p style="color:#a3a3a3;line-height:1.7;margin-top:14px;font-size:15px">CTO and co-founder of MediChain, Computer Engineering at VIT Pune, built The GP Edge for a client in Australia, 400+ LeetCode problems. Off the keyboard: movies, cricket and rap.</p>
+    </div>
+    <div class="pit" id="pit"></div>
+  </div>
+</section>
+
+<!-- J -->
+<section id="j">
+  <div class="tag"><b>J</b> — flap board · like an airport departures board</div>
+  <div class="wrap">
+    <div class="label">About me</div>
+    <div class="sf">
+      <div class="sf-top"><span>☠ DEPARTURES · PUNE (PNQ)</span><span id="sfclock"></span></div>
+      <div id="sf"></div>
+    </div>
+    <p style="color:#a3a3a3;line-height:1.7;margin-top:18px;font-size:15px;max-width:620px">Full-stack developer and Computer Engineering student who turns ideas into products people actually use.</p>
+  </div>
+</section>
+
+<script>
+
+/* F vinyl */
+(() => {
+  const T = [
+    ['Who I am', '3:12', 'Full-stack developer and Computer Engineering student at VIT Pune.'],
+    ['CTO (MediChain)', '4:05', 'Co-founded MediChain. I lead the tech that puts patients in control of their records.'],
+    ['React / Next / Node', '2:48', 'React, Next.js, Node.js and PostgreSQL — and AI with LLMs, LangChain and RAG.'],
+    ['Built in Australia', '3:30', 'The GP Edge at Career Craftly: I owned the system design and backend.'],
+    ['400+ (LeetCode)', '2:22', 'Over 400 LeetCode problems solved. The fundamentals stay sharp.'],
+    ['Side B: off-duty', '3:58', 'Movies, cricket, rap — and trying something new in tech.'],
+  ];
+  const ul = $('#tracks'), ly = $('#lyric'), v = $('#vinyl');
+  ul.innerHTML = T.map(([n, d], i) => `<li><span class="no">0${i + 1}</span><span>${n}</span><span class="d">${d}</span></li>`).join('');
+  const play = (i) => {
+    [...ul.children].forEach((li, k) => { li.classList.toggle('on', k === i); li.querySelector('.no').innerHTML = k === i ? '<span class="eq"><i></i><i></i><i></i></span>' : '0' + (k + 1); });
+    v.classList.add('on');
+    ly.innerHTML = T[i][2].split(' ').map((w, k) => `<span style="animation-delay:${k * 70}ms">${w}&nbsp;</span>`).join('');
+  };
+  [...ul.children].forEach((li, i) => (li.onclick = () => play(i)));
+  seen($('#f'), () => play(0));
+})();
+
+/* G scoreboard */
+(() => {
+  const d = $('#digits');
+  d.innerHTML = '<div class="flip">0</div><div class="flip">0</div><div class="flip">0</div>';
+  seen($('#g'), () => {
+    const target = 400, t0 = performance.now();
+    const run = (t) => {
+      const p = Math.min(1, (t - t0) / 1600), v = Math.round(target * (1 - Math.pow(1 - p, 3)));
+      String(v).padStart(3, '0').split('').forEach((c, i) => (d.children[i].textContent = c));
+      document.querySelectorAll('.bat .n[data-c]').forEach((n) => { const val = n.dataset.c * (1 - Math.pow(1 - p, 3)); n.textContent = n.dataset.d ? (val / 100).toFixed(2) : Math.round(val) + '+'; });
+      if (p < 1) requestAnimationFrame(run);
+    };
+    requestAnimationFrame(run);
+  });
+})();
+
+/* H terminal */
+(() => {
+  const C = {
+    help: ['<span class="m">available:</span> whoami  now  stack  experience  education  hobbies  contact  clear'],
+    whoami: ['Prakash Swami — full-stack developer, Pune.', '<span class="m">turns ideas into products people actually use.</span>'],
+    now: ['<span class="y">CTO & co-founder</span> @ MediChain', '<span class="m">patient-owned medical records · Flutter, React, Node, Solidity on Polygon</span>'],
+    stack: ['react  next.js  node.js  postgresql  typescript', 'llms  langchain  rag  solidity  flutter'],
+    experience: ['Career Craftly — built <span class="y">The GP Edge</span> for a client in Australia', '<span class="m">owned system design + backend · Next.js, TypeScript, PostgreSQL, Gemini</span>'],
+    education: ['B.Tech Computer Engineering · VIT Pune · 2024–2028 · <span class="y">CGPA 8.84</span>', '<span class="m">400+ LeetCode problems solved</span>'],
+    hobbies: ['movies 🎬  cricket 🏏  rap 🎧', '<span class="m">and trying out new things in tech</span>'],
+    contact: ['scroll to the bottom, or <span class="y">prakashswami.dev@gmail.com</span>'],
+  };
+  const tb = $('#tb'), ti = $('#ti'), inLine = tb.querySelector('.term-in');
+  const out = (html) => { const d = document.createElement('div'); d.innerHTML = html; tb.insertBefore(d, inLine); };
+  const run = (cmd) => {
+    cmd = cmd.trim().toLowerCase(); if (!cmd) return;
+    out(`<span class="p">❯</span> ${cmd}`);
+    if (cmd === 'clear') { [...tb.children].forEach((c) => c !== inLine && c.remove()); return; }
+    (C[cmd] || [`<span class="m">command not found: ${cmd}. try</span> <span class="y">help</span>`]).forEach(out);
+    tb.scrollTop = tb.scrollHeight;
+  };
+  ti.addEventListener('keydown', (e) => { if (e.key === 'Enter') { run(ti.value); ti.value = ''; } if (e.key === 'Tab') { e.preventDefault(); const m = Object.keys(C).find((k) => k.startsWith(ti.value)); if (m) ti.value = m; } });
+  $('#cmds').innerHTML = Object.keys(C).filter((k) => k !== 'help').map((k) => `<button>${k}</button>`).join('');
+  $('#cmds').onclick = (e) => { if (e.target.tagName === 'BUTTON') { run(e.target.textContent); ti.focus({ preventScroll: true }); } };
+  tb.onclick = () => ti.focus({ preventScroll: true });
+  seen($('#h'), () => { const s = 'whoami'; let i = 0; const id = setInterval(() => { ti.value = s.slice(0, ++i); if (i === s.length) { clearInterval(id); setTimeout(() => { run(s); ti.value = ''; }, 300); } }, 90); });
+})();
+
+/* I gravity */
+(() => {
+  const pit = $('#pit');
+  const words = [['Full-stack', 'r'], ['React', ''], ['Next.js', 'w'], ['Node.js', ''], ['PostgreSQL', 'o'], ['MediChain', 'r'], ['CTO', 'w'], ['VIT Pune', ''], ['LLMs', 'o'], ['RAG', ''], ['Solidity', 'o'], ['Flutter', ''], ['400+ LeetCode', 'w'], ['The GP Edge', ''], ['Cricket', 'o'], ['Movies', ''], ['Rap', 'r'], ['TypeScript', 'o']];
+  seen(pit, () => {
+    const { Engine, Bodies, Composite, Mouse, MouseConstraint, Runner, Body } = Matter;
+    const eng = Engine.create(), W = pit.clientWidth, H = pit.clientHeight;
+    eng.gravity.y = 1.1;
+    const wall = { isStatic: true };
+    Composite.add(eng.world, [Bodies.rectangle(W / 2, H + 25, W * 2, 50, wall), Bodies.rectangle(-25, H / 2, 50, H * 3, wall), Bodies.rectangle(W + 25, H / 2, 50, H * 3, wall)]);
+    const items = words.map(([t, c], i) => {
+      const el = document.createElement('div'); el.className = 'chip ' + c; el.textContent = t; pit.appendChild(el);
+      const w = el.offsetWidth, h = el.offsetHeight;
+      const b = Bodies.rectangle(40 + Math.random() * (W - 80), -60 - i * 45, w, h, { chamfer: { radius: h / 2 }, restitution: .45, friction: .2 });
+      Body.setAngle(b, (Math.random() - .5) * .8);
+      Composite.add(eng.world, b); return { el, b, w, h };
+    });
+    const mouse = Mouse.create(pit);
+    mouse.element.removeEventListener('mousewheel', mouse.mousewheel); mouse.element.removeEventListener('DOMMouseScroll', mouse.mousewheel); mouse.element.removeEventListener('wheel', mouse.mousewheel);
+    Composite.add(eng.world, MouseConstraint.create(eng, { mouse, constraint: { stiffness: .2, render: { visible: false } } }));
+    Runner.run(Runner.create(), eng);
+    (function f() { items.forEach(({ el, b, w, h }) => (el.style.transform = `translate(${b.position.x - w / 2}px,${b.position.y - h / 2}px) rotate(${b.angle}rad)`)); requestAnimationFrame(f); })();
+  }, .5);
+})();
+
+/* J flap board */
+(() => {
+  const rows = [['NAME', 'PRAKASH SWAMI', 1], ['ROLE', 'FULL-STACK DEV'], ['NOW', 'CTO @ MEDICHAIN', 1], ['STUDY', 'VIT PUNE  8.84'], ['SHIPPED', 'THE GP EDGE'], ['LEETCODE', '400+ SOLVED'], ['OFF DUTY', 'CRICKET  RAP', 1]];
+  const N = 16, A = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@+.-';
+  const sf = $('#sf');
+  sf.innerHTML = rows.map(([k, , r]) => `<div class="sf-row"><span class="k">${k}</span><div class="cells">${Array.from({ length: N }, () => `<span class="cell${r ? ' r' : ''}"> </span>`).join('')}</div></div>`).join('');
+  const flipTo = (cell, ch, delay) => {
+    let i = 0; const target = A.indexOf(ch) < 0 ? 0 : A.indexOf(ch), steps = 8 + Math.floor(Math.random() * 10);
+    setTimeout(function step() {
+      if (i >= steps) { cell.textContent = ch; return; }
+      cell.textContent = A[(target + A.length - (steps - i)) % A.length]; cell.classList.remove('flip-a'); void cell.offsetWidth; cell.classList.add('flip-a'); i++; setTimeout(step, 55);
+    }, delay);
+  };
+  const show = () => [...sf.children].forEach((row, r) => { const txt = rows[r][1].padEnd(N); [...row.querySelectorAll('.cell')].forEach((c, i) => flipTo(c, txt[i], r * 120 + i * 25)); });
+  seen($('#j'), show);
+  const tick = () => ($('#sfclock').textContent = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Kolkata' }) + ' IST');
+  tick(); setInterval(tick, 10000);
+})();
+</script>
+</body>
+</html>

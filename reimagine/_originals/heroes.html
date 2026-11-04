@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Hero concepts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@500;700;900&family=Sacramento&display=swap" rel="stylesheet" />
+<style>
+  :root { --bg:#0a0a0a; --fg:#ededed; --mu:#8a8a8a; --dim:#1c1c1c; --bd:rgba(255,255,255,.1); --red:#ef4444; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html { scroll-snap-type:y mandatory; }
+  body { background:var(--bg); color:var(--fg); font-family:Inter,sans-serif; overflow-x:hidden; }
+  section { position:relative; min-height:100vh; scroll-snap-align:start; overflow:hidden; display:flex; align-items:center; justify-content:center; padding:80px 24px; border-bottom:1px solid var(--bd); }
+  .tag { position:absolute; top:22px; left:24px; font:500 12px 'JetBrains Mono',monospace; color:var(--mu); z-index:20; letter-spacing:.04em; }
+  .tag b { color:var(--red); font-weight:500; }
+  .mono { font-family:'JetBrains Mono',monospace; }
+  .sig { font-family:Sacramento,cursive; font-weight:400; line-height:1; }
+  .btn { display:inline-flex; align-items:center; gap:8px; padding:11px 18px; border-radius:10px; font:500 14px Inter; border:1px solid var(--bd); color:var(--fg); text-decoration:none; background:rgba(255,255,255,.03); }
+  .btn.p { background:var(--fg); color:#0a0a0a; border-color:var(--fg); }
+  .dot { display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--red); box-shadow:0 0 0 0 rgba(239,68,68,.6); animation:ping 1.8s infinite; }
+  @keyframes ping { 70% { box-shadow:0 0 0 8px rgba(239,68,68,0); } 100% { box-shadow:0 0 0 0 rgba(239,68,68,0); } }
+  .grid-bg { position:absolute; inset:0; background-size:32px 32px; background-image:linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 0),linear-gradient(180deg,rgba(255,255,255,.035) 1px,transparent 0); pointer-events:none; }
+  #index { position:fixed; right:18px; top:50%; transform:translateY(-50%); z-index:100; display:flex; flex-direction:column; gap:10px; }
+  #index a { font:500 11px 'JetBrains Mono'; color:var(--mu); text-decoration:none; text-align:right; }
+  #index a:hover { color:var(--fg); }
+
+  /* 1 terminal boot */
+  .t-wrap { display:grid; grid-template-columns:1.25fr 1fr; gap:48px; max-width:1100px; width:100%; align-items:center; }
+  .term { border:1px solid var(--bd); border-radius:14px; background:#0d0d0d; overflow:hidden; box-shadow:0 30px 80px rgba(0,0,0,.6); }
+  .term-h { display:flex; gap:7px; padding:12px 14px; border-bottom:1px solid var(--bd); align-items:center; }
+  .term-h i { width:11px; height:11px; border-radius:50%; background:#2a2a2a; } .term-h i:first-child { background:var(--red); }
+  .term-h span { margin-left:10px; font:12px 'JetBrains Mono'; color:var(--mu); }
+  .term-b { padding:18px 20px; font:13.5px/1.75 'JetBrains Mono'; min-height:360px; }
+  .term-b .ok { color:#22c55e; } .term-b .r { color:var(--red); } .term-b .m { color:var(--mu); }
+  .caret { display:inline-block; width:8px; height:16px; background:var(--fg); vertical-align:-3px; animation:blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity:0; } }
+  .crt { position:relative; aspect-ratio:1; border-radius:50%; overflow:hidden; border:1px solid var(--bd); }
+  .crt img { width:100%; height:100%; object-fit:cover; filter:contrast(1.1); }
+  .crt::after { content:''; position:absolute; inset:0; background:repeating-linear-gradient(0deg,rgba(0,0,0,.35) 0 2px,transparent 2px 4px); mix-blend-mode:multiply; }
+  .crt .scan { position:absolute; left:0; right:0; height:30%; background:linear-gradient(transparent,rgba(239,68,68,.18),transparent); animation:scan 3.5s linear infinite; z-index:2; }
+  @keyframes scan { from { top:-30%; } to { top:100%; } }
+  .crt.glitch img { animation:glitch .35s steps(2) 3; }
+  @keyframes glitch { 0% { transform:translate(3px,-2px); filter:hue-rotate(40deg) contrast(1.4); } 50% { transform:translate(-4px,2px); } 100% { transform:none; } }
+  .t-name { font-size:88px; margin-top:20px; opacity:0; transition:opacity 1s; }
+  .t-name.on { opacity:1; }
+
+  /* 2 spotlight */
+  #s2 { cursor:none; }
+  .wall { position:absolute; inset:-20px; font:700 30px/1.15 Outfit; letter-spacing:-.01em; word-spacing:14px; color:#161616; user-select:none; text-transform:uppercase; padding:10px; }
+  .wall.lit { color:#e9e9e9; -webkit-mask-image:radial-gradient(circle 190px at var(--x,50%) var(--y,50%),#000 0%,rgba(0,0,0,.5) 45%,transparent 100%); mask-image:radial-gradient(circle 190px at var(--x,50%) var(--y,50%),#000 0%,rgba(0,0,0,.5) 45%,transparent 100%); }
+  .wall.lit em { color:var(--red); font-style:normal; }
+  .s2-card { position:relative; z-index:5; text-align:center; background:rgba(10,10,10,.82); backdrop-filter:blur(10px); border:1px solid var(--bd); border-radius:24px; padding:36px 48px; }
+  .s2-card img { width:104px; height:104px; border-radius:50%; object-fit:cover; border:2px solid var(--bd); }
+  .lens { position:absolute; width:16px; height:16px; border:1.5px solid var(--red); border-radius:50%; pointer-events:none; z-index:10; transform:translate(-50%,-50%); }
+
+  /* 3 kinetic */
+  .rows { position:absolute; inset:0; display:flex; flex-direction:column; justify-content:center; gap:0; }
+  .row { white-space:nowrap; font:900 clamp(64px,11vw,170px)/0.95 Outfit; letter-spacing:-.03em; text-transform:uppercase; display:flex; }
+  .row span { padding-right:.4em; color:transparent; -webkit-text-stroke:1.2px rgba(255,255,255,.18); }
+  .row span.f { color:#efefef; -webkit-text-stroke:0; } .row span.rd { color:var(--red); -webkit-text-stroke:0; }
+  .row .trk { display:flex; animation:mq 38s linear infinite; } .row.rev .trk { animation-direction:reverse; animation-duration:46s; }
+  @keyframes mq { to { transform:translateX(-50%); } }
+  .badge { position:relative; z-index:5; width:260px; height:260px; }
+  .badge img { position:absolute; inset:48px; width:164px; height:164px; border-radius:50%; object-fit:cover; border:3px solid var(--bg); outline:1px solid var(--bd); }
+  .badge svg { position:absolute; inset:0; animation:spin 18s linear infinite; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .k-foot { position:absolute; bottom:34px; left:0; right:0; display:flex; justify-content:space-between; align-items:end; padding:0 40px; z-index:6; }
+
+  /* 4 desktop */
+  #s4 { padding:0; align-items:stretch; background:radial-gradient(circle at 30% 20%,#1d0d0d 0,#0a0a0a 55%); }
+  .menubar { position:absolute; top:0; left:0; right:0; height:30px; display:flex; align-items:center; justify-content:space-between; padding:0 16px; font:12px 'JetBrains Mono'; color:#bbb; background:rgba(0,0,0,.4); backdrop-filter:blur(10px); border-bottom:1px solid var(--bd); z-index:30; }
+  .win { position:absolute; background:rgba(18,18,18,.92); backdrop-filter:blur(16px); border:1px solid var(--bd); border-radius:12px; box-shadow:0 24px 60px rgba(0,0,0,.55); overflow:hidden; }
+  .win-h { display:flex; align-items:center; gap:6px; padding:9px 12px; border-bottom:1px solid var(--bd); cursor:grab; user-select:none; font:11.5px 'JetBrains Mono'; color:var(--mu); }
+  .win-h i { width:10px; height:10px; border-radius:50%; background:#333; } .win-h i:first-child { background:var(--red); }
+  .win-h span { margin-left:8px; }
+  .win-b { padding:16px 18px; font-size:13.5px; line-height:1.6; }
+  .dock { position:absolute; bottom:18px; left:50%; transform:translateX(-50%); display:flex; gap:10px; align-items:end; padding:10px 12px; border-radius:18px; background:rgba(30,30,30,.6); backdrop-filter:blur(14px); border:1px solid var(--bd); z-index:30; }
+  .dock a { width:46px; height:46px; border-radius:12px; background:#1f1f1f; border:1px solid var(--bd); display:grid; place-items:center; color:var(--fg); font:600 11px 'JetBrains Mono'; text-decoration:none; transition:width .15s,height .15s,margin .15s; }
+  .dock a:hover { width:62px; height:62px; }
+  .dock a.red { background:var(--red); color:#fff; }
+  .hint { position:absolute; bottom:94px; left:50%; transform:translateX(-50%); font:11px 'JetBrains Mono'; color:var(--mu); z-index:5; }
+
+  /* 5 constellation */
+  #net { position:absolute; inset:0; }
+  .c-wrap { position:relative; z-index:3; display:grid; grid-template-columns:1fr 1fr; width:100%; max-width:1150px; align-items:center; pointer-events:none; }
+  .c-wrap .l { pointer-events:auto; }
+  .c-photo { justify-self:center; width:150px; height:150px; border-radius:50%; overflow:hidden; border:2px solid var(--red); box-shadow:0 0 0 8px rgba(239,68,68,.08),0 0 0 16px rgba(239,68,68,.04); }
+  .c-photo img { width:100%; height:100%; object-fit:cover; }
+
+  /* 6 lanyard */
+  .l-wrap { display:grid; grid-template-columns:1.1fr 1fr; gap:40px; max-width:1100px; width:100%; align-items:center; }
+  .stage { position:relative; height:620px; }
+  #strap { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; overflow:visible; }
+  .card { position:absolute; width:270px; height:400px; border-radius:18px; background:linear-gradient(160deg,#1b1b1b,#0f0f0f); border:1px solid rgba(255,255,255,.14); box-shadow:0 40px 80px rgba(0,0,0,.6); cursor:grab; user-select:none; transform-origin:50% 0; overflow:hidden; touch-action:none; }
+  .card .hole { position:absolute; top:14px; left:50%; width:44px; height:9px; margin-left:-22px; border-radius:9px; background:#050505; border:1px solid var(--bd); }
+  .card .shine { position:absolute; inset:0; background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.09) 45%,transparent 60%); pointer-events:none; }
+  .card .stripe { position:absolute; left:0; right:0; top:44px; height:4px; background:var(--red); }
+  .bars { display:flex; gap:2px; height:34px; align-items:stretch; }
+  .bars i { background:#cfcfcf; }
+
+  @media (max-width:860px) { .t-wrap,.l-wrap,.c-wrap { grid-template-columns:1fr; } .t-name { font-size:60px; } #index { display:none; } .stage { height:520px; } }
+</style>
+</head>
+<body>
+<nav id="index"><a href="#s1">01 boot</a><a href="#s2">02 spotlight</a><a href="#s3">03 kinetic</a><a href="#s4">04 desktop</a><a href="#s5">05 network</a><a href="#s6">06 id badge</a></nav>
+
+<!-- 1 -->
+<section id="s1">
+  <div class="grid-bg"></div>
+  <div class="tag"><b>01</b> — terminal boot · <a href="#" id="replay1" style="color:var(--mu)">replay</a></div>
+  <div class="t-wrap">
+    <div>
+      <div class="term">
+        <div class="term-h"><i></i><i></i><i></i><span>prakash@pune: ~</span></div>
+        <div class="term-b" id="tb"></div>
+      </div>
+    </div>
+    <div style="text-align:center">
+      <div class="crt" id="crt" style="max-width:340px;margin:0 auto"><div class="scan"></div><img src="me.jpg" alt="" /></div>
+      <div class="sig t-name" id="tname">Prakash Swami</div>
+    </div>
+  </div>
+</section>
+
+<!-- 2 -->
+<section id="s2">
+  <div class="tag"><b>02</b> — spotlight · move your cursor</div>
+  <div class="wall" id="w1"></div>
+  <div class="wall lit" id="w2"></div>
+  <div class="lens" id="lens"></div>
+  <div class="s2-card">
+    <img src="me.jpg" alt="" />
+    <div class="sig" style="font-size:84px;margin-top:8px">Prakash Swami</div>
+    <div class="mono" style="color:var(--mu);font-size:14px;margin:6px 0 22px">Full-Stack Developer · CTO @ MediChain · Pune</div>
+    <div style="display:flex;gap:10px;justify-content:center"><a class="btn p" href="#">Get in touch</a><a class="btn" href="#">View projects →</a></div>
+  </div>
+</section>
+
+<!-- 3 -->
+<section id="s3">
+  <div class="tag"><b>03</b> — kinetic type</div>
+  <div class="rows">
+    <div class="row"><div class="trk" id="r1"></div></div>
+    <div class="row rev"><div class="trk" id="r2"></div></div>
+    <div class="row"><div class="trk" id="r3"></div></div>
+  </div>
+  <div class="badge">
+    <svg viewBox="0 0 260 260"><defs><path id="circ" d="M130,130 m-112,0 a112,112 0 1,1 224,0 a112,112 0 1,1 -224,0"/></defs>
+      <text font-family="JetBrains Mono" font-size="13.5" letter-spacing="3.2" fill="#ededed"><textPath href="#circ">OPEN TO WORK ✦ BASED IN PUNE ✦ FULL-STACK ✦ CTO @ MEDICHAIN ✦</textPath></text></svg>
+    <img src="me.jpg" alt="" />
+  </div>
+  <div class="k-foot">
+    <div><div class="sig" style="font-size:70px">Prakash Swami</div><div class="mono" style="color:var(--mu);font-size:13px;margin-top:6px">B.Tech CE · VIT Pune</div></div>
+    <div style="display:flex;gap:10px"><a class="btn p" href="#">Get in touch</a><a class="btn" href="#">Projects ↓</a></div>
+  </div>
+</section>
+
+<!-- 4 -->
+<section id="s4">
+  <div class="tag" style="top:42px"><b>04</b> — desktop os · drag the windows</div>
+  <div class="menubar"><span>☠ prakash-os &nbsp; File &nbsp; Projects &nbsp; Contact</span><span id="clock"></span></div>
+  <div class="win" style="left:8%;top:16%;width:380px" data-w>
+    <div class="win-h"><i></i><i></i><i></i><span>about.md</span></div>
+    <div class="win-b" style="display:flex;gap:16px;align-items:center">
+      <img src="me.jpg" alt="" style="width:86px;height:86px;border-radius:50%;object-fit:cover" />
+      <div><div class="sig" style="font-size:46px">Prakash Swami</div><div class="mono" style="color:var(--mu);font-size:12px">Full-Stack Developer · Pune</div></div>
+    </div>
+    <div class="win-b" style="padding-top:0;color:#bbb">Versatile creator of innovative, user-focused digital solutions across web and beyond.</div>
+  </div>
+  <div class="win" style="left:44%;top:12%;width:420px" data-w>
+    <div class="win-h"><i></i><i></i><i></i><span>zsh — whoami</span></div>
+    <div class="win-b mono" style="font-size:12.5px;line-height:1.8">
+      <span style="color:var(--red)">❯</span> whoami<br><span style="color:var(--mu)">prakash — full-stack dev, builder, cofounder</span><br>
+      <span style="color:var(--red)">❯</span> cat stack.txt<br><span style="color:var(--mu)">next.js · react · node · solidity · flutter · postgres</span><br>
+      <span style="color:var(--red)">❯</span> <span class="caret"></span>
+    </div>
+  </div>
+  <div class="win" style="left:14%;top:56%;width:300px" data-w>
+    <div class="win-h"><i></i><i></i><i></i><span>now.txt</span></div>
+    <div class="win-b"><div class="mono" style="font-size:11px;color:var(--mu);margin-bottom:8px"><span class="dot"></span>&nbsp; currently</div>
+      <b style="font-weight:600">CTO & Co-Founder</b><div style="color:var(--mu);margin-bottom:8px">MediChain · 2025 → now</div>
+      <b style="font-weight:600">Web Developer Intern</b><div style="color:var(--mu)">Career Craftly</div></div>
+  </div>
+  <div class="win" style="left:60%;top:50%;width:280px" data-w>
+    <div class="win-h"><i></i><i></i><i></i><span>activity.app</span></div>
+    <div class="win-b"><div id="mini" style="display:grid;grid-template-columns:repeat(18,1fr);gap:3px"></div>
+      <div class="mono" style="font-size:11px;color:var(--mu);margin-top:10px">github + leetcode, past year</div></div>
+  </div>
+  <div class="hint">click a window to bring it forward</div>
+  <div class="dock"><a href="#">GH</a><a href="#">in</a><a href="#">LC</a><a href="#">CV</a><a href="#" class="red">✉</a></div>
+</section>
+
+<!-- 5 -->
+<section id="s5">
+  <canvas id="net"></canvas>
+  <div class="tag"><b>05</b> — network · hover near the nodes</div>
+  <div class="c-wrap">
+    <div class="l">
+      <div class="mono" style="color:var(--mu);font-size:13px;margin-bottom:10px"><span class="dot"></span>&nbsp; available for internships</div>
+      <div class="sig" style="font-size:96px">Prakash Swami</div>
+      <p style="color:#aaa;font-size:17px;line-height:1.6;max-width:430px;margin:10px 0 26px">Full-stack developer connecting web, mobile, AI and on-chain systems into products people use.</p>
+      <div style="display:flex;gap:10px"><a class="btn p" href="#">Get in touch</a><a class="btn" href="#">View projects →</a></div>
+    </div>
+    <div class="c-photo" id="cphoto"><img src="me.jpg" alt="" /></div>
+  </div>
+</section>
+
+<!-- 6 -->
+<section id="s6">
+  <div class="grid-bg"></div>
+  <div class="tag"><b>06</b> — id badge · drag and fling the card</div>
+  <div class="l-wrap">
+    <div>
+      <div class="mono" style="color:var(--mu);font-size:13px">// hello, world. i'm</div>
+      <div class="sig" style="font-size:108px;margin:6px 0">Prakash Swami</div>
+      <div style="font:700 34px/1.2 Outfit;letter-spacing:-.02em">I build full-stack products<br><span style="color:var(--mu)">from </span>pixels<span style="color:var(--mu)"> to </span>smart contracts<span style="color:var(--red)">.</span></div>
+      <div style="display:flex;gap:10px;margin-top:28px"><a class="btn p" href="#">Get in touch</a><a class="btn" href="#">View projects →</a></div>
+    </div>
+    <div class="stage" id="stage">
+      <svg id="strap"><path id="strapPath" stroke="#ef4444" stroke-width="14" fill="none" stroke-linecap="round" /><path id="strapPath2" stroke="rgba(0,0,0,.35)" stroke-width="2" stroke-dasharray="2 6" fill="none" /></svg>
+      <div class="card" id="card">
+        <div class="hole"></div><div class="stripe"></div>
+        <div style="padding:66px 22px 0">
+          <div style="display:flex;justify-content:space-between;align-items:center" class="mono"><span style="font-size:10px;color:var(--mu)">DEVELOPER PASS</span><span style="font-size:10px;color:var(--red)">● ACTIVE</span></div>
+          <img src="me.jpg" alt="" draggable="false" style="width:112px;height:112px;border-radius:14px;object-fit:cover;margin:16px 0 12px;border:1px solid var(--bd)" />
+          <div style="font:700 24px Outfit;letter-spacing:-.01em">Prakash Swami</div>
+          <div style="color:var(--mu);font-size:13px">Full-Stack Developer</div>
+          <div class="mono" style="font-size:10.5px;color:var(--mu);margin:14px 0 4px;display:grid;grid-template-columns:auto 1fr;gap:3px 12px"><span>ID</span><span style="color:var(--fg)">PS-2026-VIT</span><span>BASE</span><span style="color:var(--fg)">Pune, IN</span><span>ROLE</span><span style="color:var(--fg)">CTO @ MediChain</span></div>
+          <div class="bars" id="bars" style="margin-top:14px"></div>
+        </div>
+        <div class="shine" id="shine"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const onView = (el, fn) => new IntersectionObserver((e, o) => { if (e[0].isIntersecting) { fn(); o.disconnect(); } }, { threshold: .4 }).observe(el);
+
+/* 1 boot */
+const bootLines = [
+  ['m', '$ ./boot prakash.dev'],
+  ['', 'loading kernel ............ <span class="ok">ok</span>'],
+  ['', 'mounting next.js@16 ....... <span class="ok">ok</span>'],
+  ['', 'linking react, node, ts ... <span class="ok">ok</span>'],
+  ['', 'syncing polygon chain ..... <span class="ok">ok</span>'],
+  ['', 'brewing chai .............. <span class="r">∞</span>'],
+  ['m', ''],
+  ['', 'name:  <b>Prakash Swami</b>'],
+  ['', 'role:  Full-Stack Developer'],
+  ['', 'now:   CTO & Co-Founder @ MediChain'],
+  ['', 'base:  Pune, India'],
+  ['m', ''],
+  ['', '<span class="r">❯</span> <a class="btn p" style="padding:5px 10px;font-size:12px" href="#">contact --now</a> <a class="btn" style="padding:5px 10px;font-size:12px" href="#">ls projects/</a> <span class="caret"></span>'],
+];
+let bootTimer;
+function boot() {
+  clearTimeout(bootTimer);
+  const tb = $('#tb'); tb.innerHTML = ''; $('#tname').classList.remove('on');
+  let i = 0;
+  (function next() {
+    if (i >= bootLines.length) { $('#tname').classList.add('on'); const c = $('#crt'); c.classList.remove('glitch'); void c.offsetWidth; c.classList.add('glitch'); return; }
+    const [cls, html] = bootLines[i++];
+    const d = document.createElement('div'); d.className = cls; d.innerHTML = html || '&nbsp;'; tb.appendChild(d);
+    bootTimer = setTimeout(next, i < 7 ? 260 : 140);
+  })();
+}
+onView($('#s1'), boot);
+$('#replay1').onclick = (e) => { e.preventDefault(); boot(); };
+
+/* 2 spotlight */
+const words = ['next.js','react','<em>medichain</em>','typescript','node.js','solidity','polygon','ipfs','flutter','postgres','<em>the gp edge</em>','clerk','gemini','python','tailwind','<em>papertrail</em>','supabase','three.js','<em>solarmitra</em>','rest apis','llms','<em>inboxly</em>','vit pune','<em>gharbudget</em>','docker','git','pandas'];
+let wall = ''; for (let k = 0; k < 14; k++) wall += words.slice().sort(() => Math.random() - .5).join(' · ') + ' · ';
+$('#w1').innerHTML = wall.replace(/<\/?em>/g, ''); $('#w2').innerHTML = wall;
+const s2 = $('#s2');
+s2.addEventListener('pointermove', (e) => {
+  const r = s2.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
+  $('#w2').style.setProperty('--x', x + 20 + 'px'); $('#w2').style.setProperty('--y', y + 20 + 'px');
+  $('#lens').style.left = x + 'px'; $('#lens').style.top = y + 'px';
+});
+
+/* 3 kinetic */
+const fill = (id, items) => { const h = items.map(([t, c]) => `<span class="${c || ''}">${t}</span>`).join(''); $(id).innerHTML = h + h; };
+fill('#r1', [['Full-stack'], ['Developer', 'f'], ['Builder'], ['Founder', 'rd']]);
+fill('#r2', [['Web'], ['Mobile', 'f'], ['AI'], ['On-chain'], ['Design', 'f']]);
+fill('#r3', [['Next.js'], ['Solidity', 'rd'], ['Flutter'], ['Node', 'f'], ['Postgres']]);
+
+/* 4 desktop */
+let z = 10;
+document.querySelectorAll('[data-w]').forEach((w) => {
+  const h = w.querySelector('.win-h');
+  w.addEventListener('pointerdown', () => (w.style.zIndex = ++z));
+  h.addEventListener('pointerdown', (e) => {
+    const sx = e.clientX - w.offsetLeft, sy = e.clientY - w.offsetTop; h.setPointerCapture(e.pointerId); h.style.cursor = 'grabbing';
+    const mv = (ev) => { w.style.left = ev.clientX - sx + 'px'; w.style.top = ev.clientY - sy + 'px'; };
+    h.addEventListener('pointermove', mv);
+    h.addEventListener('pointerup', () => { h.removeEventListener('pointermove', mv); h.style.cursor = ''; }, { once: true });
+  });
+});
+const tick = () => ($('#clock').textContent = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Kolkata' }) + ' IST');
+tick(); setInterval(tick, 10000);
+$('#mini').innerHTML = Array.from({ length: 126 }, () => { const v = Math.random(); const a = v < .45 ? .06 : v < .7 ? .3 : v < .88 ? .6 : 1; return `<i style="aspect-ratio:1;border-radius:2px;background:${a === .06 ? 'rgba(255,255,255,.06)' : `rgba(239,68,68,${a})`}"></i>`; }).join('');
+
+/* 5 network */
+(() => {
+  const cv = $('#net'), ctx = cv.getContext('2d'), sec = $('#s5');
+  const labels = ['Next.js','React','Node.js','TypeScript','Solidity','Polygon','IPFS','Flutter','PostgreSQL','Python','Gemini','Clerk','Tailwind','MediChain','GP Edge','PaperTrail','SolarMitra','Inboxly','GharBudget','Supabase','three.js','LLMs'];
+  const proj = new Set(['MediChain','GP Edge','PaperTrail','SolarMitra','Inboxly','GharBudget']);
+  let W, H, cx, cy, nodes = [], m = { x: -999, y: -999 };
+  const size = () => { const d = devicePixelRatio || 1; W = sec.clientWidth; H = sec.clientHeight; cv.width = W * d; cv.height = H * d; cv.style.width = W + 'px'; cv.style.height = H + 'px'; ctx.setTransform(d, 0, 0, d, 0, 0); const p = $('#cphoto').getBoundingClientRect(), s = sec.getBoundingClientRect(); cx = p.left - s.left + p.width / 2; cy = p.top - s.top + p.height / 2; };
+  size(); addEventListener('resize', size);
+  nodes = labels.map((t, i) => { const a = (i / labels.length) * Math.PI * 2, r = 150 + (i % 3) * 70; return { t, p: proj.has(t), a, r, s: (.0006 + Math.random() * .0008) * (i % 2 ? 1 : -1), x: 0, y: 0, ox: 0, oy: 0 }; });
+  sec.addEventListener('pointermove', (e) => { const r = sec.getBoundingClientRect(); m = { x: e.clientX - r.left, y: e.clientY - r.top }; });
+  sec.addEventListener('pointerleave', () => (m = { x: -999, y: -999 }));
+  (function frame() {
+    size.cached || (size.cached = 1);
+    ctx.clearRect(0, 0, W, H);
+    for (const n of nodes) {
+      n.a += n.s; let x = cx + Math.cos(n.a) * n.r * 1.25, y = cy + Math.sin(n.a) * n.r;
+      const dx = x - m.x, dy = y - m.y, d = Math.hypot(dx, dy);
+      if (d < 140) { n.ox += (dx / d) * (140 - d) * .04; n.oy += (dy / d) * (140 - d) * .04; }
+      n.ox *= .92; n.oy *= .92; n.x = x + n.ox; n.y = y + n.oy; n.hot = Math.hypot(n.x - m.x, n.y - m.y) < 120;
+    }
+    for (let i = 0; i < nodes.length; i++) for (let j = i + 1; j < nodes.length; j++) {
+      const a = nodes[i], b = nodes[j], d = Math.hypot(a.x - b.x, a.y - b.y);
+      if (d < 170) { ctx.strokeStyle = `rgba(255,255,255,${(1 - d / 170) * (a.hot || b.hot ? .5 : .12)})`; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
+    }
+    for (const n of nodes) {
+      if (n.p || n.hot) { ctx.strokeStyle = n.hot ? 'rgba(239,68,68,.55)' : 'rgba(239,68,68,.14)'; ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(n.x, n.y); ctx.stroke(); }
+      ctx.fillStyle = n.p ? '#ef4444' : n.hot ? '#fff' : '#6b6b6b'; ctx.beginPath(); ctx.arc(n.x, n.y, n.p ? 4.5 : 3, 0, 7); ctx.fill();
+      ctx.font = (n.p ? '600 ' : '') + '12px JetBrains Mono'; ctx.fillStyle = n.hot ? '#fff' : n.p ? '#d4d4d4' : '#6b6b6b'; ctx.fillText(n.t, n.x + 9, n.y + 4);
+    }
+    requestAnimationFrame(frame);
+  })();
+})();
+
+/* 6 lanyard (pendulum with drag + fling) */
+(() => {
+  const stage = $('#stage'), card = $('#card'), path = $('#strapPath'), path2 = $('#strapPath2'), shine = $('#shine');
+  $('#bars').innerHTML = Array.from({ length: 46 }, () => `<i style="width:${1 + Math.floor(Math.random() * 3)}px"></i>`).join('');
+  const L = 230, CW = 270;
+  let ax, ay = -10, ang = .5, vel = 0, drag = false, pos = null, prev = null;
+  const place = () => { ax = stage.clientWidth / 2; };
+  place(); addEventListener('resize', place);
+  card.addEventListener('pointerdown', (e) => { drag = true; card.setPointerCapture(e.pointerId); card.style.cursor = 'grabbing'; });
+  card.addEventListener('pointermove', (e) => { if (!drag) return; const r = stage.getBoundingClientRect(); pos = { x: e.clientX - r.left, y: e.clientY - r.top }; });
+  card.addEventListener('pointerup', () => { drag = false; pos = null; card.style.cursor = ''; });
+  (function f() {
+    let tx, ty;
+    if (drag && pos) {
+      const na = Math.atan2(pos.x - ax, Math.max(40, pos.y - ay));
+      vel = na - ang; ang = na;
+    } else { vel += -Math.sin(ang) * .006; vel *= .985; ang += vel; }
+    tx = ax + Math.sin(ang) * L; ty = ay + Math.cos(ang) * L;
+    const mid = { x: (ax + tx) / 2 - Math.sin(ang) * 30, y: (ay + ty) / 2 + 20 };
+    const d = `M ${ax} ${ay} Q ${mid.x} ${mid.y} ${tx} ${ty + 20}`;
+    path.setAttribute('d', d); path2.setAttribute('d', d);
+    card.style.left = tx - CW / 2 + 'px'; card.style.top = ty + 'px';
+    card.style.transform = `rotate(${-ang * 57.3 * .9}deg) rotateY(${vel * 400}deg)`;
+    shine.style.transform = `translateX(${ang * 140}px)`;
+    requestAnimationFrame(f);
+  })();
+})();
+</script>
+</body>
+</html>

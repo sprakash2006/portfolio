@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Reimagine library</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@500;700;900&display=swap" rel="stylesheet" />
+<style>
+  :root { --bg:#0a0a0a; --fg:#ededed; --mu:#8a8a8a; --card:#111113; --bd:rgba(255,255,255,.09); --red:#ef4444; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--bg); color:var(--fg); font-family:Inter,sans-serif; overflow-x:clip; }
+  body::before { content:''; position:fixed; inset:0; z-index:-1; background-size:32px 32px; background-image:linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 0),linear-gradient(180deg,rgba(255,255,255,.03) 1px,transparent 0); }
+  a { color:inherit; text-decoration:none; }
+  .mono { font-family:'JetBrains Mono',monospace; }
+  .top { position:sticky; top:0; z-index:5; display:flex; align-items:center; gap:14px; padding:14px 24px; background:rgba(10,10,10,.85); backdrop-filter:blur(10px); border-bottom:1px solid var(--bd); font:500 12px 'JetBrains Mono'; color:var(--mu); }
+  .top a:hover { color:var(--fg); }
+  .top .sep { opacity:.4; }
+  .top b { color:var(--fg); font-weight:500; }
+  .top .sw { margin-left:auto; display:flex; gap:6px; flex-wrap:wrap; }
+  .top .sw a { padding:4px 9px; border:1px solid var(--bd); border-radius:999px; }
+  .top .sw a.on { border-color:rgba(239,68,68,.6); color:var(--fg); }
+
+  main { max-width:1200px; margin:0 auto; padding:56px 24px 80px; }
+  h1 { font:900 clamp(40px,7vw,72px) Outfit; letter-spacing:-.03em; }
+  h1 span { color:var(--red); }
+  .sub { color:var(--mu); margin:10px 0 40px; font-size:15px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:16px; }
+  .c { display:block; border:1px solid var(--bd); background:var(--card); border-radius:16px; padding:22px; transition:.25s; }
+  .c:hover { border-color:rgba(239,68,68,.55); transform:translateY(-3px); }
+  .c .n { font:500 12px 'JetBrains Mono'; color:var(--red); }
+  .c h2 { font:700 24px Outfit; margin:8px 0 10px; }
+  .c p { color:var(--mu); font-size:13px; line-height:1.6; }
+  @media (max-width:600px) { main { padding:36px 16px 60px; } }
+</style>
+</head>
+<body>
+<main><h1>Reimagine<span>.</span></h1><div class="sub">Every portfolio redesign concept, one page per section · 160 variants</div><div class="grid"><a class="c" href="loader.html"><span class="n">12 variants</span><h2>Loader</h2>
+<p>counter curtain, pixel dissolve, terminal boot, signature, split words, logo ring…</p></a><a class="c" href="hero.html"><span class="n">6 variants</span><h2>Hero</h2>
+<p>terminal boot, spotlight, kinetic type, desktop os, network, id badge</p></a><a class="c" href="about.html"><span class="n">16 variants</span><h2>About</h2>
+<p>chat, git log, character sheet, code / life, classified dossier, decrypt…</p></a><a class="c" href="education.html"><span class="n">6 variants</span><h2>Education</h2>
+<p>build log, boarding pass, metro line, big numbers, semesters, transcript</p></a><a class="c" href="experience.html"><span class="n">5 variants</span><h2>Experience</h2>
+<p>sticky split, giant rows, drawn timeline, stacking cards, code editor</p></a><a class="c" href="skills.html"><span class="n">15 variants</span><h2>Skills</h2>
+<p>marquee rows, keyboard, periodic table, npm tree, orbit, flip wall…</p></a><a class="c" href="projects.html"><span class="n">53 variants</span><h2>Projects</h2>
+<p>hover index, side scroll, code explorer, card deck, expanding strips, flashlight…</p></a><a class="c" href="activity.html"><span class="n">16 variants</span><h2>Activity</h2>
+<p>merged map, dashboard, terminal, monthly bars, switch cards, 3D skyline…</p></a><a class="c" href="certifications.html"><span class="n">18 variants</span><h2>Certifications</h2>
+<p>gallery, fanned stack, timeline, list + preview, medals, compact rows…</p></a><a class="c" href="footer.html"><span class="n">12 variants</span><h2>Footer</h2>
+<p>big CTA, giant name, terminal, red card, chat, marquee…</p></a><a class="c" href="backgrounds.html"><span class="n">1 variant</span><h2>Backgrounds</h2>
+<p>Background concepts</p></a></div></main>
+</body>
+</html>

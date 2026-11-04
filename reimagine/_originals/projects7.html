@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Projects concepts VII</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@500;700;900&display=swap" rel="stylesheet" />
+<style>
+  :root { --bg:#0a0a0a; --fg:#ededed; --mu:#8a8a8a; --card:#111113; --bd:rgba(255,255,255,.09); --red:#ef4444; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--fg); font-family:Inter,sans-serif; overflow-x:clip; }
+  body::before { content:''; position:fixed; inset:0; z-index:-1; background-size:32px 32px; background-image:linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 0),linear-gradient(180deg,rgba(255,255,255,.03) 1px,transparent 0); }
+  section { padding:110px 20px 140px; border-bottom:1px solid var(--bd); position:relative; display:flex; flex-direction:column; align-items:center; }
+  .wrap { width:100%; max-width:1088px; }
+  .tag { position:absolute; top:24px; left:24px; font:500 12px 'JetBrains Mono'; color:var(--mu); z-index:5; }
+  .tag b { color:var(--red); font-weight:500; }
+  .label { font:600 12px 'JetBrains Mono'; letter-spacing:.1em; text-transform:uppercase; color:var(--mu); margin-bottom:30px; display:flex; align-items:center; gap:12px; }
+  .label span { color:var(--red); } .label::after { content:''; flex:1; height:1px; background:var(--bd); }
+  .meta { font:500 11px 'JetBrains Mono'; color:var(--mu); text-transform:uppercase; letter-spacing:.06em; } .meta b { color:var(--red); font-weight:500; }
+  .chip { display:inline-block; font:11px 'JetBrains Mono'; padding:3px 9px; border:1px solid var(--bd); border-radius:6px; color:var(--mu); margin:0 5px 6px 0; }
+  .btn { display:inline-flex; align-items:center; gap:6px; font:600 12px 'JetBrains Mono'; text-decoration:none; padding:8px 14px; border-radius:999px; background:var(--red); color:#140404; transition:.2s; }
+  .btn:hover { filter:brightness(1.1); } .btn .ar { transition:transform .25s; } .btn:hover .ar { transform:translateX(3px); }
+  .t { font:700 22px/1.1 Outfit; letter-spacing:-.01em; }
+  .desc { color:#b5b5b5; font-size:14px; line-height:1.6; }
+  .shot { position:relative; overflow:hidden; border-radius:12px; background:#151517; }
+  .shot img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .6s cubic-bezier(.2,.8,.2,1); }
+  .card { display:block; border:1px solid var(--bd); border-radius:18px; background:var(--card); text-decoration:none; color:var(--fg); padding:12px; transition:border-color .3s; }
+  .card:hover { border-color:rgba(239,68,68,.45); } .card:hover .shot img { transform:scale(1.05); }
+  .card .shot { aspect-ratio:16/10; margin-bottom:14px; }
+  .card .tx { padding:0 4px 6px; } .card .t { margin:6px 0 8px; } .card .desc { font-size:13px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  .end { text-align:center; margin-top:60px; font:12px 'JetBrains Mono'; color:var(--mu); }
+  #index { position:fixed; right:18px; top:50%; transform:translateY(-50%); z-index:50; display:flex; flex-direction:column; gap:10px; }
+  #index a { font:500 11px 'JetBrains Mono'; color:var(--mu); text-decoration:none; text-align:right; } #index a:hover { color:var(--fg); }
+  [data-s] { will-change:transform, opacity; }
+
+  /* 01 tilt-in grid */
+  .tg { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; perspective:1200px; }
+  .tg .card { transform-origin:50% 100%; }
+
+  /* 02 parallax columns */
+  .pc { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; align-items:start; }
+  .pc-col { display:flex; flex-direction:column; gap:18px; }
+  .pc-col:nth-child(2) { margin-top:120px; }
+  .pc .card .shot { aspect-ratio:4/5; }
+  .pc .card:nth-child(even) .shot { aspect-ratio:1/1; }
+
+  /* 03 drawn timeline */
+  .tl { position:relative; }
+  .tl-line { position:absolute; left:50%; top:0; bottom:0; width:2px; margin-left:-1px; background:var(--bd); }
+  .tl-line i { position:absolute; left:0; top:0; width:100%; height:0; background:linear-gradient(var(--red),#f87171); box-shadow:0 0 12px rgba(239,68,68,.6); }
+  .tl-item { position:relative; display:grid; grid-template-columns:1fr 1fr; gap:80px; margin-bottom:90px; align-items:center; }
+  .tl-dot { position:absolute; left:50%; top:50%; width:16px; height:16px; margin:-8px; border-radius:50%; background:var(--bg); border:2px solid #333; transition:border-color .4s, box-shadow .4s, background .4s; z-index:2; }
+  .tl-item.lit .tl-dot { border-color:var(--red); background:var(--red); box-shadow:0 0 0 6px rgba(239,68,68,.15); }
+  .tl-item .side-a { text-align:right; } .tl-item:nth-child(odd of .tl-item) .side-a { order:2; text-align:left; }
+  .tl-yr { font:900 64px/1 Outfit; color:transparent; -webkit-text-stroke:1px rgba(255,255,255,.18); transition:-webkit-text-stroke-color .4s; }
+  .tl-item.lit .tl-yr { -webkit-text-stroke-color:rgba(239,68,68,.7); }
+
+  /* 04 wipe rows */
+  .wr { display:grid; grid-template-columns:1.25fr 1fr; gap:50px; align-items:center; margin-bottom:120px; text-decoration:none; color:var(--fg); }
+  .wr:nth-child(even of .wr) .wr-img { order:2; }
+  .wr-img { aspect-ratio:16/10; border-radius:18px; }
+  .wr-img img { transform:scale(1.15); }
+  .wr-num { font:900 clamp(60px,8vw,110px)/.85 Outfit; color:transparent; -webkit-text-stroke:1px rgba(239,68,68,.5); }
+  .wr h3 { font:900 clamp(34px,4vw,54px)/.95 Outfit; letter-spacing:-.03em; margin:12px 0 14px; overflow:hidden; } .wr h3 span { display:inline-block; } .wr h3 span::first-letter { color:var(--red); }
+  .wr .desc { margin-bottom:16px; }
+
+  /* 05 grow into place */
+  .gp-feat { display:grid; grid-template-columns:1.3fr 1fr; gap:28px; padding:16px; transform-origin:50% 0; }
+  .gp-feat .shot { aspect-ratio:16/10; margin:0; }
+  .gp-feat h3 { font:900 clamp(34px,4vw,52px)/.95 Outfit; letter-spacing:-.03em; margin:10px 0 14px; } .gp-feat h3::first-letter { color:var(--red); }
+  .gp-feat .tx { display:flex; flex-direction:column; justify-content:center; padding:0; }
+  .gp-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:16px; }
+
+  /* 06 focus list */
+  .fl-row { display:grid; grid-template-columns:60px 1fr auto; gap:24px; align-items:center; padding:22px 18px; border-radius:18px; border:1px solid transparent; text-decoration:none; color:var(--fg); transition:background .5s, border-color .5s, opacity .5s; opacity:.35; }
+  .fl-row .n { font:500 13px 'JetBrains Mono'; color:var(--mu); transition:color .4s; }
+  .fl-row h3 { font:900 clamp(28px,4vw,52px)/1 Outfit; letter-spacing:-.03em; transition:color .4s; }
+  .fl-row .c { font:500 11px 'JetBrains Mono'; text-transform:uppercase; color:var(--mu); }
+  .fl-more { grid-column:2 / 4; display:grid; grid-template-columns:260px 1fr; gap:24px; align-items:center; overflow:hidden; max-height:0; opacity:0; transition:max-height .7s cubic-bezier(.2,.8,.2,1), opacity .5s, margin .7s; }
+  .fl-more .shot { aspect-ratio:16/10; }
+  .fl-row.on { opacity:1; background:var(--card); border-color:var(--bd); }
+  .fl-row.on .n { color:var(--red); } .fl-row.on h3::first-letter { color:var(--red); }
+  .fl-row.on .fl-more { max-height:240px; opacity:1; margin-top:16px; }
+
+  @media (max-width:860px) {
+    #index { display:none; }
+    .tg, .gp-grid { grid-template-columns:1fr 1fr; }
+    .pc { grid-template-columns:1fr 1fr; } .pc-col:nth-child(3) { display:none; }
+    .tl-line, .tl-dot { left:12px; } .tl-item { grid-template-columns:1fr; gap:12px; padding-left:40px; } .tl-item .side-a, .tl-item:nth-child(odd of .tl-item) .side-a { order:0; text-align:left; } .tl-yr { font-size:40px; }
+    .wr { grid-template-columns:1fr; gap:22px; } .wr:nth-child(even of .wr) .wr-img { order:0; }
+    .gp-feat { grid-template-columns:1fr; }
+    .fl-row { grid-template-columns:40px 1fr; } .fl-row .c { display:none; } .fl-more { grid-column:1 / -1; grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+<nav id="index"><a href="#x1">01 tilt-in grid</a><a href="#x2">02 parallax columns</a><a href="#x3">03 drawn timeline</a><a href="#x4">04 wipe rows</a><a href="#x5">05 grow into place</a><a href="#x6">06 focus list</a></nav>
+
+<section id="x1">
+  <div class="tag"><b>01</b> — tilt-in grid · cards stand up from a 3D tilt as you scroll them into view (tied to your scroll, both ways)</div>
+  <div class="wrap"><div class="label"><span>//</span> Featured Projects</div><div class="tg" id="tg"></div></div>
+</section>
+
+<section id="x2">
+  <div class="tag"><b>02</b> — parallax columns · three columns glide at different speeds while you scroll</div>
+  <div class="wrap"><div class="label"><span>//</span> Featured Projects</div><div class="pc" id="pc"></div></div>
+</section>
+
+<section id="x3">
+  <div class="tag"><b>03</b> — drawn timeline · a red line draws down as you scroll; each project lights up and slides in when it reaches it</div>
+  <div class="wrap"><div class="label"><span>//</span> Featured Projects</div><div class="tl" id="tl"><div class="tl-line"><i id="tlI"></i></div></div></div>
+</section>
+
+<section id="x4">
+  <div class="tag"><b>04</b> — wipe rows · each screenshot wipes open and the name slides up as the row scrolls in</div>
+  <div class="wrap"><div class="label"><span>//</span> Featured Projects</div><div id="wr"></div></div>
+</section>
+
+<section id="x5">
+  <div class="tag"><b>05</b> — grow into place · the featured card settles from slightly small to full size, then the grid rises in waves</div>
+  <div class="wrap"><div class="label"><span>//</span> Featured Projects</div><div id="gp"></div></div>
+</section>
+
+<section id="x6">
+  <div class="tag"><b>06</b> — focus list · whichever project is in the middle of the screen opens up; the rest stay quiet</div>
+  <div class="wrap"><div class="label"><span>//</span> Featured Projects</div><div id="fl"></div><div class="end">— keep scrolling —</div></div>
+</section>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const P = [
+  { t:'MediChain', c:'Blockchain', y:'2026', d:'Patient-owned medical records: AES-256 encrypted files on IPFS, every access logged on Polygon, gasless for patients.', tags:['Flutter','React','Solidity','Polygon','IPFS'] },
+  { t:'The GP Edge', c:'Web', y:'2026', d:'SaaS for General Practitioners: study analytics, AI-powered Medicare billing lookup and an exam-prep system.', tags:['Next.js','TypeScript','PostgreSQL','Gemini'] },
+  { t:'SolarMitra', c:'Mobile', y:'2026', d:'AR rooftop solar assessment: maps the roof, detects obstacles with YOLOv8 and builds a PDF report in under 2 minutes.', tags:['Flutter','ARCore','YOLOv8','TFLite'] },
+  { t:'PaperTrail', c:'AI', y:'2026', d:'RAG knowledge retrieval over PDF, Word, Excel and CSV with semantic indexing and citation-backed answers.', tags:['React','Python','ChromaDB','OpenAI'] },
+  { t:'Portfolio', c:'Web', y:'2026', d:'This site: themeable portfolio with live GitHub and LeetCode heatmaps and project detail pages.', tags:['Next.js','Tailwind','three.js'] },
+  { t:'Inboxly', c:'Web', y:'2026', d:'WhatsApp Business messaging with a sales CRM: shared inbox, bulk campaigns, workflows and a Gemini auto-reply agent.', tags:['React','Node.js','Redis','BullMQ'] },
+  { t:'GharBudget', c:'Mobile', y:'2026', d:'Household expense manager with real-time cloud sync, budgets, categories and spending charts.', tags:['React Native','Firebase'] },
+  { t:'BA Agent', c:'AI', y:'2026', d:'LLM analyst workspace that turns project evidence into reviewed, source-cited requirements, BRDs and sprint plans.', tags:['Next.js','FastAPI','OpenRouter'] },
+];
+P.forEach((p, i) => { p.img = `img/sample-0${(i % 5) + 1}.jpg`; p.n = String(i + 1).padStart(2, '0'); });
+const chips = (p, m = 9) => p.tags.slice(0, m).map((t) => `<span class="chip">${t}</span>`).join('');
+const meta = (p) => `<div class="meta"><b>${p.n}</b> · ${p.c} · ${p.y}</div>`;
+const card = (p) => `<a class="card" href="#"><div class="shot"><img src="${p.img}" alt=""></div><div class="tx">${meta(p)}<h4 class="t">${p.t}</h4><p class="desc">${p.d}</p></div></a>`;
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+// How far an element has come into view: 0 when its top touches the bottom of the screen,
+// 1 once its top reaches `end` of the screen height
+const enter = (el, end = 0.6) => clamp((innerHeight - el.getBoundingClientRect().top) / (innerHeight * (1 - end)));
+// Every effect runs in one rAF loop and eases toward its target, so motion is smooth but never ahead of the scroll
+const effects = [];
+(function loop() { effects.forEach((f) => f()); requestAnimationFrame(loop); })();
+const smoothed = (calc, apply, k = 0.14) => { let v = calc(); effects.push(() => { v += (calc() - v) * k; apply(v); }); };
+
+/* 01 tilt-in grid */
+(() => {
+  $('#tg').innerHTML = P.map(card).join('');
+  [...$('#tg').children].forEach((c, i) => smoothed(() => enter(c, 0.55 - (i % 3) * 0.04), (v) => {
+    const e = easeOut(v);
+    c.style.transform = `translateY(${(1 - e) * 80}px) rotateX(${(1 - e) * 38}deg) scale(${0.92 + e * 0.08})`;
+    c.style.opacity = 0.15 + e * 0.85;
+  }));
+})();
+
+/* 02 parallax columns */
+(() => {
+  const cols = [[], [], []]; P.forEach((p, i) => cols[i % 3].push(p));
+  $('#pc').innerHTML = cols.map((c) => `<div class="pc-col">${c.map(card).join('')}</div>`).join('');
+  const sec = $('#x2'), speeds = [0.06, -0.08, 0.12];
+  [...$('#pc').children].forEach((col, i) => smoothed(() => { const r = sec.getBoundingClientRect(); return (r.top + r.height / 2 - innerHeight / 2); }, (v) => {
+    col.style.transform = `translateY(${v * speeds[i]}px)`;
+  }));
+})();
+
+/* 03 drawn timeline */
+(() => {
+  const T = $('#tl');
+  T.insertAdjacentHTML('beforeend', P.map((p) => `<div class="tl-item"><span class="tl-dot"></span><div class="side-a"><div class="tl-yr">${p.n}</div><div class="meta" style="margin-top:6px">${p.c} · ${p.y}</div></div><div class="side-b">${card(p)}</div></div>`).join(''));
+  const items = [...T.querySelectorAll('.tl-item')];
+  smoothed(() => { const r = T.getBoundingClientRect(); return clamp((innerHeight * 0.55 - r.top) / r.height); }, (v) => {
+    $('#tlI').style.height = v * 100 + '%';
+    const lineY = T.getBoundingClientRect().top + v * T.offsetHeight;
+    items.forEach((it, i) => {
+      const dot = it.querySelector('.tl-dot').getBoundingClientRect().top;
+      it.classList.toggle('lit', lineY >= dot);
+      const k = easeOut(clamp((lineY - dot + 140) / 220));
+      const dir = i % 2 ? 1 : -1;
+      it.querySelector('.side-b').style.transform = `translateX(${(1 - k) * 60 * -dir}px)`;
+      it.querySelector('.side-b').style.opacity = 0.1 + k * 0.9;
+    });
+  }, 0.16);
+})();
+
+/* 04 wipe rows */
+(() => {
+  $('#wr').innerHTML = P.slice(0, 5).map((p) => `<a class="wr" href="#"><div class="shot wr-img"><img src="${p.img}" alt=""></div><div><div class="wr-num">${p.n}</div><div class="meta" style="margin-top:8px">${p.c} · ${p.y}</div><h3><span>${p.t}</span></h3><p class="desc">${p.d}</p><div style="margin-bottom:14px">${chips(p)}</div><span class="btn">View project <span class="ar">→</span></span></div></a>`).join('');
+  [...$('#wr').children].forEach((row, i) => {
+    const im = row.querySelector('.wr-img'), h = row.querySelector('h3 span'), rest = [...row.querySelectorAll('.desc, .chip, .btn, .meta')], num = row.querySelector('.wr-num'), fromRight = i % 2;
+    smoothed(() => enter(row, 0.5), (v) => {
+      const e = easeOut(v);
+      im.style.clipPath = fromRight ? `inset(0 0 0 ${(1 - e) * 100}% round 18px)` : `inset(0 ${(1 - e) * 100}% 0 0 round 18px)`;
+      im.querySelector('img').style.transform = `scale(${1.15 - e * 0.15})`;
+      const t = easeOut(clamp(v * 1.4 - 0.3));
+      h.style.transform = `translateY(${(1 - t) * 110}%)`;
+      num.style.transform = `translateY(${(1 - t) * 30}px)`; num.style.opacity = t;
+      rest.forEach((el) => { el.style.opacity = clamp(v * 1.6 - 0.5); });
+    });
+  });
+})();
+
+/* 05 grow into place */
+(() => {
+  const f = P[0];
+  $('#gp').innerHTML = `<a class="card gp-feat" href="#"><div class="shot"><img src="${f.img}" alt=""></div><div class="tx">${meta(f)}<h3>${f.t}</h3><p class="desc" style="margin-bottom:14px">${f.d}</p><div>${chips(f)}</div><span class="btn" style="align-self:flex-start;margin-top:10px">View project <span class="ar">→</span></span></div></a><div class="gp-grid">${P.slice(1).map(card).join('')}</div>`;
+  const ft = $('.gp-feat');
+  smoothed(() => enter(ft, 0.35), (v) => { const e = easeOut(v); ft.style.transform = `scale(${0.86 + e * 0.14})`; ft.style.borderRadius = `${40 - e * 22}px`; ft.style.opacity = 0.3 + e * 0.7; });
+  [...$('.gp-grid').children].forEach((c, i) => smoothed(() => enter(c, 0.6 - (i % 3) * 0.06), (v) => { const e = easeOut(v); c.style.transform = `translateY(${(1 - e) * 70}px)`; c.style.opacity = e; }));
+})();
+
+/* 06 focus list */
+(() => {
+  $('#fl').innerHTML = P.map((p) => `<a class="fl-row" href="#"><span class="n">${p.n}</span><h3>${p.t}</h3><span class="c">${p.c} · ${p.y}</span><div class="fl-more"><div class="shot"><img src="${p.img}" alt=""></div><div><p class="desc" style="margin-bottom:12px">${p.d}</p><div style="margin-bottom:10px">${chips(p, 4)}</div><span class="btn">View project <span class="ar">→</span></span></div></div></a>`).join('');
+  const rows = [...$('#fl').children]; let cur = -1;
+  const pick = () => {
+    // The row whose middle is closest to the middle of the screen is "in focus"
+    let best = -1, bd = Infinity;
+    rows.forEach((r, i) => { const b = r.getBoundingClientRect(); const d = Math.abs(b.top + Math.min(b.height, 120) / 2 - innerHeight * 0.45); if (d < bd) { bd = d; best = i; } });
+    const sec = $('#fl').getBoundingClientRect();
+    if (sec.bottom < 0 || sec.top > innerHeight) best = -1;
+    if (best !== cur) { cur = best; rows.forEach((r, i) => r.classList.toggle('on', i === best)); }
+  };
+  addEventListener('scroll', pick, { passive: true }); pick();
+  rows.forEach((r, i) => r.addEventListener('mouseenter', () => { cur = i; rows.forEach((x, k) => x.classList.toggle('on', k === i)); }));
+})();
+</script>
+</body>
+</html>

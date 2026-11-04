@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Projects concepts</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@500;700;900&display=swap" rel="stylesheet" />
+<style>
+  :root { --bg:#0a0a0a; --fg:#ededed; --mu:#8a8a8a; --card:#111113; --bd:rgba(255,255,255,.09); --red:#ef4444; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--fg); font-family:Inter,sans-serif; overflow-x:clip; }
+  body::before { content:''; position:fixed; inset:0; z-index:-1; background-size:32px 32px; background-image:linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 0),linear-gradient(180deg,rgba(255,255,255,.03) 1px,transparent 0); }
+  section { min-height:100vh; padding:90px 20px 80px; border-bottom:1px solid var(--bd); position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .wrap { width:100%; max-width:1088px; }
+  .tag { position:absolute; top:24px; left:24px; font:500 12px 'JetBrains Mono'; color:var(--mu); z-index:5; }
+  .tag b { color:var(--red); font-weight:500; }
+  .label { font:600 12px 'JetBrains Mono'; letter-spacing:.1em; text-transform:uppercase; color:var(--mu); margin-bottom:28px; display:flex; align-items:center; gap:12px; }
+  .label span { color:var(--red); } .label::after { content:''; flex:1; height:1px; background:var(--bd); }
+  .mono { font-family:'JetBrains Mono',monospace; } .red { color:var(--red); } .mu { color:var(--mu); }
+  .chip { display:inline-block; font:11px 'JetBrains Mono'; padding:3px 9px; border:1px solid var(--bd); border-radius:6px; color:var(--mu); margin:0 5px 6px 0; }
+  .btn { display:inline-flex; align-items:center; gap:6px; font:600 12px 'JetBrains Mono'; color:var(--fg); text-decoration:none; padding:8px 14px; border-radius:999px; border:1px solid var(--bd); background:transparent; cursor:pointer; transition:.2s; }
+  .btn:hover { border-color:var(--red); color:var(--red); }
+  .btn.solid { background:var(--red); border-color:var(--red); color:#140404; } .btn.solid:hover { color:#140404; filter:brightness(1.1); }
+  #index { position:fixed; right:18px; top:50%; transform:translateY(-50%); z-index:50; display:flex; flex-direction:column; gap:10px; }
+  #index a { font:500 11px 'JetBrains Mono'; color:var(--mu); text-decoration:none; text-align:right; } #index a:hover { color:var(--fg); }
+
+  /* 1 hover index */
+  .rows { border-top:1px solid var(--bd); }
+  .rw { display:grid; grid-template-columns:56px 1fr auto; align-items:center; gap:18px; padding:18px 6px; border-bottom:1px solid var(--bd); cursor:pointer; position:relative; }
+  .rw .n { font:500 12px 'JetBrains Mono'; color:var(--mu); transition:.3s; }
+  .rw .t { font:900 clamp(34px,6.4vw,76px)/1 Outfit; text-transform:uppercase; letter-spacing:-.035em; color:transparent; -webkit-text-stroke:1px rgba(255,255,255,.35); transition:color .35s, transform .45s cubic-bezier(.2,.8,.2,1), -webkit-text-stroke-color .35s; }
+  .rw .m { font:12px 'JetBrains Mono'; color:var(--mu); text-align:right; transition:.3s; }
+  .rw:hover .t { color:var(--fg); -webkit-text-stroke-color:transparent; transform:translateX(18px); }
+  .rw:hover .t::first-letter { color:var(--red); }
+  .rw:hover .n, .rw:hover .m { color:var(--red); }
+  .rows:hover .rw:not(:hover) { opacity:.45; }
+  #peek { position:fixed; left:0; top:0; width:340px; aspect-ratio:16/10; border-radius:14px; overflow:hidden; pointer-events:none; z-index:40; opacity:0; transform:scale(.6); transition:opacity .3s, scale .3s; box-shadow:0 30px 80px rgba(0,0,0,.7); border:1px solid var(--bd); }
+  #peek.on { opacity:1; }
+  #peek img { width:100%; height:100%; object-fit:cover; display:block; }
+  #peek .cap { position:absolute; left:10px; bottom:10px; font:600 11px 'JetBrains Mono'; background:var(--red); color:#140404; padding:4px 9px; border-radius:999px; }
+
+  /* 2 horizontal pin */
+  #x2 { display:block; padding:0; min-height:0; }
+  .hz { height:520vh; position:relative; }
+  .hz-pin { position:sticky; top:0; height:100vh; overflow:hidden; display:flex; flex-direction:column; justify-content:center; }
+  .hz-head { display:flex; justify-content:space-between; align-items:flex-end; padding:0 6vw; margin-bottom:34px; }
+  .hz-head .big { font:900 clamp(40px,7vw,96px)/.9 Outfit; letter-spacing:-.04em; text-transform:uppercase; }
+  .hz-head .big span { color:var(--red); }
+  .hz-cnt { font:700 13px 'JetBrains Mono'; color:var(--mu); } .hz-cnt b { color:var(--fg); font-size:34px; }
+  .hz-track { display:flex; gap:28px; padding:0 6vw; will-change:transform; }
+  .hz-card { flex:0 0 min(66vw,700px); background:var(--card); border:1px solid var(--bd); border-radius:24px; overflow:hidden; display:grid; grid-template-columns:1.15fr 1fr; min-height:52vh; transition:border-color .3s; }
+  .hz-card:hover { border-color:rgba(239,68,68,.5); }
+  .hz-card .im { position:relative; overflow:hidden; } .hz-card .im img { position:absolute; inset:0; width:120%; height:100%; object-fit:cover; }
+  .hz-card .tx { padding:26px; display:flex; flex-direction:column; }
+  .hz-card h4 { font:900 30px/1 Outfit; letter-spacing:-.02em; text-transform:uppercase; margin:10px 0 12px; }
+  .hz-card p { color:#b5b5b5; font-size:14px; line-height:1.6; margin-bottom:16px; }
+  .hz-bar { margin:34px 6vw 0; height:2px; background:var(--bd); border-radius:2px; overflow:hidden; } .hz-bar i { display:block; height:100%; width:0; background:var(--red); }
+
+  /* 3 explorer */
+  .ide { border:1px solid var(--bd); border-radius:14px; overflow:hidden; background:#0d0d0f; box-shadow:0 40px 100px rgba(0,0,0,.6); }
+  .ide-top { display:flex; align-items:center; gap:8px; padding:10px 14px; border-bottom:1px solid var(--bd); font:12px 'JetBrains Mono'; color:var(--mu); }
+  .ide-top i { width:11px; height:11px; border-radius:50%; background:#2a2a2a; } .ide-top i:first-child { background:var(--red); }
+  .ide-top span { margin-left:auto; margin-right:auto; }
+  .ide-body { display:grid; grid-template-columns:230px 1fr 1fr; min-height:500px; }
+  .tree { border-right:1px solid var(--bd); padding:12px 0; font:13px 'JetBrains Mono'; }
+  .tree .dir { padding:6px 16px; color:var(--mu); font-size:11px; letter-spacing:.08em; text-transform:uppercase; margin-top:6px; }
+  .tree .f { padding:6px 16px 6px 30px; cursor:pointer; color:#b5b5b5; border-left:2px solid transparent; display:flex; gap:8px; }
+  .tree .f:hover { background:rgba(255,255,255,.03); }
+  .tree .f.on { background:rgba(239,68,68,.08); border-left-color:var(--red); color:var(--fg); }
+  .tree .f::before { content:'M↓'; color:var(--red); font-size:10px; line-height:18px; }
+  .code { border-right:1px solid var(--bd); display:flex; flex-direction:column; min-width:0; }
+  .tabs { display:flex; border-bottom:1px solid var(--bd); font:12px 'JetBrains Mono'; }
+  .tabs span { padding:9px 16px; color:var(--fg); border-right:1px solid var(--bd); border-top:2px solid var(--red); background:#111113; }
+  .src { padding:16px 0; font:13px/1.75 'JetBrains Mono'; white-space:pre-wrap; flex:1; counter-reset:ln; }
+  .src div { padding:0 16px 0 52px; position:relative; color:#c9c9c9; min-height:1.75em; }
+  .src div::before { counter-increment:ln; content:counter(ln); position:absolute; left:0; width:36px; text-align:right; color:#444; }
+  .src .h { color:var(--fg); font-weight:700; } .src .h b { color:var(--red); }
+  .src .k { color:var(--mu); } .src .s { color:#fca5a5; }
+  .prev { padding:18px; display:flex; flex-direction:column; gap:14px; }
+  .prev .shot { aspect-ratio:16/10; border-radius:10px; overflow:hidden; border:1px solid var(--bd); }
+  .prev .shot img { width:100%; height:100%; object-fit:cover; display:block; animation:fadeIn .5s; }
+  .prev h4 { font:900 28px/1 Outfit; text-transform:uppercase; letter-spacing:-.02em; }
+  .ide-status { display:flex; justify-content:space-between; padding:6px 14px; font:11px 'JetBrains Mono'; color:#140404; background:var(--red); }
+  .cur { display:inline-block; width:8px; height:15px; background:var(--red); vertical-align:-2px; animation:blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity:0; } }
+  @keyframes fadeIn { from { opacity:0; transform:scale(1.04); } }
+
+  /* 4 deck */
+  .deck-wrap { display:grid; grid-template-columns:1fr 1.1fr; gap:60px; align-items:center; }
+  .deck { position:relative; height:520px; perspective:1400px; }
+  .dc { position:absolute; inset:0; background:var(--card); border:1px solid var(--bd); border-radius:24px; overflow:hidden; display:flex; flex-direction:column; transition:transform .6s cubic-bezier(.2,.8,.2,1), opacity .6s, filter .6s; cursor:grab; user-select:none; box-shadow:0 30px 70px rgba(0,0,0,.55); }
+  .dc:active { cursor:grabbing; }
+  .dc .im { height:55%; overflow:hidden; position:relative; } .dc .im img { width:100%; height:100%; object-fit:cover; pointer-events:none; }
+  .dc .im .no { position:absolute; top:14px; left:14px; font:700 12px 'JetBrains Mono'; background:var(--red); color:#140404; padding:4px 10px; border-radius:999px; }
+  .dc .tx { padding:22px 24px; }
+  .dc h4 { font:900 30px/1 Outfit; text-transform:uppercase; letter-spacing:-.02em; margin-bottom:10px; }
+  .dc p { color:#b5b5b5; font-size:14px; line-height:1.6; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+  .deck-side .big { font:900 clamp(44px,6vw,80px)/.9 Outfit; letter-spacing:-.04em; text-transform:uppercase; margin:14px 0 18px; }
+  .deck-side .big span { color:var(--red); }
+  .deck-list { margin-top:26px; display:grid; grid-template-columns:1fr 1fr; gap:4px 18px; }
+  .deck-list button { all:unset; cursor:pointer; font:12px 'JetBrains Mono'; color:var(--mu); padding:5px 0; transition:.2s; }
+  .deck-list button.on { color:var(--fg); } .deck-list button.on::before { content:'> '; color:var(--red); }
+
+  /* 5 strips */
+  .strips { display:flex; gap:10px; height:72vh; min-height:480px; }
+  .st { flex:1; min-width:0; border-radius:20px; overflow:hidden; position:relative; background:var(--card); border:1px solid var(--bd); cursor:pointer; transition:flex .7s cubic-bezier(.2,.8,.2,1), border-color .3s; }
+  .st.on { flex:7; border-color:rgba(239,68,68,.55); }
+  .st img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.18; filter:grayscale(1); transition:opacity .7s, filter .7s, transform 1.2s; transform:scale(1.15); }
+  .st.on img { opacity:.55; filter:none; transform:scale(1); }
+  .st::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,transparent 30%,rgba(10,10,10,.95)); }
+  .st .v { position:absolute; left:50%; bottom:22px; transform:translateX(-50%) rotate(180deg); writing-mode:vertical-rl; white-space:nowrap; font:900 22px Outfit; text-transform:uppercase; letter-spacing:-.01em; z-index:2; transition:opacity .3s; }
+  .st .v em { font-style:normal; color:var(--red); font:500 11px 'JetBrains Mono'; margin-bottom:12px; }
+  .st.on .v { opacity:0; }
+  .st .in { position:absolute; left:0; right:0; bottom:0; padding:30px; z-index:2; opacity:0; transform:translateY(20px); transition:.5s .0s; max-width:560px; }
+  .st.on .in { opacity:1; transform:none; transition-delay:.35s; }
+  .st .in h4 { font:900 clamp(34px,4.5vw,60px)/.9 Outfit; text-transform:uppercase; letter-spacing:-.035em; margin:10px 0 14px; }
+  .st .in h4::first-letter { color:var(--red); }
+  .st .in p { color:#cfcfcf; font-size:14px; line-height:1.6; margin-bottom:16px; }
+
+  /* 6 scroll zoom */
+  #x6 { display:block; padding:0; min-height:0; }
+  .zm { height:230vh; position:relative; }
+  .zm-pin { position:sticky; top:0; height:100vh; overflow:hidden; display:flex; align-items:center; justify-content:center; }
+  .zm-title { position:absolute; z-index:1; font:900 clamp(56px,13vw,200px)/.85 Outfit; letter-spacing:-.05em; text-transform:uppercase; text-align:center; white-space:nowrap; }
+  .zm-title span { color:var(--red); }
+  .zm-img { position:relative; z-index:2; width:100vw; height:100vh; overflow:hidden; will-change:clip-path; }
+  .zm-img img { width:100%; height:100%; object-fit:cover; display:block; transform-origin:center; }
+  .zm-img::after { content:''; position:absolute; inset:0; background:linear-gradient(90deg,rgba(10,10,10,.92),rgba(10,10,10,.35) 60%,transparent); opacity:var(--o,0); }
+  .zm-info { position:absolute; z-index:3; left:7vw; bottom:12vh; max-width:480px; opacity:0; transform:translateY(30px); }
+  .zm-info h4 { font:900 clamp(40px,5vw,72px)/.9 Outfit; text-transform:uppercase; letter-spacing:-.04em; margin:10px 0 14px; }
+  .zm-info h4::first-letter { color:var(--red); }
+  .zm-info p { color:#d4d4d4; font-size:15px; line-height:1.6; margin-bottom:16px; }
+  .zm-n { position:absolute; z-index:3; right:5vw; top:12vh; font:700 13px 'JetBrains Mono'; color:var(--mu); } .zm-n b { color:var(--fg); font-size:30px; }
+
+  @media (max-width:760px) {
+    #index { display:none; }
+    .rw { grid-template-columns:34px 1fr; } .rw .m { display:none; } #peek { display:none; }
+    .hz-card { grid-template-columns:1fr; flex-basis:82vw; } .hz-card .im { height:200px; }
+    .ide-body { grid-template-columns:1fr; } .tree { display:flex; overflow-x:auto; padding:0; } .tree .dir { display:none; } .tree .f { white-space:nowrap; padding:8px 12px; } .code { display:none; }
+    .deck-wrap { grid-template-columns:1fr; } .deck { height:460px; }
+    .strips { flex-direction:column; height:auto; } .st { flex:none; height:70px; } .st.on { height:420px; } .st .v { writing-mode:horizontal-tb; transform:none; left:20px; bottom:auto; top:22px; }
+  }
+</style>
+</head>
+<body>
+<nav id="index"><a href="#x1">01 hover index</a><a href="#x2">02 side scroll</a><a href="#x3">03 code explorer</a><a href="#x4">04 card deck</a><a href="#x5">05 expanding strips</a><a href="#x6">06 scroll zoom</a></nav>
+
+<!-- 1 -->
+<section id="x1">
+  <div class="tag"><b>01</b> — hover index · giant outlined names, a screenshot follows your cursor</div>
+  <div class="wrap">
+    <div class="label"><span>//</span> Featured Projects</div>
+    <div class="rows" id="rows"></div>
+  </div>
+  <div id="peek"><img alt="" /><span class="cap">View project →</span></div>
+</section>
+
+<!-- 2 -->
+<section id="x2">
+  <div class="tag" style="position:absolute"><b>02</b> — side scroll · the page pins and scrolling moves the projects sideways</div>
+  <div class="hz" id="hz">
+    <div class="hz-pin">
+      <div class="hz-head">
+        <div><div class="label" style="margin-bottom:12px"><span>//</span> Featured Projects</div><div class="big">Things I<br/><span>built</span>.</div></div>
+        <div class="hz-cnt"><b id="hzN">01</b> / 08</div>
+      </div>
+      <div class="hz-track" id="hzT"></div>
+      <div class="hz-bar"><i id="hzB"></i></div>
+    </div>
+  </div>
+</section>
+
+<!-- 3 -->
+<section id="x3">
+  <div class="tag"><b>03</b> — code explorer · each project is a README you open from the file tree</div>
+  <div class="wrap">
+    <div class="label"><span>//</span> Featured Projects</div>
+    <div class="ide">
+      <div class="ide-top"><i></i><i></i><i></i><span>~/prakash/projects</span></div>
+      <div class="ide-body">
+        <div class="tree" id="tree"></div>
+        <div class="code"><div class="tabs"><span id="tabN">README.md</span></div><div class="src" id="src"></div></div>
+        <div class="prev" id="prev"></div>
+      </div>
+      <div class="ide-status"><span>● main</span><span id="stat">MediChain · Blockchain</span><span>UTF-8 · Markdown</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 -->
+<section id="x4">
+  <div class="tag"><b>04</b> — card deck · drag / swipe the top card away, or pick one from the list</div>
+  <div class="wrap deck-wrap">
+    <div class="deck" id="deck"></div>
+    <div class="deck-side">
+      <div class="label" style="margin-bottom:0"><span>//</span> Featured Projects</div>
+      <div class="big" id="deckT"></div>
+      <div class="mono mu" style="font-size:13px" id="deckM"></div>
+      <div style="display:flex;gap:10px;margin-top:22px"><button class="btn" id="dPrev">← Prev</button><button class="btn" id="dNext">Next →</button><a class="btn solid" href="#">View project</a></div>
+      <div class="deck-list" id="deckL"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 -->
+<section id="x5">
+  <div class="tag"><b>05</b> — expanding strips · every project is a slim panel; hover one to open it</div>
+  <div class="wrap">
+    <div class="label"><span>//</span> Featured Projects</div>
+    <div class="strips" id="strips"></div>
+  </div>
+</section>
+
+<!-- 6 -->
+<section id="x6">
+  <div class="tag" style="position:absolute"><b>06</b> — scroll zoom · the screenshot grows out of the name until it fills the screen (first 3 shown)</div>
+  <div id="zms"></div>
+</section>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const P = [
+  { t:'MediChain', c:'Blockchain', y:'2026', d:'Patient-owned medical records: AES-256 encrypted files on IPFS, every access logged on Polygon, gasless for patients.', tags:['Flutter','React','Solidity','Polygon','IPFS'] },
+  { t:'The GP Edge', c:'Web', y:'2026', d:'SaaS for General Practitioners: study analytics, AI-powered Medicare billing lookup and an exam-prep system.', tags:['Next.js','TypeScript','PostgreSQL','Gemini'] },
+  { t:'SolarMitra', c:'Mobile', y:'2026', d:'AR rooftop solar assessment: maps the roof, detects obstacles with YOLOv8 and builds a PDF report in under 2 minutes.', tags:['Flutter','ARCore','YOLOv8','TFLite'] },
+  { t:'PaperTrail', c:'AI', y:'2026', d:'RAG knowledge retrieval over PDF, Word, Excel and CSV with semantic indexing and citation-backed answers.', tags:['React','Python','ChromaDB','OpenAI'] },
+  { t:'Portfolio', c:'Web', y:'2026', d:'This site: themeable portfolio with live GitHub and LeetCode heatmaps and project detail pages.', tags:['Next.js','Tailwind','three.js'] },
+  { t:'Inboxly', c:'Web', y:'2026', d:'WhatsApp Business messaging with a sales CRM: shared inbox, bulk campaigns, workflows and a Gemini auto-reply agent.', tags:['React','Node.js','Redis','BullMQ'] },
+  { t:'GharBudget', c:'Mobile', y:'2026', d:'Household expense manager with real-time cloud sync, budgets, categories and spending charts.', tags:['React Native','Firebase'] },
+  { t:'BA Agent', c:'AI', y:'2026', d:'LLM analyst workspace that turns project evidence into reviewed, source-cited requirements, BRDs and sprint plans.', tags:['Next.js','FastAPI','OpenRouter'] },
+];
+P.forEach((p, i) => { p.img = `img/sample-0${(i % 5) + 1}.jpg`; p.n = String(i + 1).padStart(2, '0'); });
+const chips = (p) => p.tags.map((t) => `<span class="chip">${t}</span>`).join('');
+const red1 = (s) => `<span>${s[0]}</span>${s.slice(1)}`;
+
+/* 1 hover index */
+(() => {
+  $('#rows').innerHTML = P.map((p) => `<div class="rw" data-img="${p.img}"><span class="n">${p.n}</span><span class="t">${p.t}</span><span class="m">${p.c} · ${p.y}</span></div>`).join('');
+  const peek = $('#peek'), img = peek.querySelector('img');
+  let x = 0, y = 0, tx = 0, ty = 0, lastX = 0;
+  document.querySelectorAll('.rw').forEach((r) => {
+    r.addEventListener('mouseenter', () => { img.src = r.dataset.img; peek.classList.add('on'); });
+    r.addEventListener('mouseleave', () => peek.classList.remove('on'));
+  });
+  addEventListener('mousemove', (e) => { tx = e.clientX; ty = e.clientY; });
+  (function loop() {
+    x += (tx - x) * 0.12; y += (ty - y) * 0.12;
+    const rot = Math.max(-12, Math.min(12, (x - lastX) * 0.6)); lastX = x;
+    peek.style.transform = `translate(${x + 30}px, ${y - 110}px) rotate(${rot}deg) scale(${peek.classList.contains('on') ? 1 : 0.6})`;
+    requestAnimationFrame(loop);
+  })();
+})();
+
+/* 2 horizontal pin */
+(() => {
+  $('#hzT').innerHTML = P.map((p) => `<div class="hz-card"><div class="im"><img src="${p.img}" alt=""></div><div class="tx"><div class="mono red" style="font-size:12px">${p.n} · ${p.c} · ${p.y}</div><h4>${p.t}</h4><p>${p.d}</p><div>${chips(p)}</div><a class="btn" href="#" style="margin-top:auto;align-self:flex-start">View project →</a></div></div>`).join('');
+  const hz = $('#hz'), T = $('#hzT'), imgs = [...T.querySelectorAll('.im img')];
+  const tick = () => {
+    const r = hz.getBoundingClientRect(), max = r.height - innerHeight;
+    const p = Math.min(1, Math.max(0, -r.top / max));
+    const dist = T.scrollWidth - innerWidth;
+    T.style.transform = `translateX(${-p * dist}px)`;
+    imgs.forEach((im) => { const b = im.parentElement.getBoundingClientRect(); im.style.transform = `translateX(${((b.left / innerWidth) - 0.5) * -12}%)`; });
+    $('#hzB').style.width = p * 100 + '%';
+    $('#hzN').textContent = String(Math.min(P.length, Math.round(p * (P.length - 1)) + 1)).padStart(2, '0');
+  };
+  addEventListener('scroll', tick, { passive: true }); addEventListener('resize', tick); tick();
+})();
+
+/* 3 explorer */
+(() => {
+  const cats = [...new Set(P.map((p) => p.c))];
+  $('#tree').innerHTML = cats.map((c) => `<div class="dir">▾ ${c.toLowerCase()}/</div>` + P.map((p, i) => p.c === c ? `<div class="f" data-i="${i}">${p.t.toLowerCase().replace(/ /g, '-')}.md</div>` : '').join('')).join('');
+  let typing = 0;
+  const open = (i) => {
+    const p = P[i];
+    document.querySelectorAll('.tree .f').forEach((f) => f.classList.toggle('on', +f.dataset.i === i));
+    $('#tabN').textContent = p.t.toLowerCase().replace(/ /g, '-') + '.md';
+    $('#stat').textContent = `${p.t} · ${p.c}`;
+    $('#prev').innerHTML = `<div class="shot"><img src="${p.img}" alt=""></div><div class="mono red" style="font-size:12px">${p.c} · ${p.y}</div><h4>${p.t}</h4><div>${chips(p)}</div><a class="btn solid" href="#" style="align-self:flex-start">Open project →</a>`;
+    const lines = [`<span class="h"><b>#</b> ${p.t}</span>`, '', ...p.d.match(/.{1,46}(\s|$)/g).map((l) => l.trim()), '', `<span class="h"><b>##</b> Stack</span>`, ...p.tags.map((t) => `<span class="k">-</span> ${t}`), '', `<span class="k">year:</span> <span class="s">"${p.y}"</span>`];
+    const src = $('#src'); src.innerHTML = ''; const id = ++typing;
+    lines.forEach((l, k) => setTimeout(() => { if (id !== typing) return; const d = document.createElement('div'); d.innerHTML = l || ' '; src.appendChild(d); src.querySelector('.cur')?.remove(); if (k === lines.length - 1) d.insertAdjacentHTML('beforeend', ' <span class="cur"></span>'); }, k * 45));
+  };
+  document.querySelectorAll('.tree .f').forEach((f) => f.addEventListener('click', () => open(+f.dataset.i)));
+  open(0);
+})();
+
+/* 4 deck */
+(() => {
+  const deck = $('#deck');
+  deck.innerHTML = P.map((p) => `<div class="dc"><div class="im"><img src="${p.img}" alt=""><span class="no">${p.n} / 08</span></div><div class="tx"><h4>${p.t}</h4><p>${p.d}</p><div style="margin-top:14px">${chips(p)}</div></div></div>`).join('');
+  $('#deckL').innerHTML = P.map((p, i) => `<button data-i="${i}">${p.n} ${p.t}</button>`).join('');
+  const cards = [...deck.children]; let cur = 0;
+  const lay = () => {
+    cards.forEach((c, i) => {
+      const k = (i - cur + P.length) % P.length;
+      c.style.zIndex = P.length - k;
+      c.style.transform = k < 4 ? `translate(${k * 22}px, ${k * -16}px) rotate(${k * 3}deg) scale(${1 - k * 0.05})` : `translate(66px,-48px) rotate(9deg) scale(.85)`;
+      c.style.opacity = k < 4 ? 1 : 0;
+      c.style.filter = `brightness(${1 - k * 0.22})`;
+    });
+    $('#deckT').innerHTML = red1(P[cur].t); $('#deckM').textContent = `${P[cur].n} / 08 · ${P[cur].c} · ${P[cur].y}`;
+    document.querySelectorAll('#deckL button').forEach((b) => b.classList.toggle('on', +b.dataset.i === cur));
+  };
+  const go = (d) => { cur = (cur + d + P.length) % P.length; lay(); };
+  $('#dNext').onclick = () => go(1); $('#dPrev').onclick = () => go(-1);
+  document.querySelectorAll('#deckL button').forEach((b) => b.onclick = () => { cur = +b.dataset.i; lay(); });
+  let sx = null, dx = 0;
+  deck.addEventListener('pointerdown', (e) => { sx = e.clientX; dx = 0; cards[cur].style.transition = 'none'; deck.setPointerCapture(e.pointerId); });
+  deck.addEventListener('pointermove', (e) => { if (sx === null) return; dx = e.clientX - sx; cards[cur].style.transform = `translateX(${dx}px) rotate(${dx / 18}deg)`; });
+  deck.addEventListener('pointerup', () => { if (sx === null) return; cards[cur].style.transition = ''; sx = null; if (Math.abs(dx) > 90) go(dx < 0 ? 1 : -1); else lay(); });
+  lay();
+})();
+
+/* 5 strips */
+(() => {
+  const S = $('#strips');
+  S.innerHTML = P.map((p, i) => `<div class="st${i === 0 ? ' on' : ''}"><img src="${p.img}" alt=""><div class="v"><em>${p.n}</em> ${p.t}</div><div class="in"><div class="mono red" style="font-size:12px">${p.n} · ${p.c} · ${p.y}</div><h4>${p.t}</h4><p>${p.d}</p><div style="margin-bottom:14px">${chips(p)}</div><a class="btn solid" href="#">View project →</a></div></div>`).join('');
+  const st = [...S.children];
+  const on = (el) => st.forEach((s) => s.classList.toggle('on', s === el));
+  st.forEach((s) => { s.addEventListener('mouseenter', () => matchMedia('(hover:hover)').matches && on(s)); s.addEventListener('click', () => on(s)); });
+})();
+
+/* 6 scroll zoom */
+(() => {
+  $('#zms').innerHTML = P.slice(0, 3).map((p) => `<div class="zm"><div class="zm-pin"><div class="zm-title">${red1(p.t)}</div><div class="zm-img"><img src="${p.img}" alt=""></div><div class="zm-n"><b>${p.n}</b> / 08</div><div class="zm-info"><div class="mono red" style="font-size:12px">${p.c} · ${p.y}</div><h4>${p.t}</h4><p>${p.d}</p><div style="margin-bottom:14px">${chips(p)}</div><a class="btn solid" href="#">View project →</a></div></div></div>`).join('');
+  const zs = [...document.querySelectorAll('.zm')];
+  const ease = (t) => t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+  const tick = () => zs.forEach((z) => {
+    const r = z.getBoundingClientRect(), p = Math.min(1, Math.max(0, -r.top / (r.height - innerHeight)));
+    const g = ease(Math.min(1, p / 0.65));
+    const ix = (1 - g) * 34, iy = (1 - g) * 36;
+    const box = z.querySelector('.zm-img');
+    box.style.clipPath = `inset(${iy}% ${ix}% round ${(1 - g) * 28}px)`;
+    box.querySelector('img').style.transform = `scale(${1.25 - g * 0.25})`;
+    box.style.setProperty('--o', Math.max(0, (p - 0.55) / 0.3));
+    const info = z.querySelector('.zm-info'), k = Math.min(1, Math.max(0, (p - 0.62) / 0.25));
+    info.style.opacity = k; info.style.transform = `translateY(${(1 - k) * 30}px)`;
+    z.querySelector('.zm-title').style.opacity = 1 - g;
+  });
+  addEventListener('scroll', tick, { passive: true }); addEventListener('resize', tick); tick();
+})();
+</script>
+</body>
+</html>

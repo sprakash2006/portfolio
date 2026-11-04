@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Projects concepts III</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@500;700;900&family=Press+Start+2P&display=swap" rel="stylesheet" />
+<style>
+  :root { --bg:#0a0a0a; --fg:#ededed; --mu:#8a8a8a; --card:#111113; --bd:rgba(255,255,255,.09); --red:#ef4444; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--fg); font-family:Inter,sans-serif; overflow-x:clip; }
+  body::before { content:''; position:fixed; inset:0; z-index:-1; background-size:32px 32px; background-image:linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 0),linear-gradient(180deg,rgba(255,255,255,.03) 1px,transparent 0); }
+  section { min-height:100vh; padding:90px 20px 80px; border-bottom:1px solid var(--bd); position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .wrap { width:100%; max-width:1088px; }
+  .tag { position:absolute; top:24px; left:24px; font:500 12px 'JetBrains Mono'; color:var(--mu); z-index:5; }
+  .tag b { color:var(--red); font-weight:500; }
+  .label { font:600 12px 'JetBrains Mono'; letter-spacing:.1em; text-transform:uppercase; color:var(--mu); margin-bottom:28px; display:flex; align-items:center; gap:12px; }
+  .label span { color:var(--red); } .label::after { content:''; flex:1; height:1px; background:var(--bd); }
+  .mono { font-family:'JetBrains Mono',monospace; } .red { color:var(--red); } .mu { color:var(--mu); }
+  .chip { display:inline-block; font:11px 'JetBrains Mono'; padding:3px 9px; border:1px solid var(--bd); border-radius:6px; color:var(--mu); margin:0 5px 6px 0; }
+  .btn { display:inline-flex; align-items:center; gap:6px; font:600 12px 'JetBrains Mono'; color:var(--fg); text-decoration:none; padding:8px 14px; border-radius:999px; border:1px solid var(--bd); background:transparent; cursor:pointer; transition:.2s; }
+  .btn:hover { border-color:var(--red); color:var(--red); }
+  .btn.solid { background:var(--red); border-color:var(--red); color:#140404; } .btn.solid:hover { color:#140404; filter:brightness(1.1); }
+  .ttl { font:900 clamp(38px,5vw,68px)/.9 Outfit; text-transform:uppercase; letter-spacing:-.04em; margin:12px 0 14px; }
+  .ttl::first-letter { color:var(--red); }
+  .desc { color:#c9c9c9; font-size:15px; line-height:1.65; margin-bottom:16px; }
+  .swap { animation:swapIn .55s cubic-bezier(.2,.8,.2,1); }
+  @keyframes swapIn { from { opacity:0; transform:translateY(16px); } }
+  #index { position:fixed; right:18px; top:50%; transform:translateY(-50%); z-index:50; display:flex; flex-direction:column; gap:10px; }
+  #index a { font:500 11px 'JetBrains Mono'; color:var(--mu); text-decoration:none; text-align:right; } #index a:hover { color:var(--fg); }
+
+  /* 01 scroll zoom (kept) */
+  #x1 { display:block; padding:0; min-height:0; }
+  .zm { height:230vh; position:relative; }
+  .zm-pin { position:sticky; top:0; height:100vh; overflow:hidden; display:flex; align-items:center; justify-content:center; }
+  .zm-title { position:absolute; z-index:1; font:900 clamp(56px,13vw,200px)/.85 Outfit; letter-spacing:-.05em; text-transform:uppercase; text-align:center; white-space:nowrap; }
+  .zm-title span { color:var(--red); }
+  .zm-img { position:relative; z-index:2; width:100vw; height:100vh; overflow:hidden; }
+  .zm-img img { width:100%; height:100%; object-fit:cover; display:block; }
+  .zm-img::after { content:''; position:absolute; inset:0; background:linear-gradient(90deg,rgba(10,10,10,.92),rgba(10,10,10,.35) 60%,transparent); opacity:var(--o,0); }
+  .zm-info { position:absolute; z-index:3; left:7vw; bottom:12vh; max-width:480px; opacity:0; }
+  .zm-info h4 { font:900 clamp(40px,5vw,72px)/.9 Outfit; text-transform:uppercase; letter-spacing:-.04em; margin:10px 0 14px; }
+  .zm-info h4::first-letter { color:var(--red); }
+  .zm-info p { color:#d4d4d4; font-size:15px; line-height:1.6; margin-bottom:16px; }
+  .zm-n { position:absolute; z-index:3; right:5vw; top:12vh; font:700 13px 'JetBrains Mono'; color:var(--mu); } .zm-n b { color:var(--fg); font-size:30px; }
+
+  /* 02 flipbook (kept) */
+  #x2 { display:block; padding:0; min-height:0; }
+  .fb { height:650vh; position:relative; }
+  .fb-pin { position:sticky; top:0; height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; perspective:2200px; overflow:hidden; }
+  .book { position:relative; width:min(94vw,1000px); height:min(62vh,560px); transform:rotateX(14deg); transform-style:preserve-3d; }
+  .book::before { content:''; position:absolute; left:50%; top:0; bottom:0; width:2px; margin-left:-1px; background:rgba(0,0,0,.6); z-index:60; }
+  .pg { position:absolute; top:0; width:50%; height:100%; background:var(--card); border:1px solid var(--bd); overflow:hidden; }
+  .pg.l { left:0; border-radius:16px 0 0 16px; } .pg.r { left:50%; border-radius:0 16px 16px 0; }
+  .leaf { position:absolute; left:50%; top:0; width:50%; height:100%; transform-origin:left center; transform-style:preserve-3d; }
+  .leaf .f, .leaf .b { position:absolute; inset:0; backface-visibility:hidden; background:var(--card); border:1px solid var(--bd); overflow:hidden; }
+  .leaf .f { border-radius:0 16px 16px 0; padding:clamp(18px,3vw,40px); display:flex; flex-direction:column; }
+  .leaf .b { transform:rotateY(180deg); border-radius:16px 0 0 16px; }
+  .leaf .f::after { content:''; position:absolute; inset:0; background:linear-gradient(90deg,rgba(0,0,0,.35),transparent 18%); pointer-events:none; opacity:var(--sh,1); }
+  .shotpg img { width:100%; height:100%; object-fit:cover; display:block; }
+  .shotpg .n { position:absolute; left:18px; top:16px; font:700 12px 'JetBrains Mono'; background:var(--red); color:#140404; padding:4px 10px; border-radius:999px; }
+  .leaf h4 { font:900 clamp(30px,4vw,58px)/.9 Outfit; text-transform:uppercase; letter-spacing:-.04em; margin:12px 0 16px; }
+  .leaf h4::first-letter { color:var(--red); }
+  .leaf p { color:#c9c9c9; font-size:clamp(12.5px,1.3vw,15px); line-height:1.65; margin-bottom:16px; }
+  .leaf .foot { margin-top:auto; display:flex; justify-content:space-between; align-items:center; font:11px 'JetBrains Mono'; color:var(--mu); }
+  .fb-hint { margin-top:28px; font:12px 'JetBrains Mono'; color:var(--mu); }
+
+  /* 03 laptop */
+  #x3 { display:block; padding:0; min-height:0; }
+  .lp { height:600vh; position:relative; }
+  .lp-pin { position:sticky; top:0; height:100vh; display:grid; grid-template-columns:1fr 1.35fr; gap:40px; align-items:center; max-width:1180px; margin:0 auto; padding:0 24px; }
+  .lp-scene { perspective:1600px; display:flex; flex-direction:column; align-items:center; }
+  .lid { width:min(100%,620px); aspect-ratio:16/10.4; background:#1a1a1c; border:1px solid #2a2a2e; border-radius:18px 18px 4px 4px; padding:14px 14px 22px; transform-origin:bottom center; transform:rotateX(-88deg); box-shadow:0 -10px 60px rgba(239,68,68,.12); position:relative; }
+  .lid::before { content:''; position:absolute; top:6px; left:50%; width:6px; height:6px; margin-left:-3px; border-radius:50%; background:#333; }
+  .screen { width:100%; height:100%; border-radius:6px; overflow:hidden; background:#000; position:relative; }
+  .reel { position:absolute; inset:0; transition:transform .8s cubic-bezier(.7,0,.2,1); }
+  .reel img { width:100%; height:100%; object-fit:cover; display:block; }
+  .screen::after { content:''; position:absolute; inset:0; background:linear-gradient(120deg,rgba(255,255,255,.08),transparent 40%); opacity:var(--on,0); }
+  .base { width:min(112%,700px); height:16px; background:linear-gradient(#2c2c30,#18181a); border-radius:2px 2px 14px 14px; position:relative; }
+  .base::before { content:''; position:absolute; left:50%; top:0; width:110px; height:6px; margin-left:-55px; background:#0f0f10; border-radius:0 0 8px 8px; }
+  .lp-dots { display:flex; gap:6px; margin-top:22px; } .lp-dots i { width:6px; height:6px; border-radius:50%; background:var(--bd); transition:.3s; } .lp-dots i.on { background:var(--red); width:22px; border-radius:6px; }
+
+  /* 04 pixel dissolve */
+  .px-wrap { display:grid; grid-template-columns:1.4fr 1fr; gap:40px; align-items:center; }
+  .px { position:relative; aspect-ratio:16/10; border-radius:4px; overflow:hidden; border:4px solid #1f1f22; box-shadow:0 0 0 1px var(--bd), 8px 8px 0 rgba(239,68,68,.35); image-rendering:pixelated; }
+  .px .base-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .tiles { position:absolute; inset:0; display:grid; grid-template-columns:repeat(16,1fr); grid-template-rows:repeat(10,1fr); }
+  .tiles i { opacity:0; background-size:1600% 1000%; }
+  .tiles i.in { opacity:1; }
+  .px .hud { position:absolute; left:10px; top:10px; font:8px 'Press Start 2P'; color:#fff; background:rgba(0,0,0,.6); padding:6px 8px; z-index:3; }
+  .px-side .pt { font:clamp(18px,2.4vw,28px)/1.35 'Press Start 2P'; text-transform:uppercase; margin:16px 0 18px; }
+  .px-side .pt::first-letter { color:var(--red); }
+  .px-nav { display:flex; flex-wrap:wrap; gap:6px; margin-top:22px; }
+  .px-nav button { all:unset; cursor:pointer; font:9px 'Press Start 2P'; color:var(--mu); border:2px solid #2a2a2e; padding:8px 9px; transition:.15s; }
+  .px-nav button:hover { color:var(--fg); } .px-nav button.on { background:var(--red); border-color:var(--red); color:#140404; box-shadow:3px 3px 0 #7f1d1d; }
+
+  /* 05 receipt */
+  .rc-wrap { display:grid; grid-template-columns:1fr 1fr; gap:50px; align-items:start; }
+  .printer { position:relative; width:360px; max-width:100%; margin:0 auto; }
+  .ptop { position:relative; z-index:3; height:74px; border-radius:16px; background:linear-gradient(#232326,#151517); border:1px solid #2c2c30; display:flex; align-items:center; justify-content:space-between; padding:0 22px; box-shadow:0 20px 40px rgba(0,0,0,.6); }
+  .ptop .led { width:9px; height:9px; border-radius:50%; background:#3a0d0d; } .ptop .led.on { background:var(--red); box-shadow:0 0 12px var(--red); }
+  .ptop .slot { position:absolute; left:24px; right:24px; bottom:12px; height:5px; border-radius:4px; background:#000; }
+  .paper-zone { position:relative; height:560px; margin-top:-14px; overflow:hidden; padding:0 34px; }
+  .receipt { position:absolute; left:34px; right:34px; top:0; background:#f1ede4; color:#1a1a1a; padding:26px 22px 30px; font:12px/1.6 'JetBrains Mono'; transform:translateY(-100%); --tear:8px; -webkit-mask:linear-gradient(#000 0 0) top/100% calc(100% - var(--tear)) no-repeat, conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) bottom/16px var(--tear) repeat-x; mask:linear-gradient(#000 0 0) top/100% calc(100% - var(--tear)) no-repeat, conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) bottom/16px var(--tear) repeat-x; }
+  .receipt.print { transition:transform 2.2s steps(22); transform:translateY(0); }
+  .receipt.torn { transition:transform .9s cubic-bezier(.5,0,.8,.5), opacity .9s; transform:translate(140px,700px) rotate(28deg); opacity:0; }
+  .receipt .c { text-align:center; } .receipt .hr { border-top:1px dashed #9a9a9a; margin:10px 0; }
+  .receipt .ln { display:flex; justify-content:space-between; } .receipt .ln span:last-child { color:#b91c1c; }
+  .receipt .rt { font:900 24px/1 Outfit; text-transform:uppercase; letter-spacing:-.02em; text-align:center; margin:6px 0 2px; }
+  .receipt img { width:100%; height:110px; object-fit:cover; filter:grayscale(1) contrast(1.3); mix-blend-mode:multiply; margin:6px 0; }
+  .barcode { height:38px; margin-top:10px; background:repeating-linear-gradient(90deg,#1a1a1a 0 2px,transparent 2px 4px,#1a1a1a 4px 5px,transparent 5px 8px,#1a1a1a 8px 11px,transparent 11px 12px); }
+  .rc-list { display:flex; flex-direction:column; gap:2px; margin-top:20px; }
+  .rc-list button { all:unset; cursor:pointer; display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px dashed var(--bd); font:13px 'JetBrains Mono'; color:var(--mu); transition:.2s; }
+  .rc-list button:hover { color:var(--fg); } .rc-list button.on { color:var(--fg); } .rc-list button.on span:first-child::before { content:'> '; color:var(--red); }
+
+  /* 06 prism */
+  .pr-stage { perspective:1800px; height:400px; display:flex; align-items:center; justify-content:center; cursor:grab; touch-action:pan-y; user-select:none; }
+  .pr-stage:active { cursor:grabbing; }
+  .prism { position:relative; width:420px; height:270px; transform-style:preserve-3d; }
+  .face { position:absolute; inset:0; border-radius:14px; overflow:hidden; border:1px solid var(--bd); background:var(--card); backface-visibility:hidden; }
+  .face img { width:100%; height:100%; object-fit:cover; pointer-events:none; opacity:.85; }
+  .face span { position:absolute; left:14px; bottom:12px; font:900 22px Outfit; text-transform:uppercase; text-shadow:0 2px 12px #000; }
+  .face.on { border-color:var(--red); box-shadow:0 0 50px rgba(239,68,68,.35); }
+  .pr-info { display:grid; grid-template-columns:auto 1fr auto; gap:30px; align-items:center; margin-top:30px; }
+  .pr-info .ttl { margin:6px 0 0; }
+  .pr-info .desc { margin:0; max-width:520px; }
+  .arrow { all:unset; cursor:pointer; width:46px; height:46px; border-radius:50%; border:1px solid var(--bd); display:flex; align-items:center; justify-content:center; font:16px 'JetBrains Mono'; transition:.2s; } .arrow:hover { border-color:var(--red); color:var(--red); }
+
+  /* 07 venetian blinds */
+  .bl-wrap { display:grid; grid-template-columns:1fr 1.5fr; gap:40px; align-items:center; }
+  .bl-list button { all:unset; display:flex; align-items:baseline; gap:14px; cursor:pointer; padding:7px 0; font:900 clamp(24px,3vw,38px)/1 Outfit; text-transform:uppercase; letter-spacing:-.03em; color:rgba(255,255,255,.18); transition:color .3s, transform .4s; }
+  .bl-list button small { font:500 11px 'JetBrains Mono'; color:var(--mu); }
+  .bl-list button.on { color:var(--fg); transform:translateX(10px); } .bl-list button.on small { color:var(--red); }
+  .blinds { display:flex; aspect-ratio:16/10.5; perspective:1400px; border-radius:16px; overflow:hidden; }
+  .slat { flex:1; position:relative; transform-style:preserve-3d; transition:transform .9s cubic-bezier(.6,0,.2,1); }
+  .slat i { position:absolute; inset:0; backface-visibility:hidden; background-repeat:no-repeat; }
+  .slat i.b { transform:rotateY(180deg); }
+  .bl-cap { margin-top:18px; display:flex; justify-content:space-between; gap:20px; align-items:flex-start; }
+  .bl-cap p { color:#c9c9c9; font-size:14px; line-height:1.6; max-width:460px; }
+
+  /* 08 projector */
+  .pj { display:grid; grid-template-columns:150px 1fr; gap:0; align-items:center; }
+  .strip { height:560px; overflow:hidden; background:#050505; border-left:14px solid #111; border-right:14px solid #111; position:relative; -webkit-mask:linear-gradient(transparent,#000 15%,#000 85%,transparent); mask:linear-gradient(transparent,#000 15%,#000 85%,transparent); }
+  .strip::before, .strip::after { content:''; position:absolute; top:0; bottom:0; width:14px; z-index:2; background:repeating-linear-gradient(#111 0 8px,#d9d9d9 8px 16px,#111 16px 24px); background-size:6px 24px; background-repeat:repeat-y; background-position:center; }
+  .strip::before { left:-14px; } .strip::after { right:-14px; }
+  .frames { position:absolute; left:0; right:0; transition:transform .7s cubic-bezier(.6,0,.2,1); }
+  .frame { height:100px; margin:8px 6px; border:2px solid #222; cursor:pointer; overflow:hidden; filter:sepia(.6) brightness(.6); transition:filter .3s, border-color .3s; }
+  .frame img { width:100%; height:100%; object-fit:cover; }
+  .frame.on { filter:none; border-color:var(--red); }
+  .beam-zone { position:relative; display:flex; align-items:center; }
+  .beam { position:absolute; left:-6px; top:50%; width:46%; height:120%; transform:translateY(-50%); background:linear-gradient(90deg,rgba(255,240,220,.35),rgba(255,240,220,.04)); clip-path:polygon(0 47%,100% 5%,100% 95%,0 53%); filter:blur(6px); animation:beam 2.4s infinite; pointer-events:none; }
+  @keyframes beam { 50% { opacity:.75; } 52% { opacity:1; } 54% { opacity:.85; } }
+  .screen2 { margin-left:44%; flex:1; }
+  .cine { aspect-ratio:16/9; border-radius:4px; overflow:hidden; position:relative; box-shadow:0 0 80px rgba(255,240,220,.08); border:6px solid #e9e4da; }
+  .cine img { width:100%; height:100%; object-fit:cover; display:block; animation:flick .18s steps(2) infinite; }
+  .cine::after { content:''; position:absolute; inset:0; background:radial-gradient(ellipse,transparent 55%,rgba(0,0,0,.55)); pointer-events:none; }
+  @keyframes flick { 50% { filter:brightness(1.07); } }
+  .sub { text-align:center; margin-top:18px; }
+  .sub .ttl { font-size:clamp(28px,3.4vw,46px); margin:4px 0 8px; }
+  .sub p { color:#c9c9c9; font-size:14px; line-height:1.6; max-width:540px; margin:0 auto 14px; }
+
+  @media (max-width:760px) {
+    #index { display:none; }
+    .leaf p { display:none; }
+    .lp-pin { grid-template-columns:1fr; gap:16px; align-content:center; } .lp-pin .desc { display:none; }
+    .px-wrap, .rc-wrap, .bl-wrap { grid-template-columns:1fr; }
+    .prism { width:260px; height:170px; } .pr-stage { height:280px; } .pr-info { grid-template-columns:auto 1fr auto; gap:12px; } .pr-info .desc { display:none; }
+    .pj { grid-template-columns:90px 1fr; } .strip { height:420px; } .frame { height:60px; } .screen2 { margin-left:16px; } .beam { display:none; }
+  }
+</style>
+</head>
+<body>
+<nav id="index"><a href="#x1">01 scroll zoom (kept)</a><a href="#x2">02 flipbook (kept)</a><a href="#x3">03 laptop</a><a href="#x4">04 pixel dissolve</a><a href="#x5">05 receipt printer</a><a href="#x6">06 3D prism</a><a href="#x7">07 venetian blinds</a><a href="#x8">08 film projector</a></nav>
+
+<section id="x1">
+  <div class="tag" style="position:absolute"><b>01</b> — scroll zoom (kept) · the screenshot grows out of the name until it fills the screen</div>
+  <div id="zms"></div>
+</section>
+
+<section id="x2">
+  <div class="tag" style="position:absolute"><b>02</b> — flipbook (kept) · the projects are pages of a book; scrolling turns the pages</div>
+  <div class="fb" id="fb">
+    <div class="fb-pin">
+      <div class="label" style="margin-bottom:26px"><span>//</span> Featured Projects</div>
+      <div class="book" id="book"></div>
+      <div class="fb-hint"><b class="red" id="fbN">01</b> / 08 · keep scrolling to turn the page</div>
+    </div>
+  </div>
+</section>
+
+<section id="x3">
+  <div class="tag" style="position:absolute"><b>03</b> — laptop · scrolling opens the lid, then flicks through each project on its screen</div>
+  <div class="lp" id="lp">
+    <div class="lp-pin">
+      <div id="lpTxt"></div>
+      <div class="lp-scene"><div class="lid" id="lid"><div class="screen" id="scr"><div class="reel" id="reel"></div></div></div><div class="base"></div><div class="lp-dots" id="lpD"></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="x4">
+  <div class="tag"><b>04</b> — pixel dissolve · retro screen; projects dissolve in tile by tile (matches the pixel background)</div>
+  <div class="wrap px-wrap">
+    <div class="px" id="px"><img class="base-img" id="pxBase" alt="" /><div class="tiles" id="tiles"></div><div class="hud" id="hud">P1 ▶ 01/08</div></div>
+    <div class="px-side" id="pxSide"></div>
+  </div>
+</section>
+
+<section id="x5">
+  <div class="tag"><b>05</b> — receipt printer · each project prints out as a receipt; picking another tears the old one off</div>
+  <div class="wrap rc-wrap">
+    <div class="printer"><div class="ptop"><span class="mono mu" style="font-size:11px">PRAKASH-PRINT 01</span><span class="led" id="led"></span><div class="slot"></div></div><div class="paper-zone" id="pz"></div></div>
+    <div>
+      <div class="label" style="margin-bottom:6px"><span>//</span> Featured Projects</div>
+      <div class="ttl" id="rcT"></div>
+      <div class="rc-list" id="rcL"></div>
+    </div>
+  </div>
+</section>
+
+<section id="x6">
+  <div class="tag"><b>06</b> — 3D prism · the projects are faces of a spinning 8-sided prism; drag it or use the arrows</div>
+  <div class="wrap">
+    <div class="label"><span>//</span> Featured Projects</div>
+    <div class="pr-stage" id="prS"><div class="prism" id="prism"></div></div>
+    <div class="pr-info"><button class="arrow" id="prL">←</button><div id="prI"></div><button class="arrow" id="prR">→</button></div>
+  </div>
+</section>
+
+<section id="x7">
+  <div class="tag"><b>07</b> — venetian blinds · hover a name; the picture turns over slat by slat like window blinds</div>
+  <div class="wrap bl-wrap">
+    <div><div class="label"><span>//</span> Featured Projects</div><div class="bl-list" id="blL"></div></div>
+    <div><div class="blinds" id="blinds"></div><div class="bl-cap" id="blC"></div></div>
+  </div>
+</section>
+
+<section id="x8">
+  <div class="tag"><b>08</b> — film projector · a film strip of projects; the current frame is projected onto the screen</div>
+  <div class="wrap">
+    <div class="label"><span>//</span> Featured Projects</div>
+    <div class="pj">
+      <div class="strip"><div class="frames" id="frames"></div></div>
+      <div class="beam-zone"><div class="beam"></div><div class="screen2"><div class="cine"><img id="cine" alt="" /></div><div class="sub" id="sub"></div></div></div>
+    </div>
+  </div>
+</section>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const P = [
+  { t:'MediChain', c:'Blockchain', y:'2026', d:'Patient-owned medical records: AES-256 encrypted files on IPFS, every access logged on Polygon, gasless for patients.', tags:['Flutter','React','Solidity','Polygon','IPFS'] },
+  { t:'The GP Edge', c:'Web', y:'2026', d:'SaaS for General Practitioners: study analytics, AI-powered Medicare billing lookup and an exam-prep system.', tags:['Next.js','TypeScript','PostgreSQL','Gemini'] },
+  { t:'SolarMitra', c:'Mobile', y:'2026', d:'AR rooftop solar assessment: maps the roof, detects obstacles with YOLOv8 and builds a PDF report in under 2 minutes.', tags:['Flutter','ARCore','YOLOv8','TFLite'] },
+  { t:'PaperTrail', c:'AI', y:'2026', d:'RAG knowledge retrieval over PDF, Word, Excel and CSV with semantic indexing and citation-backed answers.', tags:['React','Python','ChromaDB','OpenAI'] },
+  { t:'Portfolio', c:'Web', y:'2026', d:'This site: themeable portfolio with live GitHub and LeetCode heatmaps and project detail pages.', tags:['Next.js','Tailwind','three.js'] },
+  { t:'Inboxly', c:'Web', y:'2026', d:'WhatsApp Business messaging with a sales CRM: shared inbox, bulk campaigns, workflows and a Gemini auto-reply agent.', tags:['React','Node.js','Redis','BullMQ'] },
+  { t:'GharBudget', c:'Mobile', y:'2026', d:'Household expense manager with real-time cloud sync, budgets, categories and spending charts.', tags:['React Native','Firebase'] },
+  { t:'BA Agent', c:'AI', y:'2026', d:'LLM analyst workspace that turns project evidence into reviewed, source-cited requirements, BRDs and sprint plans.', tags:['Next.js','FastAPI','OpenRouter'] },
+];
+P.forEach((p, i) => { p.img = `img/sample-0${(i % 5) + 1}.jpg`; p.n = String(i + 1).padStart(2, '0'); });
+const chips = (p) => p.tags.map((t) => `<span class="chip">${t}</span>`).join('');
+const red1 = (s) => `<span>${s[0]}</span>${s.slice(1)}`;
+const clamp = (v) => Math.min(1, Math.max(0, v));
+const ease = (t) => t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+const info = (p) => `<div class="mono red" style="font-size:12px">${p.n} / 08 · ${p.c} · ${p.y}</div><div class="ttl">${p.t}</div><p class="desc">${p.d}</p><div style="margin-bottom:16px">${chips(p)}</div><a class="btn solid" href="#">View project →</a>`;
+const onScroll = (fn) => { addEventListener('scroll', fn, { passive: true }); addEventListener('resize', fn); fn(); };
+
+/* 01 scroll zoom */
+(() => {
+  $('#zms').innerHTML = P.slice(0, 3).map((p) => `<div class="zm"><div class="zm-pin"><div class="zm-title">${red1(p.t)}</div><div class="zm-img"><img src="${p.img}" alt=""></div><div class="zm-n"><b>${p.n}</b> / 08</div><div class="zm-info"><div class="mono red" style="font-size:12px">${p.c} · ${p.y}</div><h4>${p.t}</h4><p>${p.d}</p><div style="margin-bottom:14px">${chips(p)}</div><a class="btn solid" href="#">View project →</a></div></div></div>`).join('');
+  const zs = [...document.querySelectorAll('.zm')];
+  onScroll(() => zs.forEach((z) => {
+    const r = z.getBoundingClientRect(), p = clamp(-r.top / (r.height - innerHeight));
+    const g = ease(Math.min(1, p / 0.65)), box = z.querySelector('.zm-img');
+    box.style.clipPath = `inset(${(1 - g) * 36}% ${(1 - g) * 34}% round ${(1 - g) * 28}px)`;
+    box.querySelector('img').style.transform = `scale(${1.25 - g * 0.25})`;
+    box.style.setProperty('--o', Math.max(0, (p - 0.55) / 0.3));
+    const inf = z.querySelector('.zm-info'), k = clamp((p - 0.62) / 0.25);
+    inf.style.opacity = k; inf.style.transform = `translateY(${(1 - k) * 30}px)`;
+    z.querySelector('.zm-title').style.opacity = 1 - g;
+  }));
+})();
+
+/* 02 flipbook */
+(() => {
+  const B = $('#book');
+  const shot = (p) => `<div class="shotpg" style="position:relative;height:100%"><img src="${p.img}" alt=""><span class="n">${p.n} / 08</span></div>`;
+  const text = (p) => `<span class="mono red" style="font-size:12px">${p.n} · ${p.c} · ${p.y}</span><h4>${p.t}</h4><p>${p.d}</p><div>${chips(p)}</div><div class="foot"><a class="btn solid" href="#">View project →</a><span>p. ${p.n}</span></div>`;
+  B.innerHTML = `<div class="pg l">${shot(P[0])}</div><div class="pg r"></div>` +
+    P.map((p, i) => `<div class="leaf" style="z-index:${P.length - i}"><div class="f">${text(p)}</div><div class="b">${P[i + 1] ? shot(P[i + 1]) : ''}</div></div>`).join('');
+  const leaves = [...B.querySelectorAll('.leaf')], fb = $('#fb'), flips = P.length - 1;
+  onScroll(() => {
+    const r = fb.getBoundingClientRect(), p = clamp(-r.top / (r.height - innerHeight)) * flips;
+    leaves.forEach((l, i) => {
+      if (i >= flips) return;
+      const e = ease(clamp(p - i));
+      l.style.transform = `rotateY(${-180 * e}deg)`;
+      l.style.zIndex = e > 0.5 ? 10 + i : P.length - i + 10 + P.length;
+      l.querySelector('.f').style.setProperty('--sh', 1 + e * 2);
+    });
+    $('#fbN').textContent = String(Math.min(P.length, Math.round(p) + 1)).padStart(2, '0');
+  });
+})();
+
+/* 03 laptop */
+(() => {
+  $('#reel').innerHTML = P.map((p) => `<img src="${p.img}" alt="">`).join('');
+  $('#lpD').innerHTML = P.map(() => '<i></i>').join('');
+  const lp = $('#lp'), lid = $('#lid'), dots = [...$('#lpD').children]; let cur = -1;
+  onScroll(() => {
+    const r = lp.getBoundingClientRect(), p = clamp(-r.top / (r.height - innerHeight));
+    const open = ease(clamp(p / 0.15));
+    lid.style.transform = `rotateX(${-88 * (1 - open)}deg)`;
+    $('#scr').style.setProperty('--on', open);
+    const i = Math.min(P.length - 1, Math.floor(clamp((p - 0.15) / 0.85) * P.length));
+    if (i !== cur) {
+      cur = i; $('#reel').style.transform = `translateY(${-i * 100}%)`;
+      dots.forEach((d, k) => d.classList.toggle('on', k === i));
+      $('#lpTxt').innerHTML = `<div class="swap"><div class="label" style="margin-bottom:6px"><span>//</span> Featured Projects</div>${info(P[i])}</div>`;
+    }
+  });
+})();
+
+/* 04 pixel dissolve */
+(() => {
+  const C = 16, R = 10, T = $('#tiles');
+  T.innerHTML = Array.from({ length: C * R }, (_, k) => `<i style="background-position:${(k % C) / (C - 1) * 100}% ${Math.floor(k / C) / (R - 1) * 100}%"></i>`).join('');
+  const tiles = [...T.children]; let cur = 0, busy = false, timer;
+  const side = (i) => { const p = P[i]; $('#pxSide').innerHTML = `<div class="swap"><div class="label" style="margin-bottom:0"><span>//</span> Featured Projects</div><div class="pt">${p.t}</div><p class="desc">${p.d}</p><div style="margin-bottom:16px">${chips(p)}</div><a class="btn solid" href="#">▶ View project</a><div class="px-nav">${P.map((q, k) => `<button data-i="${k}" class="${k === i ? 'on' : ''}">${q.n}</button>`).join('')}</div></div>`;
+    document.querySelectorAll('.px-nav button').forEach((b) => b.onclick = () => go(+b.dataset.i)); };
+  const go = (i) => {
+    if (busy || i === cur) return; busy = true; clearTimeout(timer);
+    tiles.forEach((t) => { t.style.backgroundImage = `url(${P[i].img})`; t.classList.remove('in'); });
+    const order = tiles.map((_, k) => k).sort(() => Math.random() - .5);
+    order.forEach((k, n) => setTimeout(() => tiles[k].classList.add('in'), n * 4));
+    setTimeout(() => { $('#pxBase').src = P[i].img; tiles.forEach((t) => t.classList.remove('in')); busy = false; timer = setTimeout(() => go((cur + 1) % P.length), 4500); }, order.length * 4 + 80);
+    cur = i; side(i); $('#hud').textContent = `P1 ▶ ${P[i].n}/08`;
+  };
+  $('#pxBase').src = P[0].img; side(0); timer = setTimeout(() => go(1), 4500);
+})();
+
+/* 05 receipt */
+(() => {
+  const Z = $('#pz'); let cur = -1, el = null;
+  $('#rcL').innerHTML = P.map((p, i) => `<button data-i="${i}"><span>${p.n} ${p.t}</span><span>${p.c}</span></button>`).join('');
+  const btns = [...document.querySelectorAll('#rcL button')];
+  const print = (i) => {
+    if (i === cur) return; cur = i; const p = P[i];
+    btns.forEach((b, k) => b.classList.toggle('on', k === i));
+    $('#rcT').textContent = p.t;
+    if (el) { const old = el; old.classList.add('torn'); setTimeout(() => old.remove(), 900); }
+    el = document.createElement('div'); el.className = 'receipt';
+    el.innerHTML = `<div class="c">*** PRAKASH.DEV ***<br>PROJECT RECEIPT #${p.n}</div><div class="hr"></div><div class="rt">${p.t}</div><div class="c">${p.c.toUpperCase()} · ${p.y}</div><img src="${p.img}" alt=""><div class="hr"></div>${p.tags.map((t) => `<div class="ln"><span>${t}</span><span>✓</span></div>`).join('')}<div class="hr"></div><div class="ln"><b>STATUS</b><b>SHIPPED</b></div><div class="ln"><span>BUGS</span><span>0*</span></div><div class="hr"></div><div class="c" style="font-size:10px">*some conditions apply<br>THANK YOU FOR VISITING</div><div class="barcode"></div>`;
+    Z.appendChild(el); el.offsetHeight; el.classList.add('print');
+    $('#led').classList.add('on'); setTimeout(() => $('#led').classList.remove('on'), 2200);
+  };
+  btns.forEach((b) => b.onclick = () => print(+b.dataset.i));
+  new IntersectionObserver((es, o) => es.forEach((e) => { if (e.isIntersecting) { print(0); o.disconnect(); } }), { threshold: 0.4 }).observe(Z);
+})();
+
+/* 06 prism */
+(() => {
+  const PR = $('#prism'), n = P.length;
+  PR.innerHTML = P.map((p) => `<div class="face"><img src="${p.img}" alt=""><span>${p.t}</span></div>`).join('');
+  const faces = [...PR.children]; let ang = 0, target = 0, cur = -1;
+  const layout = () => { const w = PR.offsetWidth, z = w / 2 / Math.tan(Math.PI / n) + 10; faces.forEach((f, i) => f.style.transform = `rotateY(${i * 360 / n}deg) translateZ(${z}px)`); PR.dataset.z = z; };
+  const show = (i) => { faces.forEach((f, k) => f.classList.toggle('on', k === i)); $('#prI').innerHTML = `<div class="swap" style="display:flex;gap:30px;align-items:center;flex-wrap:wrap"><div><div class="mono red" style="font-size:12px">${P[i].n} / 08 · ${P[i].c}</div><div class="ttl">${P[i].t}</div></div><p class="desc">${P[i].d}</p><a class="btn solid" href="#">View →</a></div>`; };
+  const step = 360 / n;
+  $('#prL').onclick = () => target += step; $('#prR').onclick = () => target -= step;
+  let sx = null, sa = 0;
+  const S = $('#prS');
+  S.addEventListener('pointerdown', (e) => { sx = e.clientX; sa = target; S.setPointerCapture(e.pointerId); });
+  S.addEventListener('pointermove', (e) => { if (sx !== null) target = sa + (e.clientX - sx) * 0.4; });
+  S.addEventListener('pointerup', () => { sx = null; target = Math.round(target / step) * step; });
+  (function loop() {
+    ang += (target - ang) * 0.08;
+    PR.style.transform = `translateZ(${-PR.dataset.z}px) rotateX(-6deg) rotateY(${ang}deg)`;
+    const i = ((Math.round(-ang / step) % n) + n) % n;
+    if (i !== cur) { cur = i; show(i); }
+    requestAnimationFrame(loop);
+  })();
+  layout(); addEventListener('resize', layout);
+})();
+
+/* 07 venetian blinds */
+(() => {
+  const N = 14, B = $('#blinds');
+  B.innerHTML = Array.from({ length: N }, (_, k) => `<div class="slat"><i class="f"></i><i class="b"></i></div>`).join('');
+  const slats = [...B.children];
+  slats.forEach((s, k) => s.querySelectorAll('i').forEach((f) => { f.style.backgroundSize = `${N * 100}% 100%`; f.style.backgroundPosition = `${k / (N - 1) * 100}% 50%`; }));
+  let front = true, angle = 0, cur = -1;
+  const setImg = (face, i) => slats.forEach((s) => s.querySelector('i.' + face).style.backgroundImage = `url(${P[i].img})`);
+  $('#blL').innerHTML = P.map((p, i) => `<button data-i="${i}"><small>${p.n}</small>${p.t}</button>`).join('');
+  const btns = [...document.querySelectorAll('#blL button')];
+  const go = (i, instant) => {
+    if (i === cur) return; cur = i;
+    btns.forEach((b, k) => b.classList.toggle('on', k === i));
+    $('#blC').innerHTML = `<div class="swap"><div class="mono red" style="font-size:12px;margin-bottom:6px">${P[i].c} · ${P[i].y}</div><p>${P[i].d}</p></div><a class="btn solid" href="#">View project →</a>`;
+    if (instant) { setImg('f', i); return; }
+    setImg(front ? 'b' : 'f', i); front = !front; angle += 180;
+    slats.forEach((s, k) => { s.style.transitionDelay = `${k * 35}ms`; s.style.transform = `rotateY(${angle}deg)`; });
+  };
+  btns.forEach((b) => { b.onmouseenter = () => go(+b.dataset.i); b.onclick = () => go(+b.dataset.i); });
+  go(0, true);
+})();
+
+/* 08 projector */
+(() => {
+  const F = $('#frames');
+  F.innerHTML = P.map((p, i) => `<div class="frame" data-i="${i}"><img src="${p.img}" alt=""></div>`).join('');
+  const frames = [...F.children]; let cur = 0, timer;
+  const go = (i) => {
+    cur = i; clearTimeout(timer);
+    frames.forEach((f, k) => f.classList.toggle('on', k === i));
+    F.style.transform = `translateY(${280 - 58 - i * 116}px)`;
+    const img = $('#cine'); img.style.opacity = 0;
+    setTimeout(() => { img.src = P[i].img; img.style.transition = 'opacity .35s'; img.style.opacity = 1; }, 250);
+    $('#sub').innerHTML = `<div class="swap"><div class="mono red" style="font-size:12px">REEL ${P[i].n} · ${P[i].c} · ${P[i].y}</div><div class="ttl">${P[i].t}</div><p>${P[i].d}</p><a class="btn solid" href="#">View project →</a></div>`;
+    timer = setTimeout(() => go((cur + 1) % P.length), 5000);
+  };
+  frames.forEach((f) => f.onclick = () => go(+f.dataset.i));
+  go(0);
+})();
+</script>
+</body>
+</html>

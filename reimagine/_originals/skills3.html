@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Skills with logos, round two</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@500;700;900&display=swap" rel="stylesheet" />
+<style>
+  :root { --bg:#0a0a0a; --fg:#ededed; --mu:#8a8a8a; --card:#111113; --bd:rgba(255,255,255,.09); --red:#ef4444; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--fg); font-family:Inter,sans-serif; overflow-x:clip; }
+  body::before { content:''; position:fixed; inset:0; z-index:-1; background-size:32px 32px; background-image:linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 0),linear-gradient(180deg,rgba(255,255,255,.03) 1px,transparent 0); }
+  section { min-height:100vh; padding:90px 20px 80px; border-bottom:1px solid var(--bd); position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .wrap { width:100%; max-width:1040px; }
+  .tag { position:absolute; top:24px; left:24px; font:500 12px 'JetBrains Mono'; color:var(--mu); z-index:5; }
+  .tag b { color:var(--red); font-weight:500; }
+  .label { font:600 12px 'JetBrains Mono'; letter-spacing:.1em; text-transform:uppercase; color:var(--mu); margin-bottom:28px; display:flex; align-items:center; gap:12px; }
+  .label span { color:var(--red); } .label::after { content:''; flex:1; height:1px; background:var(--bd); }
+  .mono { font-family:'JetBrains Mono',monospace; } .red { color:var(--red); } .mu { color:var(--mu); }
+  #index { position:fixed; right:18px; top:50%; transform:translateY(-50%); z-index:50; display:flex; flex-direction:column; gap:10px; }
+  #index a { font:500 11px 'JetBrains Mono'; color:var(--mu); text-decoration:none; text-align:right; } #index a:hover { color:var(--fg); }
+  #index a.kept { color:#c4c4c4; }
+  .lg { display:grid; place-items:center; }
+  .lg img { width:100%; height:100%; object-fit:contain; }
+  .lg .fb { font:900 1em Outfit; letter-spacing:-.03em; color:#e5e5e5; }
+
+  /* kept: bento */
+  .bento { display:grid; grid-template-columns:repeat(6,1fr); grid-auto-rows:minmax(170px,auto); gap:12px; }
+  .bx { background:#111113; border:1px solid var(--bd); border-radius:22px; padding:20px 22px; display:flex; flex-direction:column; position:relative; overflow:hidden; transition:border-color .3s; }
+  .bx:hover { border-color:rgba(239,68,68,.5); }
+  .bx h3 { font:700 22px Outfit; letter-spacing:-.01em; } .bx p { font-size:13px; color:var(--mu); margin:3px 0 16px; }
+  .bx .num { position:absolute; right:18px; top:14px; font:900 54px/1 Outfit; color:rgba(255,255,255,.04); }
+  .lgs { display:flex; flex-wrap:wrap; gap:10px; margin-top:auto; }
+  .chiplg { display:flex; align-items:center; gap:8px; padding:7px 11px 7px 8px; border-radius:12px; background:#18181b; border:1px solid var(--bd); font:500 13px Inter; color:#d4d4d4; transition:.2s; }
+  .chiplg .lg { width:20px; height:20px; font-size:11px; filter:grayscale(1) brightness(1.6); transition:filter .2s; }
+  .chiplg:hover { border-color:var(--hc,#ef4444); color:#fff; transform:translateY(-2px); }
+  .chiplg:hover .lg { filter:none; }
+  .b-lang { grid-column:span 2; } .b-fe { grid-column:span 4; } .b-be { grid-column:span 3; } .b-ai { grid-column:span 3; background:linear-gradient(160deg,rgba(239,68,68,.16),#111113 60%); } .b-ds { grid-column:span 2; } .b-tools { grid-column:span 4; }
+
+  /* A isometric stack */
+  .iso-wrap { display:grid; grid-template-columns:1fr 300px; gap:20px; align-items:center; }
+  .iso { position:relative; height:620px; perspective:2000px; }
+  .iso-in { position:absolute; left:50%; top:50%; width:440px; height:300px; margin:-150px 0 0 -220px; transform:rotateX(58deg) rotateZ(-40deg); transform-style:preserve-3d; }
+  .slab { position:absolute; inset:0; border-radius:22px; background:rgba(24,24,27,.94); border:1px solid rgba(255,255,255,.14); transform-style:preserve-3d; transition:transform .55s cubic-bezier(.3,1.2,.5,1), background .3s, border-color .3s; display:flex; flex-wrap:wrap; align-content:center; justify-content:center; gap:16px; padding:28px; box-shadow:0 30px 50px rgba(0,0,0,.5); }
+  .slab::after { content:''; position:absolute; left:0; right:0; bottom:-14px; height:14px; border-radius:0 0 22px 22px; background:#0d0d0f; transform-origin:top; transform:rotateX(-90deg); }
+  .slab .lg { width:40px; height:40px; font-size:16px; transform:rotateZ(40deg) rotateX(-58deg) translateY(-14px); transform-origin:bottom; transition:transform .3s; }
+  .slab.on { background:rgba(60,14,14,.95); border-color:var(--red); }
+  .slab .slab-n { position:absolute; left:18px; top:12px; font:700 11px 'JetBrains Mono'; color:var(--mu); letter-spacing:.08em; }
+  .slab.on .slab-n { color:var(--red); }
+  .layers { display:flex; flex-direction:column; gap:6px; }
+  .layers div { padding:11px 14px; border:1px solid var(--bd); border-radius:12px; cursor:pointer; transition:.2s; }
+  .layers div b { font:600 15px Outfit; display:block; } .layers div span { font:11.5px Inter; color:var(--mu); }
+  .layers div.on { border-color:var(--red); background:rgba(239,68,68,.08); }
+
+  /* B laptop stickers */
+  .laptop { position:relative; max-width:860px; margin:0 auto; aspect-ratio:16/10; border-radius:28px; background:linear-gradient(145deg,#2a2a2e,#18181b 60%); border:1px solid rgba(255,255,255,.12); box-shadow:0 50px 100px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.1); overflow:hidden; }
+  .laptop .apple { position:absolute; left:50%; top:50%; width:90px; height:90px; margin:-45px; border-radius:50%; background:radial-gradient(circle,#3a3a3e,#232326); opacity:.6; }
+  .stk { position:absolute; display:flex; align-items:center; gap:8px; padding:10px 14px 10px 10px; border-radius:16px; background:#f5f5f4; color:#111; font:700 14px Outfit; box-shadow:0 4px 0 rgba(0,0,0,.25), 0 10px 20px rgba(0,0,0,.35); cursor:grab; user-select:none; touch-action:none; transition:box-shadow .15s, scale .15s; white-space:nowrap; }
+  .stk .lg { width:26px; height:26px; font-size:12px; } .stk .lg .fb { color:#111; }
+  .stk.round { border-radius:999px; } .stk.dark { background:#111; color:#fff; border:2px solid #f5f5f4; } .stk.dark .lg .fb { color:#fff; }
+  .stk.redst { background:var(--red); color:#fff; } .stk.redst .lg .fb { color:#fff; }
+  .stk:hover { scale:1.06; } .stk.drag { cursor:grabbing; scale:1.1; box-shadow:0 18px 30px rgba(0,0,0,.5); z-index:50; }
+
+  /* C spotlight grid */
+  .sgrid { position:relative; display:grid; grid-template-columns:repeat(7,1fr); gap:1px; background:var(--bd); border:1px solid var(--bd); border-radius:20px; overflow:hidden; cursor:none; }
+  .sc { background:#0d0d0e; aspect-ratio:1.15; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; position:relative; }
+  .sc .lg { width:34px; height:34px; font-size:14px; filter:grayscale(1) brightness(.35); transition:filter .25s; }
+  .sc span { font:500 11px 'JetBrains Mono'; color:#333; transition:color .25s; text-align:center; padding:0 4px; }
+  .sc.lit .lg { filter:none; } .sc.lit span { color:#e5e5e5; }
+  .glow { position:absolute; width:340px; height:340px; margin:-170px; border-radius:50%; background:radial-gradient(circle,rgba(239,68,68,.22),transparent 65%); pointer-events:none; left:0; top:0; mix-blend-mode:screen; }
+  .sgrid .ring { position:absolute; width:22px; height:22px; margin:-11px; border:2px solid var(--red); border-radius:50%; pointer-events:none; left:0; top:0; z-index:3; }
+
+  /* D honeycomb ripple */
+  .hive { display:flex; flex-direction:column; align-items:center; }
+  .hrow { display:flex; gap:8px; margin-top:-22px; } .hrow:first-child { margin-top:0; }
+  .hex { width:96px; height:110px; clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%); background:#1a1a1d; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; transition:transform .35s cubic-bezier(.3,1.6,.5,1), background .3s; cursor:pointer; position:relative; }
+  .hex::before { content:''; position:absolute; inset:1px; clip-path:inherit; background:#121214; z-index:0; transition:background .3s; }
+  .hex > * { position:relative; z-index:1; }
+  .hex .lg { width:32px; height:32px; font-size:13px; }
+  .hex small { font:10px 'JetBrains Mono'; color:var(--mu); max-width:80px; text-align:center; line-height:1.2; }
+  .hex.pop { transform:scale(1.14); background:var(--red); } .hex.pop::before { background:#1f0b0b; }
+  .hex.cat-on::before { background:#2a0e0e; } .hex.cat-on { background:var(--red); }
+  .hleg { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:28px; }
+  .hleg button { font:12px 'JetBrains Mono'; color:var(--mu); background:transparent; border:1px solid var(--bd); border-radius:99px; padding:6px 12px; cursor:pointer; }
+  .hleg button.on, .hleg button:hover { color:var(--fg); border-color:var(--red); }
+
+  /* E featured cycle */
+  .feat { display:grid; grid-template-columns:1.1fr 1fr; gap:40px; align-items:center; }
+  .hero-lg { position:relative; aspect-ratio:1; max-width:420px; border-radius:40px; background:#111113; border:1px solid var(--bd); display:grid; place-items:center; overflow:hidden; }
+  .hero-lg::before { content:''; position:absolute; inset:-30%; background:radial-gradient(circle,var(--hc,#ef4444),transparent 60%); opacity:.18; transition:background .6s; }
+  .hero-lg .lg { width:44%; height:44%; font-size:80px; position:relative; transition:transform .5s cubic-bezier(.3,1.4,.5,1), opacity .3s; }
+  .hero-lg .lg.swap { transform:scale(.6) rotate(-12deg); opacity:0; }
+  .hero-lg .cap { position:absolute; bottom:22px; left:0; right:0; text-align:center; }
+  .hero-lg .cap b { display:block; font:900 32px Outfit; letter-spacing:-.02em; } .hero-lg .cap span { font:11.5px 'JetBrains Mono'; color:var(--mu); }
+  .minis { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .mini { aspect-ratio:1; border-radius:12px; background:#121214; border:1px solid var(--bd); padding:10px; cursor:pointer; transition:.2s; position:relative; overflow:hidden; }
+  .mini .lg { width:100%; height:100%; font-size:11px; filter:grayscale(1) brightness(1.4); transition:filter .2s; }
+  .mini.on { border-color:var(--red); } .mini.on .lg, .mini:hover .lg { filter:none; }
+  .mini.on::after { content:''; position:absolute; left:0; bottom:0; height:3px; background:var(--red); animation:bar 2.2s linear forwards; }
+  @keyframes bar { from { width:0; } to { width:100%; } }
+
+  @media (max-width:760px) { #index { display:none; } .bento { grid-template-columns:1fr 1fr; } .bento > * { grid-column:span 2 !important; } .iso-wrap, .feat { grid-template-columns:1fr; } .iso { height:460px; transform:scale(.7); } .sgrid { grid-template-columns:repeat(4,1fr); } .hex { width:70px; height:80px; } .hex small { display:none; } .hrow { margin-top:-16px; } .minis { grid-template-columns:repeat(5,1fr); } .stk { font-size:11px; padding:6px 10px 6px 6px; } .stk .lg { width:18px; height:18px; } }
+</style>
+</head>
+<body>
+<nav id="index"><a href="#m0" class="kept">02 bento ★</a><a href="#m1">A layer stack</a><a href="#m2">B laptop stickers</a><a href="#m3">C spotlight grid</a><a href="#m4">D honeycomb</a><a href="#m5">E featured</a></nav>
+
+<section id="m0">
+  <div class="tag"><b>02</b> — bento (kept) · a box per category; hover a logo for its brand colour</div>
+  <div class="wrap"><div class="label"><span>//</span> Skills &amp; Toolbox</div><div class="bento" id="bento"></div></div>
+</section>
+
+<section id="m1">
+  <div class="tag"><b>A</b> — layer stack · your stack as 3D layers; hover a layer to lift it out</div>
+  <div class="wrap"><div class="label"><span>//</span> Skills &amp; Toolbox</div>
+    <div class="iso-wrap"><div class="iso"><div class="iso-in" id="iso"></div></div><div class="layers" id="layers"></div></div>
+  </div>
+</section>
+
+<section id="m2">
+  <div class="tag"><b>B</b> — laptop stickers · your laptop lid covered in stickers; drag them around</div>
+  <div class="wrap"><div class="label"><span>//</span> Skills &amp; Toolbox</div><div class="laptop" id="lid"><div class="apple"></div></div></div>
+</section>
+
+<section id="m3">
+  <div class="tag"><b>C</b> — spotlight grid · logos sit in the dark; your cursor lights them up</div>
+  <div class="wrap"><div class="label"><span>//</span> Skills &amp; Toolbox</div><div class="sgrid" id="sg"><div class="glow" id="glow"></div><div class="ring" id="sring"></div></div></div>
+</section>
+
+<section id="m4">
+  <div class="tag"><b>D</b> — honeycomb · hover a cell to ripple; pick a category to light its cells</div>
+  <div class="wrap"><div class="label"><span>//</span> Skills &amp; Toolbox</div><div class="hive" id="hive"></div><div class="hleg" id="hleg"></div></div>
+</section>
+
+<section id="m5">
+  <div class="tag"><b>E</b> — featured · one big logo at a time cycles through; click any small one</div>
+  <div class="wrap"><div class="label"><span>//</span> Skills &amp; Toolbox</div>
+    <div class="feat"><div class="hero-lg" id="hl"><span class="lg" id="hlg"></span><div class="cap"><b id="hln"></b><span id="hlc"></span></div></div>
+      <div><div style="font:700 34px/1.1 Outfit;letter-spacing:-.02em;margin-bottom:10px">35 tools,<br><span class="red">one stack.</span></div><p class="mu" style="line-height:1.6;margin-bottom:22px;font-size:15px">From the language to the database to the LLM — the kit I reach for every day.</p><div class="minis" id="minis"></div></div>
+    </div>
+  </div>
+</section>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const S = [
+  { t: 'Languages', b: 'The foundations.', k: 'lang', i: [['JavaScript', 'javascript', '#F7DF1E'], ['TypeScript', 'typescript', '#3178C6'], ['C++', 'cplusplus', '#00599C'], ['Python', 'python', '#3776AB'], ['SQL', 'mysql', '#4479A1']] },
+  { t: 'Frontend', b: 'Responsive interfaces for web and mobile.', k: 'fe', i: [['React.js', 'react', '#61DAFB'], ['Next.js', 'nextdotjs', '#ffffff'], ['React Native', 'react', '#61DAFB'], ['HTML5', 'html5', '#E34F26'], ['CSS3', 'css3', '#1572B6'], ['Responsive UI', null, '#ef4444']] },
+  { t: 'Backend & Databases', b: 'APIs, auth and data.', k: 'be', i: [['Node.js', 'nodedotjs', '#5FA04E'], ['Express.js', 'express', '#ffffff'], ['REST APIs', null, '#ef4444'], ['PostgreSQL', 'postgresql', '#4169E1'], ['Supabase', 'supabase', '#3FCF8E'], ['Firebase', 'firebase', '#FFCA28'], ['Redis', 'redis', '#FF4438']] },
+  { t: 'AI / LLM', b: 'Shipping LLM-powered features.', k: 'ai', i: [['LangChain', 'langchain', '#ffffff'], ['LangGraph', 'langchain', '#ffffff'], ['OpenAI API', 'openai', '#ffffff'], ['Gemini API', 'googlegemini', '#8E75B2'], ['RAG', null, '#ef4444'], ['ChromaDB', null, '#ef4444'], ['Prompt Engineering', null, '#ef4444']] },
+  { t: 'Data Science', b: 'Analysis and modelling.', k: 'ds', i: [['NumPy', 'numpy', '#4DABCF'], ['Pandas', 'pandas', '#E70488'], ['Matplotlib', null, '#11557C'], ['Supervised Learning', 'scikitlearn', '#F7931E']] },
+  { t: 'Developer Tools', b: 'The everyday kit.', k: 'tools', i: [['Git', 'git', '#F05032'], ['GitHub', 'github', '#ffffff'], ['Postman', 'postman', '#FF6C37'], ['Clerk', 'clerk', '#6C47FF'], ['VS Code', 'visualstudiocode', '#007ACC'], ['Agile / Scrum', 'jira', '#0052CC']] },
+];
+const ALL = S.flatMap((s, ci) => s.i.map(([n, slug, c]) => ({ n, slug, c, ci })));
+const initials = (n) => n.replace(/[^A-Za-z+ ]/g, ' ').trim().split(/\s+/).map((w) => w[0]).join('').slice(0, 3).toUpperCase();
+const logo = (s, color = 'ffffff') => s.slug
+  ? `<span class="lg"><img src="https://cdn.simpleicons.org/${s.slug}/${color}" alt="" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'fb',textContent:'${initials(s.n)}'}))"></span>`
+  : `<span class="lg"><span class="fb">${initials(s.n)}</span></span>`;
+const brand = (s) => (s.c === '#ffffff' || s.c === '#ef4444' ? 'ffffff' : s.c.slice(1));
+
+/* kept bento */
+$('#bento').innerHTML = S.map((s, i) => `<div class="bx b-${s.k}"><span class="num">0${i + 1}</span><h3>${s.t}</h3><p>${s.b}</p><div class="lgs">${s.i.map(([n, slug, c]) => `<span class="chiplg" style="--hc:${c}">${logo({ n, slug }, c.replace('#', ''))}${n}</span>`).join('')}</div></div>`).join('');
+
+/* A layer stack: top = what users see, bottom = the tools underneath */
+(() => {
+  const order = [1, 3, 2, 0, 4, 5]; // frontend, ai, backend, languages, data, tools
+  const iso = $('#iso'), gap = 46;
+  iso.innerHTML = order.map((ci, k) => `<div class="slab" data-k="${k}" style="transform:translateZ(${(order.length - 1 - k) * gap}px)"><span class="slab-n">L${k + 1} · ${S[ci].t.toUpperCase()}</span>${S[ci].i.map((it) => logo({ n: it[0], slug: it[1] }, brand({ c: it[2] }))).join('')}</div>`).join('');
+  $('#layers').innerHTML = order.map((ci, k) => `<div data-k="${k}"><b>L${k + 1} · ${S[ci].t}</b><span>${S[ci].i.map((x) => x[0]).join(' · ')}</span></div>`).join('');
+  const slabs = [...iso.children], rows = [...$('#layers').children];
+  const focus = (k) => slabs.forEach((s, j) => { const base = (order.length - 1 - j) * gap; const lift = k === null ? 0 : j < k ? 70 : j === k ? 34 : 0; s.style.transform = `translateZ(${base + lift}px) ${j === k ? 'translateX(-30px) translateY(30px)' : ''}`; s.classList.toggle('on', j === k); rows[j].classList.toggle('on', j === k); });
+  [...slabs, ...rows].forEach((el) => { el.addEventListener('pointerenter', () => focus(+el.dataset.k)); el.addEventListener('pointerleave', () => focus(null)); });
+})();
+
+/* B laptop stickers */
+(() => {
+  const lid = $('#lid'), kinds = ['', 'round', 'dark', '', 'redst', 'round', 'dark'];
+  ALL.forEach((s, i) => {
+    const el = document.createElement('div'); el.className = 'stk ' + kinds[i % kinds.length]; el.innerHTML = logo(s, el.classList.contains('dark') || el.classList.contains('redst') ? 'ffffff' : s.c === '#ffffff' ? '111111' : s.c.slice(1)) + s.n;
+    const col = i % 6, row = Math.floor(i / 6);
+    el.style.left = (3 + col * 16 + (row % 2) * 5 + Math.random() * 3) + '%'; el.style.top = (5 + row * 15 + Math.random() * 3) + '%'; el.style.rotate = (Math.random() * 24 - 12) + 'deg';
+    lid.appendChild(el);
+    el.addEventListener('pointerdown', (e) => {
+      el.setPointerCapture(e.pointerId); el.classList.add('drag'); const r = lid.getBoundingClientRect(), ox = e.clientX - el.offsetLeft - r.left, oy = e.clientY - el.offsetTop - r.top;
+      const mv = (ev) => { el.style.left = ev.clientX - r.left - ox + 'px'; el.style.top = ev.clientY - r.top - oy + 'px'; };
+      el.addEventListener('pointermove', mv);
+      el.addEventListener('pointerup', () => { el.removeEventListener('pointermove', mv); el.classList.remove('drag'); lid.appendChild(el); }, { once: true });
+    });
+  });
+})();
+
+/* C spotlight grid */
+(() => {
+  const g = $('#sg');
+  g.insertAdjacentHTML('beforeend', ALL.map((s) => `<div class="sc">${logo(s, brand(s))}<span>${s.n}</span></div>`).join(''));
+  const cells = [...g.querySelectorAll('.sc')], glow = $('#glow'), ring = $('#sring');
+  g.addEventListener('pointermove', (e) => {
+    const r = g.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
+    glow.style.transform = ring.style.transform = `translate(${x}px,${y}px)`;
+    cells.forEach((c) => { const cr = c.getBoundingClientRect(); c.classList.toggle('lit', Math.hypot(cr.left + cr.width / 2 - e.clientX, cr.top + cr.height / 2 - e.clientY) < 170); });
+  });
+  g.addEventListener('pointerleave', () => { cells.forEach((c) => c.classList.remove('lit')); glow.style.transform = ring.style.transform = 'translate(-999px,-999px)'; });
+})();
+
+/* D honeycomb */
+(() => {
+  const per = [6, 7, 6, 7, 6, 3]; let idx = 0;
+  $('#hive').innerHTML = per.map((n) => `<div class="hrow">${Array.from({ length: n }, () => { const s = ALL[idx++]; return s ? `<div class="hex" data-ci="${s.ci}">${logo(s, brand(s))}<small>${s.n}</small></div>` : ''; }).join('')}</div>`).join('');
+  const hexes = [...document.querySelectorAll('.hex')];
+  hexes.forEach((h) => h.addEventListener('pointerenter', () => {
+    const r0 = h.getBoundingClientRect();
+    hexes.forEach((o) => { const r = o.getBoundingClientRect(), d = Math.hypot(r.left - r0.left, r.top - r0.top); setTimeout(() => { o.classList.add('pop'); setTimeout(() => o.classList.remove('pop'), 220); }, d * 1.6); });
+  }));
+  $('#hleg').innerHTML = S.map((s, i) => `<button data-i="${i}">${s.t}</button>`).join('');
+  $('#hleg').onclick = (e) => { const b = e.target.closest('button'); if (!b) return; const on = !b.classList.contains('on'); $('#hleg').querySelectorAll('button').forEach((x) => x.classList.remove('on')); hexes.forEach((h) => h.classList.remove('cat-on')); if (on) { b.classList.add('on'); hexes.filter((h) => h.dataset.ci === b.dataset.i).forEach((h) => h.classList.add('cat-on')); } };
+})();
+
+/* E featured */
+(() => {
+  $('#minis').innerHTML = ALL.map((s) => `<div class="mini">${logo(s, brand(s))}</div>`).join('');
+  const minis = [...$('#minis').children]; let cur = 0, timer;
+  const show = (i) => {
+    cur = i; const s = ALL[i], lg = $('#hlg');
+    lg.classList.add('swap');
+    setTimeout(() => { lg.outerHTML = logo(s, brand(s)).replace('class="lg"', 'class="lg swap" id="hlg"'); requestAnimationFrame(() => requestAnimationFrame(() => $('#hlg').classList.remove('swap'))); $('#hln').textContent = s.n; $('#hlc').textContent = S[s.ci].t; $('#hl').style.setProperty('--hc', s.c === '#ffffff' ? '#ef4444' : s.c); }, 200);
+    minis.forEach((m, k) => { m.classList.remove('on'); if (k === i) { void m.offsetWidth; m.classList.add('on'); } });
+    clearTimeout(timer); timer = setTimeout(() => show((cur + 1) % ALL.length), 2200);
+  };
+  minis.forEach((m, i) => (m.onclick = () => show(i)));
+  show(0);
+})();
+</script>
+</body>
+</html>

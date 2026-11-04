@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Activity concepts III</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@500;700;900&display=swap" rel="stylesheet" />
+<style>
+  :root { --bg:#0a0a0a; --fg:#ededed; --mu:#8a8a8a; --card:#111113; --bd:rgba(255,255,255,.09); --red:#ef4444; --amber:#f59e0b; --green:#10b981; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--fg); font-family:Inter,sans-serif; }
+  body::before { content:''; position:fixed; inset:0; z-index:-1; background-size:32px 32px; background-image:linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 0),linear-gradient(180deg,rgba(255,255,255,.03) 1px,transparent 0); }
+  section { padding:100px 20px 90px; border-bottom:1px solid var(--bd); position:relative; display:flex; flex-direction:column; align-items:center; }
+  .wrap { width:100%; max-width:810px; }
+  .tag { position:absolute; top:24px; left:24px; right:24px; font:500 12px 'JetBrains Mono'; color:var(--mu); }
+  .tag b { color:var(--red); font-weight:500; }
+  .label { font:600 12px 'JetBrains Mono'; letter-spacing:.1em; text-transform:uppercase; color:var(--mu); margin-bottom:22px; display:flex; align-items:center; gap:12px; }
+  .label span { color:var(--red); } .label::after { content:''; flex:1; height:1px; background:var(--bd); }
+  .card { border:1px solid var(--bd); border-radius:18px; background:var(--card); padding:20px; }
+  .num { font:700 24px/1 Outfit; font-variant-numeric:tabular-nums; }
+  .cap { font:500 11px Inter; color:var(--mu); margin-top:5px; }
+  .src { display:inline-flex; align-items:center; gap:8px; font:600 13px Inter; color:var(--fg); }
+  .src svg { width:16px; height:16px; }
+  .handle { font:12px 'JetBrains Mono'; color:var(--mu); text-decoration:none; } .handle:hover { color:var(--red); }
+  .chip { font:11px 'JetBrains Mono'; padding:2px 8px; border:1px solid var(--bd); border-radius:6px; }
+  .fade { opacity:0; transform:translateY(10px); transition:opacity .6s, transform .6s ease; } .fade.in { opacity:1; transform:none; }
+  #index { position:fixed; right:18px; top:50%; transform:translateY(-50%); z-index:50; display:flex; flex-direction:column; gap:10px; }
+  #index a { font:500 11px 'JetBrains Mono'; color:var(--mu); text-decoration:none; text-align:right; } #index a:hover { color:var(--fg); }
+
+  /* heatmap */
+  .hm-scroll { overflow-x:auto; scrollbar-width:none; direction:rtl; } .hm-scroll > * { direction:ltr; }
+  .hm { display:grid; grid-auto-flow:column; grid-template-rows:repeat(7,10px); grid-auto-columns:10px; gap:3px; }
+  .hm i { border-radius:2px; background:rgba(255,255,255,.05); }
+  .hm i.l1 { background:rgba(239,68,68,.25); } .hm i.l2 { background:rgba(239,68,68,.45); } .hm i.l3 { background:rgba(239,68,68,.7); } .hm i.l4 { background:var(--red); }
+  .hm.am i.l1 { background:rgba(245,158,11,.25); } .hm.am i.l2 { background:rgba(245,158,11,.45); } .hm.am i.l3 { background:rgba(245,158,11,.7); } .hm.am i.l4 { background:var(--amber); }
+  .hm i:hover { outline:1px solid var(--fg); outline-offset:1px; }
+  .months { display:grid; grid-auto-flow:column; grid-auto-columns:10px; gap:3px; font:9px 'JetBrains Mono'; color:var(--mu); margin-bottom:5px; height:11px; } .months span { white-space:nowrap; }
+  .legend { display:flex; justify-content:flex-end; align-items:center; gap:3px; font:10px 'JetBrains Mono'; color:var(--mu); margin-top:8px; } .legend i { width:10px; height:10px; border-radius:2px; }
+  #tip { position:fixed; z-index:99; pointer-events:none; font:11px 'JetBrains Mono'; background:#1b1b1e; border:1px solid var(--bd); border-radius:8px; padding:5px 8px; opacity:0; white-space:nowrap; }
+  #tip b { color:var(--red); font-weight:500; }
+
+  /* 01 two rows, no tabs */
+  .rows .row { display:grid; grid-template-columns:170px 1fr; gap:24px; align-items:start; padding:20px 0; }
+  .rows .row + .row { border-top:1px solid var(--bd); }
+  .rows .who .handle { display:block; margin-top:6px; }
+  .rows .nums { display:flex; gap:26px; margin-bottom:14px; flex-wrap:wrap; }
+
+  /* 02 sentence summary */
+  .sent { font:500 clamp(20px,2.6vw,28px)/1.45 Outfit; color:#bdbdbd; margin-bottom:22px; letter-spacing:-.01em; }
+  .sent b { color:var(--fg); font-weight:700; } .sent .r { color:var(--red); } .sent .a { color:var(--amber); }
+  .seg { display:inline-flex; gap:2px; padding:3px; border:1px solid var(--bd); border-radius:999px; }
+  .seg button { all:unset; cursor:pointer; padding:5px 12px; font:500 12px Inter; color:var(--mu); border-radius:999px; transition:background .2s, color .2s; display:inline-flex; gap:6px; align-items:center; }
+  .seg button svg { width:13px; height:13px; }
+  .seg button.on { background:rgba(255,255,255,.08); color:var(--fg); }
+  .bar-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; gap:10px; flex-wrap:wrap; }
+
+  /* 03 stat strip */
+  .strip { display:grid; grid-template-columns:repeat(4,1fr); border:1px solid var(--bd); border-radius:18px; background:var(--card); margin-bottom:12px; }
+  .strip > div { padding:18px 20px; } .strip > div + div { border-left:1px solid var(--bd); }
+  .strip .num { font-size:28px; }
+  .links { display:flex; gap:18px; font:500 13px Inter; margin-bottom:12px; }
+  .links button { all:unset; cursor:pointer; color:var(--mu); padding-bottom:6px; border-bottom:2px solid transparent; transition:color .2s, border-color .2s; display:inline-flex; gap:6px; align-items:center; } .links button svg { width:14px; height:14px; }
+  .links button.on { color:var(--fg); border-color:var(--red); }
+
+  /* 04 side by side compact */
+  .duo { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .duo .card { padding:18px; }
+  .duo .hd { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+  .duo .nums { display:flex; gap:22px; margin-bottom:16px; }
+  .duo .hm { grid-template-rows:repeat(7,6px); grid-auto-columns:6px; gap:2px; }
+  .diff { display:flex; height:6px; border-radius:6px; overflow:hidden; margin-top:14px; gap:2px; } .diff i:nth-child(1) { background:var(--green); } .diff i:nth-child(2) { background:var(--amber); } .diff i:nth-child(3) { background:var(--red); }
+  .dl { display:flex; justify-content:space-between; font:11px 'JetBrains Mono'; color:var(--mu); margin-top:6px; }
+
+  /* 05 refined current */
+  .cur .top { display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; gap:10px; flex-wrap:wrap; }
+  .cur .nums { display:grid; grid-template-columns:repeat(3,auto) 1fr; gap:30px; align-items:end; margin-bottom:18px; }
+  .cur .diffbox { justify-self:end; width:200px; }
+  .cur .foot { display:flex; justify-content:space-between; margin-top:14px; padding-top:14px; border-top:1px solid var(--bd); font:11px 'JetBrains Mono'; color:var(--mu); }
+
+  @media (max-width:700px) {
+    #index { display:none; }
+    .rows .row { grid-template-columns:1fr; gap:12px; }
+    .strip { grid-template-columns:1fr 1fr; } .strip > div:nth-child(3) { border-left:0; } .strip > div:nth-child(n+3) { border-top:1px solid var(--bd); }
+    .duo { grid-template-columns:1fr; }
+    .cur .nums { grid-template-columns:repeat(3,auto); } .cur .diffbox { grid-column:1 / -1; justify-self:stretch; width:auto; }
+  }
+</style>
+</head>
+<body>
+<nav id="index"><a href="#x1">01 two rows</a><a href="#x2">02 one sentence</a><a href="#x3">03 stat strip</a><a href="#x4">04 side by side</a><a href="#x5">05 tidied current</a></nav>
+<div id="tip"></div>
+
+<section id="x1">
+  <div class="tag"><b>01</b> — two rows · no tabs; GitHub and LeetCode stacked like a small table, both always visible</div>
+  <div class="wrap"><div class="label"><span>//</span> Activity</div><div class="card rows fade" id="r1"></div></div>
+</section>
+
+<section id="x2">
+  <div class="tag"><b>02</b> — one sentence · a plain-English summary on top, then one map with a small switch</div>
+  <div class="wrap"><div class="label"><span>//</span> Activity</div><div class="fade" id="r2"></div></div>
+</section>
+
+<section id="x3">
+  <div class="tag"><b>03</b> — stat strip · four key numbers in one row, then the map with simple underline tabs</div>
+  <div class="wrap"><div class="label"><span>//</span> Activity</div><div class="fade" id="r3"></div></div>
+</section>
+
+<section id="x4">
+  <div class="tag"><b>04</b> — side by side · two small cards, a mini map each, LeetCode difficulty as one bar</div>
+  <div class="wrap"><div class="label"><span>//</span> Activity</div><div class="duo fade" id="r4"></div></div>
+</section>
+
+<section id="x5">
+  <div class="tag"><b>05</b> — tidied current · what you have now, cleaned up: clearer numbers, difficulty bar, footer with handle and update time</div>
+  <div class="wrap"><div class="label"><span>//</span> Activity</div><div class="card cur fade" id="r5"></div></div>
+</section>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const ICON = {
+  gh: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-6 0-1.2.5-2.3 1.2-3.1-.1-.4-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.7 1.6.2 2.8.1 3.2.8.8 1.2 1.9 1.2 3.1 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .5z"/></svg>',
+  lc: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 1.6a1.4 1.4 0 0 0-2 .1L4.7 9a5.3 5.3 0 0 0 0 7.2l4.2 4.5a5.3 5.3 0 0 0 7.5.3l2.4-2.3a1.4 1.4 0 1 0-1.9-2l-2.4 2.3a2.5 2.5 0 0 1-3.5-.2l-4.2-4.5a2.5 2.5 0 0 1 0-3.4l6.7-7.3a1.4 1.4 0 0 0 0-2zM9.7 12.4a1.4 1.4 0 0 0 0 2.8h9.6a1.4 1.4 0 0 0 0-2.8z"/></svg>',
+};
+let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+const end = new Date(); end.setHours(0, 0, 0, 0);
+const start = new Date(end); start.setDate(end.getDate() - end.getDay() - 52 * 7);
+const mk = (bias) => { const out = []; for (const d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) { const m = d.getMonth(); const busy = 0.35 + 0.4 * Math.sin((m + bias) / 1.9); const c = rnd() < busy ? Math.ceil(rnd() * rnd() * 14) : 0; out.push({ date: new Date(d), count: c, level: c === 0 ? 0 : c < 3 ? 1 : c < 6 ? 2 : c < 10 ? 3 : 4 }); } return out; };
+const G = mk(0), L = mk(3);
+const sum = (D) => { let t = 0, a = 0, run = 0, best = 0; D.forEach((d) => { t += d.count; if (d.count) { a++; best = Math.max(best, ++run); } else run = 0; }); return { total: t, active: a, longest: best }; };
+const gs = sum(G), ls = sum(L); const solved = { all: 312, easy: 148, medium: 131, hard: 33 };
+const fmt = (d) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+const S = {
+  g: { name: 'GitHub', ic: ICON.gh, handle: 'sprakash2006', D: G, unit: 'contribution', cls: '' },
+  l: { name: 'LeetCode', ic: ICON.lc, handle: 'prakash_swami', D: L, unit: 'submission', cls: 'am' },
+};
+const n = (v, c) => `<div><div class="num">${v.toLocaleString()}</div><div class="cap">${c}</div></div>`;
+const hm = (k, months = true) => { const s = S[k]; const w = Math.ceil(s.D.length / 7);
+  const ms = months ? `<div class="months">${Array.from({ length: w }, (_, i) => { const f = s.D.slice(i * 7, i * 7 + 7).find((d) => d.date.getDate() === 1); return `<span>${f && i < w - 1 ? MON[f.date.getMonth()] : ''}</span>`; }).join('')}</div>` : '';
+  return `<div class="hm-scroll"><div>${ms}<div class="hm ${s.cls}">${s.D.map((d) => `<i class="l${d.level}" data-t="${d.count} ${s.unit}${d.count === 1 ? '' : 's'}" data-d="${fmt(d.date)}"></i>`).join('')}</div></div></div>`; };
+const legend = (k) => `<div class="legend">Less ${[0, 1, 2, 3, 4].map((l) => `<i class="" style="background:${l === 0 ? 'rgba(255,255,255,.05)' : (k === 'g' ? `rgba(239,68,68,${[0, .25, .45, .7, 1][l]})` : `rgba(245,158,11,${[0, .25, .45, .7, 1][l]})`)}"></i>`).join('')} More</div>`;
+const diff = () => `<div class="diff"><i style="flex:${solved.easy}"></i><i style="flex:${solved.medium}"></i><i style="flex:${solved.hard}"></i></div><div class="dl"><span style="color:var(--green)">Easy ${solved.easy}</span><span style="color:var(--amber)">Med ${solved.medium}</span><span style="color:var(--red)">Hard ${solved.hard}</span></div>`;
+
+/* 01 two rows */
+$('#r1').innerHTML = `<div class="row"><div class="who"><span class="src">${ICON.gh}GitHub</span><a class="handle" href="#">@sprakash2006 ↗</a></div><div><div class="nums">${n(gs.total, 'contributions')}${n(gs.active, 'active days')}${n(gs.longest, 'longest streak')}</div>${hm('g')}</div></div>
+  <div class="row"><div class="who"><span class="src">${ICON.lc}LeetCode</span><a class="handle" href="#">@prakash_swami ↗</a></div><div><div class="nums">${n(solved.all, 'solved')}${n(ls.active, 'active days')}${n(ls.longest, 'longest streak')}<div style="display:flex;gap:5px;align-items:flex-end"><span class="chip" style="color:var(--green)">E ${solved.easy}</span><span class="chip" style="color:var(--amber)">M ${solved.medium}</span><span class="chip" style="color:var(--red)">H ${solved.hard}</span></div></div>${hm('l')}</div></div>`;
+
+/* 02 one sentence */
+(() => {
+  $('#r2').innerHTML = `<p class="sent">In the past year I made <b class="r">${gs.total} contributions</b> on GitHub across <b>${gs.active} days</b>, and solved <b class="a">${solved.all} problems</b> on LeetCode.</p><div class="card"><div class="bar-top"><div class="seg" id="seg2"><button data-k="g">${ICON.gh}GitHub</button><button data-k="l">${ICON.lc}LeetCode</button></div><a class="handle" id="h2" href="#"></a></div><div id="m2"></div></div>`;
+  const pick = (k) => { document.querySelectorAll('#seg2 button').forEach((b) => b.classList.toggle('on', b.dataset.k === k)); $('#m2').innerHTML = hm(k) + legend(k); $('#h2').textContent = `@${S[k].handle} ↗`; };
+  document.querySelectorAll('#seg2 button').forEach((b) => b.onclick = () => pick(b.dataset.k)); pick('g');
+})();
+
+/* 03 stat strip */
+(() => {
+  $('#r3').innerHTML = `<div class="strip">${n(gs.total, 'GitHub contributions')}${n(solved.all, 'LeetCode solved')}${n(Math.max(gs.active, ls.active), 'most active days')}${n(Math.max(gs.longest, ls.longest), 'longest streak')}</div><div class="card"><div class="links" id="tabs3"><button data-k="g">${ICON.gh}GitHub</button><button data-k="l">${ICON.lc}LeetCode</button></div><div id="m3"></div></div>`;
+  const pick = (k) => { document.querySelectorAll('#tabs3 button').forEach((b) => b.classList.toggle('on', b.dataset.k === k)); $('#m3').innerHTML = hm(k) + legend(k); };
+  document.querySelectorAll('#tabs3 button').forEach((b) => b.onclick = () => pick(b.dataset.k)); pick('g');
+})();
+
+/* 04 side by side */
+$('#r4').innerHTML = `<div class="card"><div class="hd"><span class="src">${ICON.gh}GitHub</span><a class="handle" href="#">@sprakash2006 ↗</a></div><div class="nums">${n(gs.total, 'contributions')}${n(gs.active, 'active days')}${n(gs.longest, 'streak')}</div>${hm('g', false)}</div>
+  <div class="card"><div class="hd"><span class="src">${ICON.lc}LeetCode</span><a class="handle" href="#">@prakash_swami ↗</a></div><div class="nums">${n(solved.all, 'solved')}${n(ls.active, 'active days')}${n(ls.longest, 'streak')}</div>${hm('l', false)}${diff()}</div>`;
+
+/* 05 tidied current */
+(() => {
+  $('#r5').innerHTML = `<div class="top"><div class="seg" id="seg5"><button data-k="l">${ICON.lc}LeetCode</button><button data-k="g">${ICON.gh}GitHub</button></div><a class="handle" id="h5" href="#"></a></div><div id="b5"></div>`;
+  const pick = (k) => {
+    document.querySelectorAll('#seg5 button').forEach((b) => b.classList.toggle('on', b.dataset.k === k)); $('#h5').textContent = `@${S[k].handle} ↗`;
+    const nums = k === 'g' ? n(gs.total, 'contributions, past year') + n(gs.active, 'active days') + n(gs.longest, 'longest streak') + '<span></span>' : n(solved.all, 'problems solved') + n(ls.active, 'active days') + n(ls.longest, 'longest streak') + `<div class="diffbox">${diff()}</div>`;
+    $('#b5').innerHTML = `<div class="nums">${nums}</div>${hm(k)}<div class="foot"><span>Past 12 months</span><span>Updated every 12 hours</span></div>`;
+  };
+  document.querySelectorAll('#seg5 button').forEach((b) => b.onclick = () => pick(b.dataset.k)); pick('l');
+})();
+
+// Only motion: each block fades up once, plus hover tooltips on the days
+const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: 0.2 });
+document.querySelectorAll('.fade').forEach((el) => io.observe(el));
+const tip = $('#tip');
+addEventListener('mouseover', (e) => { const c = e.target.closest('.hm i'); if (!c) { tip.style.opacity = 0; return; } tip.innerHTML = `<b>${c.dataset.t}</b> · ${c.dataset.d}`; tip.style.opacity = 1; const r = c.getBoundingClientRect(); tip.style.left = r.left + r.width / 2 - tip.offsetWidth / 2 + 'px'; tip.style.top = r.top - tip.offsetHeight - 8 + 'px'; });
+</script>
+</body>
+</html>

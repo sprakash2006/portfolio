@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Education concepts</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@500;700;900&family=Sacramento&display=swap" rel="stylesheet" />
+<style>
+  :root { --bg:#0a0a0a; --fg:#ededed; --mu:#8a8a8a; --card:#111113; --bd:rgba(255,255,255,.09); --red:#ef4444; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--fg); font-family:Inter,sans-serif; overflow-x:clip; }
+  body::before { content:''; position:fixed; inset:0; z-index:-1; background-size:32px 32px; background-image:linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 0),linear-gradient(180deg,rgba(255,255,255,.03) 1px,transparent 0); }
+  section { min-height:100vh; padding:90px 20px 70px; border-bottom:1px solid var(--bd); position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .wrap { width:100%; max-width:860px; }
+  .tag { position:absolute; top:24px; left:24px; font:500 12px 'JetBrains Mono'; color:var(--mu); }
+  .tag b { color:var(--red); font-weight:500; }
+  .label { font:600 12px 'JetBrains Mono'; letter-spacing:.1em; text-transform:uppercase; color:var(--mu); margin-bottom:22px; display:flex; align-items:center; gap:12px; }
+  .label span { color:var(--red); } .label::after { content:''; flex:1; height:1px; background:var(--bd); }
+  .mono { font-family:'JetBrains Mono',monospace; }
+  .red { color:var(--red); } .mu { color:var(--mu); }
+  #index { position:fixed; right:18px; top:50%; transform:translateY(-50%); z-index:50; display:flex; flex-direction:column; gap:10px; }
+  #index a { font:500 11px 'JetBrains Mono'; color:var(--mu); text-decoration:none; text-align:right; }
+  #index a:hover { color:var(--fg); }
+
+  /* 1 build */
+  .term { background:#0c0c0d; border:1px solid var(--bd); border-radius:14px; overflow:hidden; }
+  .term-h { display:flex; gap:7px; padding:12px 14px; border-bottom:1px solid var(--bd); align-items:center; }
+  .term-h i { width:11px; height:11px; border-radius:50%; background:#2a2a2a; } .term-h i:first-child { background:var(--red); }
+  .term-h span { margin-left:10px; font:12px 'JetBrains Mono'; color:var(--mu); }
+  .term-b { padding:20px 22px; font:13.5px/1.9 'JetBrains Mono'; min-height:360px; }
+  .ok { color:#22c55e; } .y { color:#fbbf24; }
+  .pbar { display:inline-block; vertical-align:middle; width:min(380px,55vw); height:12px; border:1px solid #333; padding:2px; margin:0 10px; }
+  .pbar i { display:block; height:100%; width:0; background:repeating-linear-gradient(90deg,var(--red) 0 8px,#b91c1c 8px 10px); transition:width 2.2s cubic-bezier(.2,.8,.2,1); }
+  .ln { opacity:0; transform:translateY(4px); transition:.3s; } .ln.on { opacity:1; transform:none; }
+
+  /* 2 boarding passes */
+  .pass { display:grid; grid-template-columns:1fr 190px; background:#141416; border:1px solid rgba(255,255,255,.12); border-radius:18px; overflow:hidden; margin-bottom:18px; position:relative; transition:transform .3s; }
+  .pass:hover { transform:translateY(-3px) rotate(-.4deg); }
+  .pass-main { padding:22px 26px; }
+  .pass-stub { padding:22px 20px; border-left:2px dashed rgba(255,255,255,.14); position:relative; display:flex; flex-direction:column; justify-content:space-between; }
+  .pass-stub::before, .pass-stub::after { content:''; position:absolute; left:-12px; width:22px; height:22px; border-radius:50%; background:var(--bg); }
+  .pass-stub::before { top:-11px; } .pass-stub::after { bottom:-11px; }
+  .route { display:flex; align-items:center; gap:18px; margin:14px 0 18px; }
+  .city b { display:block; font:900 44px/1 Outfit; letter-spacing:-.02em; } .city span { font:11px 'JetBrains Mono'; color:var(--mu); }
+  .fly { flex:1; height:1px; border-top:2px dashed #333; position:relative; }
+  .fly::after { content:'✈'; position:absolute; left:var(--p,0%); top:-14px; font-size:18px; color:var(--red); transition:left 1.8s cubic-bezier(.3,.9,.3,1); }
+  .kv { display:grid; grid-template-columns:repeat(4,auto); gap:6px 26px; font:11px 'JetBrains Mono'; color:var(--mu); }
+  .kv b { display:block; color:var(--fg); font-size:14px; font-weight:500; margin-top:2px; }
+  .bars { display:flex; gap:2px; height:44px; } .bars i { background:#d4d4d4; }
+  .band { position:absolute; left:0; top:0; bottom:0; width:6px; background:var(--red); }
+
+  /* 3 metro */
+  .metro { position:relative; padding:20px 0 10px; overflow-x:auto; scrollbar-width:none; }
+  .line { position:relative; display:flex; justify-content:space-between; min-width:760px; padding:60px 10px 70px; }
+  .line::before { content:''; position:absolute; left:20px; right:20px; top:69px; height:6px; background:#262626; border-radius:3px; }
+  .line .fill { position:absolute; left:20px; top:69px; height:6px; background:var(--red); border-radius:3px; width:0; transition:width 2s cubic-bezier(.3,.9,.3,1); }
+  .st { position:relative; width:24px; display:flex; flex-direction:column; align-items:center; z-index:2; }
+  .st i { width:24px; height:24px; border-radius:50%; background:var(--bg); border:5px solid #333; transition:.4s; }
+  .st.done i { border-color:var(--red); }
+  .st.big i { width:34px; height:34px; margin-top:-5px; }
+  .st.now i { border-color:var(--red); background:var(--red); box-shadow:0 0 0 0 rgba(239,68,68,.6); animation:ping 1.6s infinite; }
+  .st.future i { border-style:dashed; }
+  @keyframes ping { 70% { box-shadow:0 0 0 12px rgba(239,68,68,0); } 100% { box-shadow:0 0 0 0 rgba(239,68,68,0); } }
+  .st .up, .st .dn { position:absolute; white-space:nowrap; text-align:center; font:11px 'JetBrains Mono'; color:var(--mu); }
+  .st .up { bottom:44px; } .st .dn { top:44px; }
+  .st .up b { display:block; font:700 15px Outfit; color:var(--fg); letter-spacing:-.01em; }
+  .yah { color:var(--red) !important; font-weight:700; }
+  .mcards { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:6px; }
+  .mcard { border:1px solid var(--bd); border-radius:14px; padding:16px 18px; background:var(--card); }
+
+  /* 4 kinetic numbers */
+  .kn { display:grid; grid-template-columns:1fr; gap:10px; }
+  .kn-row { display:grid; grid-template-columns:auto 1fr; gap:30px; align-items:center; padding:20px 0; border-bottom:1px solid var(--bd); }
+  .num { font:900 clamp(90px,15vw,190px)/0.85 Outfit; letter-spacing:-.05em; color:transparent; -webkit-text-stroke:1.5px rgba(255,255,255,.35); position:relative; }
+  .num .fillx { position:absolute; inset:0; color:var(--red); -webkit-text-stroke:0; clip-path:inset(100% 0 0 0); transition:clip-path 1.6s cubic-bezier(.3,.9,.3,1); }
+  .kn-row.on .num .fillx { clip-path:inset(0 0 0 0); }
+  .kn-row h3 { font:700 26px/1.15 Outfit; letter-spacing:-.01em; }
+  .chip { display:inline-block; font:11px 'JetBrains Mono'; padding:3px 9px; border:1px solid var(--bd); border-radius:6px; color:var(--mu); margin:0 4px 4px 0; }
+
+  /* 5 semester grid */
+  .sem-wrap { display:grid; grid-template-columns:1.1fr 1fr; gap:34px; align-items:center; }
+  .sems { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+  .sem { aspect-ratio:1; border-radius:12px; border:1px solid var(--bd); background:#141416; position:relative; padding:10px; display:flex; flex-direction:column; justify-content:space-between; font:11px 'JetBrains Mono'; color:var(--mu); cursor:pointer; transition:.25s; opacity:0; transform:scale(.8); }
+  .sem.in { opacity:1; transform:none; }
+  .sem b { font:900 30px/1 Outfit; color:#2e2e2e; }
+  .sem.done { background:color-mix(in oklab,var(--red) 22%,#141416); border-color:rgba(239,68,68,.35); color:#f3c4c4; } .sem.done b { color:var(--red); }
+  .sem.now { border:1px dashed var(--red); } .sem.now b { color:var(--fg); }
+  .sem.now::after { content:'IN PROGRESS'; position:absolute; right:8px; top:9px; font-size:9px; color:var(--red); letter-spacing:.08em; animation:blink 1.2s steps(1) infinite; }
+  @keyframes blink { 50% { opacity:0; } }
+  .sem:hover { transform:translateY(-3px); border-color:var(--red); }
+  .gauge { position:relative; width:180px; height:180px; }
+  .gauge svg { width:100%; height:100%; transform:rotate(-90deg); }
+  .gauge .v { position:absolute; inset:0; display:grid; place-items:center; text-align:center; }
+  .gauge .v b { font:900 40px/1 Outfit; } .gauge .v span { font:11px 'JetBrains Mono'; color:var(--mu); display:block; margin-top:4px; }
+
+  /* 6 transcript */
+  .paper { position:relative; background:#121212; border:1px solid rgba(255,255,255,.12); border-radius:6px; padding:40px 44px; font-family:'JetBrains Mono'; overflow:hidden; box-shadow:0 40px 80px rgba(0,0,0,.5); }
+  .paper::before { content:'VIT'; position:absolute; right:-20px; bottom:-60px; font:900 260px/1 Outfit; color:rgba(255,255,255,.025); letter-spacing:-.05em; }
+  .paper h4 { font:700 13px 'JetBrains Mono'; letter-spacing:.2em; color:var(--mu); text-align:center; }
+  .paper h2 { font:900 34px/1.1 Outfit; text-align:center; margin:10px 0 4px; letter-spacing:-.01em; }
+  .tbl { width:100%; border-collapse:collapse; margin:26px 0; font-size:13px; }
+  .tbl th { text-align:left; font-size:10.5px; letter-spacing:.14em; color:var(--mu); font-weight:500; padding:8px 0; border-bottom:1px solid #2a2a2a; }
+  .tbl td { padding:11px 0; border-bottom:1px dashed #262626; }
+  .tbl td:last-child, .tbl th:last-child { text-align:right; }
+  .seal { position:absolute; right:44px; bottom:60px; width:110px; height:110px; border-radius:50%; border:3px double var(--red); color:var(--red); display:grid; place-items:center; text-align:center; font:700 10px/1.4 'JetBrains Mono'; letter-spacing:.12em; transform:rotate(-14deg) scale(2); opacity:0; transition:transform .45s cubic-bezier(.3,1.6,.5,1),opacity .3s; }
+  .seal.on { transform:rotate(-14deg) scale(1); opacity:.85; }
+  .sign { font-family:Sacramento,cursive; font-size:42px; line-height:1; }
+
+  @media (max-width:760px) { #index { display:none; } .pass { grid-template-columns:1fr; } .pass-stub { border-left:0; border-top:2px dashed rgba(255,255,255,.14); } .pass-stub::before,.pass-stub::after { display:none; } .kv { grid-template-columns:repeat(2,auto); } .kn-row,.sem-wrap,.mcards { grid-template-columns:1fr; } .paper { padding:28px 20px; } .seal { position:static; margin:10px auto 0; } }
+</style>
+</head>
+<body>
+<nav id="index"><a href="#e1">01 build log</a><a href="#e2">02 boarding pass</a><a href="#e3">03 metro line</a><a href="#e4">04 big numbers</a><a href="#e5">05 semesters</a><a href="#e6">06 transcript</a></nav>
+
+<!-- 1 -->
+<section id="e1">
+  <div class="tag"><b>01</b> — build log · education as a running build</div>
+  <div class="wrap">
+    <div class="label"><span>//</span> Education</div>
+    <div class="term">
+      <div class="term-h"><i></i><i></i><i></i><span>prakash@pune: ~/education</span></div>
+      <div class="term-b" id="build">
+        <div class="ln"><span class="red">❯</span> npm run build:education</div>
+        <div class="ln mu">&nbsp;</div>
+        <div class="ln"><span class="ok">✓</span> hsc · Rajarshi Shahu Jr College, Latur <span class="mu">· science · 2024</span> <span class="y">82.34%</span></div>
+        <div class="ln mu">&nbsp;</div>
+        <div class="ln"><span class="y">◐</span> b.tech · Computer Engineering · VIT Pune <span class="mu">· 2024 → 2028</span></div>
+        <div class="ln">&nbsp;&nbsp;semesters<span class="pbar"><i id="pb"></i></span><span id="pct">0%</span></div>
+        <div class="ln">&nbsp;&nbsp;cgpa&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="y" style="font-weight:700">8.84</span> <span class="mu">/ 10</span></div>
+        <div class="ln">&nbsp;&nbsp;modules&nbsp;&nbsp;<span class="mu">dsa · dbms · operating-systems · oop · agile</span></div>
+        <div class="ln mu">&nbsp;</div>
+        <div class="ln mu">build in progress… expected output: <span style="color:var(--fg)">B.Tech, 2028</span> <span class="red">▌</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2 -->
+<section id="e2">
+  <div class="tag"><b>02</b> — boarding pass · the journey from Latur to Pune</div>
+  <div class="wrap">
+    <div class="label"><span>//</span> Education</div>
+    <div class="pass" id="p1">
+      <div class="band"></div>
+      <div class="pass-main">
+        <div class="mono mu" style="font-size:11px;letter-spacing:.14em">BOARDING PASS · CLASS XII · SCIENCE</div>
+        <div class="route"><div class="city"><b>LTR</b><span>Latur</span></div><div class="fly" style="--p:0%"></div><div class="city" style="text-align:right"><b>HSC</b><span>Completed</span></div></div>
+        <div class="kv"><div>PASSENGER<b>Prakash Swami</b></div><div>COLLEGE<b>Rajarshi Shahu Jr</b></div><div>YEAR<b>2024</b></div><div>STATUS<b class="red">LANDED</b></div></div>
+      </div>
+      <div class="pass-stub"><div class="mono mu" style="font-size:11px">SCORE</div><div style="font:900 40px/1 Outfit">82.34<span style="font-size:20px">%</span></div><div class="bars" data-bars></div></div>
+    </div>
+    <div class="pass" id="p2">
+      <div class="band"></div>
+      <div class="pass-main">
+        <div class="mono mu" style="font-size:11px;letter-spacing:.14em">BOARDING PASS · B.TECH · COMPUTER ENGINEERING</div>
+        <div class="route"><div class="city"><b>LTR</b><span>Latur</span></div><div class="fly" style="--p:0%"></div><div class="city" style="text-align:right"><b>PNQ</b><span>VIT Pune</span></div></div>
+        <div class="kv"><div>DEPART<b>2024</b></div><div>ARRIVE<b>2028</b></div><div>FOCUS<b>DSA · DBMS · OS</b></div><div>STATUS<b class="red">IN FLIGHT</b></div></div>
+      </div>
+      <div class="pass-stub"><div class="mono mu" style="font-size:11px">CGPA</div><div style="font:900 40px/1 Outfit">8.84</div><div class="bars" data-bars></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 3 -->
+<section id="e3">
+  <div class="tag"><b>03</b> — metro line · stations from Latur to graduation</div>
+  <div class="wrap">
+    <div class="label"><span>//</span> Education</div>
+    <div class="metro"><div class="line" id="line"><div class="fill" id="lfill"></div></div></div>
+    <div class="mcards">
+      <div class="mcard"><div class="mono mu" style="font-size:11px">2024 → 2028</div><div style="font:700 19px Outfit;margin:4px 0">B.Tech, Computer Engineering</div><div class="mu" style="font-size:13px">VIT Pune · <span class="red">CGPA 8.84</span></div><div class="mono mu" style="font-size:11.5px;margin-top:8px">&gt; DSA, DBMS, OS, OOP, Agile</div></div>
+      <div class="mcard"><div class="mono mu" style="font-size:11px">2024</div><div style="font:700 19px Outfit;margin:4px 0">HSC (Class XII)</div><div class="mu" style="font-size:13px">Rajarshi Shahu Jr College, Latur · <span class="red">82.34%</span></div><div class="mono mu" style="font-size:11.5px;margin-top:8px">&gt; Science</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 -->
+<section id="e4">
+  <div class="tag"><b>04</b> — big numbers · the scores fill with red as they scroll in</div>
+  <div class="wrap">
+    <div class="label"><span>//</span> Education</div>
+    <div class="kn">
+      <div class="kn-row"><div class="num">8.84<span class="fillx">8.84</span></div><div><div class="mono mu" style="font-size:12px">2024 — 2028 · CGPA</div><h3>B.Tech in Computer Engineering</h3><div class="mu" style="margin:4px 0 12px">VIT Pune</div><span class="chip">DSA</span><span class="chip">DBMS</span><span class="chip">Operating systems</span><span class="chip">OOP</span><span class="chip">Agile</span></div></div>
+      <div class="kn-row"><div class="num">82<span style="font-size:.45em">%</span><span class="fillx">82<span style="font-size:.45em">%</span></span></div><div><div class="mono mu" style="font-size:12px">2024 · 82.34%</div><h3>HSC (Class XII)</h3><div class="mu" style="margin:4px 0 12px">Rajarshi Shahu Jr College, Latur</div><span class="chip">Science</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 -->
+<section id="e5">
+  <div class="tag"><b>05</b> — semesters · eight tiles, hover them</div>
+  <div class="wrap">
+    <div class="label"><span>//</span> Education</div>
+    <div class="sem-wrap">
+      <div>
+        <div class="mono mu" style="font-size:12px">VIT Pune · 2024 — 2028</div>
+        <div style="font:700 28px/1.15 Outfit;letter-spacing:-.01em;margin:6px 0 18px">B.Tech in Computer Engineering</div>
+        <div class="sems" id="sems"></div>
+        <div class="mono mu" style="font-size:11.5px;margin-top:14px" id="semnote">hover a semester</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:22px">
+        <div class="gauge"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" fill="none" stroke="#1f1f1f" stroke-width="8"/><circle id="garc" cx="50" cy="50" r="42" fill="none" stroke="#ef4444" stroke-width="8" stroke-linecap="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100" style="transition:stroke-dashoffset 1.8s cubic-bezier(.3,.9,.3,1)"/></svg><div class="v"><div><b id="gval">0.00</b><span>CGPA / 10</span></div></div></div>
+        <div class="mcard" style="width:100%"><div class="mono mu" style="font-size:11px">BEFORE THAT · 2024</div><div style="font:700 17px Outfit;margin:4px 0">HSC (Class XII) · Science</div><div class="mu" style="font-size:13px">Rajarshi Shahu Jr College, Latur · <span class="red">82.34%</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 -->
+<section id="e6">
+  <div class="tag"><b>06</b> — transcript · an official-looking record, stamped when it scrolls in</div>
+  <div class="wrap">
+    <div class="label"><span>//</span> Education</div>
+    <div class="paper">
+      <h4>ACADEMIC RECORD</h4>
+      <h2>Prakash Swami</h2>
+      <div class="mu" style="text-align:center;font-size:12px">Computer Engineering · Pune, India</div>
+      <table class="tbl">
+        <tr><th>PROGRAMME</th><th>INSTITUTION</th><th>YEAR</th><th>RESULT</th></tr>
+        <tr><td>B.Tech, Computer Engineering</td><td class="mu">VIT Pune</td><td class="mu">2024–28</td><td class="red" style="font-weight:700">8.84 CGPA</td></tr>
+        <tr><td>HSC (Class XII), Science</td><td class="mu">Rajarshi Shahu Jr College, Latur</td><td class="mu">2024</td><td style="font-weight:700">82.34%</td></tr>
+      </table>
+      <div class="mu" style="font-size:11px;letter-spacing:.14em;margin-bottom:8px">CORE COURSEWORK</div>
+      <div style="font-size:13px;line-height:1.9">Data structures &amp; algorithms · Database management systems · Operating systems · Object-oriented programming · Agile</div>
+      <div style="margin-top:34px;display:flex;justify-content:space-between;align-items:end">
+        <div><div class="sign">Prakash Swami</div><div class="mu" style="font-size:10.5px;border-top:1px solid #333;padding-top:6px;margin-top:4px;letter-spacing:.12em">STUDENT</div></div>
+      </div>
+      <div class="seal" id="seal">IN<br>PROGRESS<br>· 2028 ·</div>
+    </div>
+  </div>
+</section>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const seen = (el, fn, t = .4) => new IntersectionObserver((e, o) => { if (e[0].isIntersecting) { fn(); o.disconnect(); } }, { threshold: t }).observe(el);
+// Aug 2024 start, 8 semesters of ~6 months; today Oct 2026 → semester 5 in progress
+const SEM_NOW = 5, DEGREE_PCT = 56;
+
+/* 1 build */
+seen($('#e1'), () => {
+  [...document.querySelectorAll('#build .ln')].forEach((l, i) => setTimeout(() => l.classList.add('on'), i * 220));
+  setTimeout(() => { $('#pb').style.width = DEGREE_PCT + '%'; let p = 0; const id = setInterval(() => { p = Math.min(DEGREE_PCT, p + 1); $('#pct').textContent = p + '%'; if (p >= DEGREE_PCT) clearInterval(id); }, 38); }, 1300);
+});
+
+/* 2 passes */
+document.querySelectorAll('[data-bars]').forEach((b) => (b.innerHTML = Array.from({ length: 38 }, () => `<i style="width:${1 + Math.floor(Math.random() * 3)}px"></i>`).join('')));
+seen($('#e2'), () => { $('#p1 .fly').style.setProperty('--p', '96%'); setTimeout(() => $('#p2 .fly').style.setProperty('--p', DEGREE_PCT + '%'), 500); });
+
+/* 3 metro */
+(() => {
+  const st = [['Latur', 'HSC · 2024', 'done big'], ['VIT Pune', 'start · 2024', 'done big']];
+  for (let i = 1; i <= 8; i++) st.push([`Sem ${i}`, i === SEM_NOW ? '<span class="yah">you are here</span>' : i < SEM_NOW ? 'done' : '', i < SEM_NOW ? 'done' : i === SEM_NOW ? 'now' : 'future']);
+  st.push(['B.Tech', 'graduation · 2028', 'future big']);
+  const line = $('#line');
+  line.insertAdjacentHTML('beforeend', st.map(([a, b, c], i) => `<div class="st ${c}"><span class="${i % 2 ? 'dn' : 'up'}"><b>${a}</b>${b}</span><i></i></div>`).join(''));
+  seen($('#e3'), () => { const stations = [...line.querySelectorAll('.st')], now = stations.find((s) => s.classList.contains('now')); $('#lfill').style.width = now.offsetLeft + 12 - 20 + 'px'; });
+})();
+
+/* 4 big numbers */
+document.querySelectorAll('.kn-row').forEach((r, i) => seen(r, () => setTimeout(() => r.classList.add('on'), i * 250), .6));
+
+/* 5 semesters */
+(() => {
+  const notes = ['Sem 1 · foundations', 'Sem 2 · programming', 'Sem 3 · data structures', 'Sem 4 · DBMS + OOP', 'Sem 5 · operating systems — now', 'Sem 6 · ahead', 'Sem 7 · ahead', 'Sem 8 · ahead → 2028'];
+  $('#sems').innerHTML = notes.map((_, i) => `<div class="sem ${i + 1 < SEM_NOW ? 'done' : i + 1 === SEM_NOW ? 'now' : ''}"><span>SEM</span><b>0${i + 1}</b></div>`).join('');
+  const sems = [...document.querySelectorAll('.sem')];
+  sems.forEach((s, i) => s.addEventListener('pointerenter', () => ($('#semnote').textContent = notes[i])));
+  seen($('#e5'), () => {
+    sems.forEach((s, i) => setTimeout(() => s.classList.add('in'), i * 90));
+    $('#garc').style.strokeDashoffset = 100 - 88.4;
+    const t0 = performance.now(); (function f(t) { const p = Math.min(1, (t - t0) / 1800); $('#gval').textContent = (8.84 * (1 - Math.pow(1 - p, 3))).toFixed(2); if (p < 1) requestAnimationFrame(f); })(t0);
+  });
+})();
+
+/* 6 transcript */
+seen($('#e6'), () => setTimeout(() => $('#seal').classList.add('on'), 600), .5);
+</script>
+</body>
+</html>

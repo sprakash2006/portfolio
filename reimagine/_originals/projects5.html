@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Projects concepts V</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;500;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet" />
+<style>
+  :root { --bg:#0a0a0a; --fg:#ededed; --ivory:#efe9df; --mu:#8a8a8a; --card:#111113; --bd:rgba(255,255,255,.09); --red:#ef4444; --crimson:#c53030; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--fg); font-family:Inter,sans-serif; overflow-x:clip; }
+  body::before { content:''; position:fixed; inset:0; z-index:-1; background-size:32px 32px; background-image:linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 0),linear-gradient(180deg,rgba(255,255,255,.025) 1px,transparent 0); }
+  section { min-height:100vh; padding:110px 24px 100px; border-bottom:1px solid var(--bd); position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .wrap { width:100%; max-width:1088px; }
+  .tag { position:absolute; top:24px; left:24px; font:500 12px 'JetBrains Mono'; color:var(--mu); z-index:5; }
+  .tag b { color:var(--red); font-weight:500; }
+  .serif { font-family:'Cormorant Garamond',serif; }
+  .eyebrow { font:500 11px Inter; letter-spacing:.32em; text-transform:uppercase; color:var(--mu); }
+  .eyebrow b { color:var(--red); font-weight:500; }
+  .head { text-align:center; margin-bottom:70px; }
+  .head h2 { font:400 clamp(44px,6vw,80px)/1 'Cormorant Garamond'; letter-spacing:-.01em; margin:18px 0 0; color:var(--ivory); }
+  .head h2 i { color:var(--red); }
+  .orn { display:flex; align-items:center; justify-content:center; gap:14px; color:var(--red); margin-top:22px; font-size:12px; }
+  .orn::before, .orn::after { content:''; width:70px; height:1px; background:linear-gradient(90deg,transparent,rgba(239,68,68,.6)); }
+  .orn::after { transform:scaleX(-1); }
+  .link { display:inline-flex; align-items:center; gap:10px; font:500 11px Inter; letter-spacing:.24em; text-transform:uppercase; color:var(--ivory); text-decoration:none; padding-bottom:6px; border-bottom:1px solid rgba(239,68,68,.6); transition:gap .4s, color .3s; }
+  .link:hover { gap:16px; color:var(--red); }
+  .stack { font:italic 400 17px 'Cormorant Garamond'; color:#a8a29a; }
+  #index { position:fixed; right:18px; top:50%; transform:translateY(-50%); z-index:50; display:flex; flex-direction:column; gap:10px; }
+  #index a { font:500 11px 'JetBrains Mono'; color:var(--mu); text-decoration:none; text-align:right; } #index a:hover { color:var(--fg); }
+  .reveal { opacity:0; transform:translateY(24px); transition:opacity 1.1s ease, transform 1.1s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in { opacity:1; transform:none; }
+
+  /* 01 table of contents */
+  .toc { display:grid; grid-template-columns:1.15fr 1fr; gap:70px; align-items:center; }
+  .toc-list a { display:grid; grid-template-columns:54px auto 1fr auto; align-items:baseline; gap:14px; padding:16px 0; text-decoration:none; color:var(--fg); border-bottom:1px solid var(--bd); }
+  .toc-list .rn { font:italic 400 18px 'Cormorant Garamond'; color:var(--mu); transition:color .4s; }
+  .toc-list .nm { font:500 clamp(26px,3vw,38px)/1 'Cormorant Garamond'; color:#9a958e; transition:color .4s, transform .5s cubic-bezier(.2,.7,.2,1); }
+  .toc-list .dots { border-bottom:1px dotted rgba(255,255,255,.18); transform:translateY(-6px); }
+  .toc-list .ct { font:500 10px Inter; letter-spacing:.24em; text-transform:uppercase; color:var(--mu); }
+  .toc-list a.on .nm { color:var(--ivory); transform:translateX(8px); } .toc-list a.on .rn { color:var(--red); }
+  .toc-frame { position:relative; padding:14px; border:1px solid rgba(239,68,68,.35); }
+  .toc-frame::before { content:''; position:absolute; inset:6px; border:1px solid var(--bd); pointer-events:none; }
+  .toc-img { position:relative; aspect-ratio:4/5; overflow:hidden; }
+  .toc-img img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity .9s ease; }
+  .toc-img img.on { opacity:1; }
+  .toc-cap { margin-top:22px; text-align:center; min-height:96px; }
+  .toc-cap p { font:300 14px/1.7 Inter; color:#bdb7ae; margin-top:8px; }
+
+  /* 02 museum gallery */
+  .gal { display:grid; grid-template-columns:repeat(3,1fr); gap:60px 46px; }
+  .art { text-decoration:none; color:var(--fg); }
+  .art:nth-child(3n+2) { margin-top:70px; }
+  .canvas { position:relative; padding:12px; background:linear-gradient(145deg,#1d1d20,#0e0e10); border:1px solid #2a2a2e; box-shadow:0 30px 60px rgba(0,0,0,.55), inset 0 0 0 1px rgba(239,68,68,.15); transition:transform .7s cubic-bezier(.2,.7,.2,1), box-shadow .7s; }
+  .canvas::after { content:''; position:absolute; left:15%; right:15%; top:-40px; height:60px; background:radial-gradient(ellipse at top,rgba(255,240,220,.18),transparent 70%); pointer-events:none; opacity:0; transition:opacity .7s; }
+  .canvas .mat { padding:14px; background:#f3efe7; }
+  .canvas img { width:100%; aspect-ratio:4/5; object-fit:cover; display:block; filter:saturate(.85); transition:filter .7s; }
+  .art:hover .canvas { transform:translateY(-8px); box-shadow:0 50px 80px rgba(0,0,0,.6), inset 0 0 0 1px rgba(239,68,68,.35); } .art:hover .canvas::after { opacity:1; } .art:hover img { filter:none; }
+  .placard { margin:22px auto 0; width:86%; padding:14px 16px; background:#111113; border:1px solid var(--bd); text-align:left; }
+  .placard h4 { font:500 22px/1.1 'Cormorant Garamond'; color:var(--ivory); }
+  .placard .md { font:italic 400 14px 'Cormorant Garamond'; color:#a8a29a; margin-top:4px; }
+  .placard .no { font:500 10px Inter; letter-spacing:.24em; color:var(--red); }
+
+  /* 03 editorial spread */
+  .mag-top { display:grid; grid-template-columns:1.3fr 1fr; gap:56px; padding-bottom:56px; border-bottom:1px solid var(--bd); }
+  .mag-img { aspect-ratio:4/3; overflow:hidden; } .mag-img img { width:100%; height:100%; object-fit:cover; transition:transform 2s cubic-bezier(.2,.7,.2,1); } .mag-img:hover img { transform:scale(1.04); }
+  .mag-cover h3 { font:400 clamp(48px,5.5vw,84px)/.95 'Cormorant Garamond'; color:var(--ivory); margin:16px 0 22px; }
+  .mag-cover h3 i { color:var(--red); }
+  .mag-cover p { font:300 15px/1.85 Inter; color:#bdb7ae; }
+  .mag-cover p::first-letter { float:left; font:500 66px/.8 'Cormorant Garamond'; color:var(--red); padding:6px 10px 0 0; }
+  .mag-q { margin:26px 0; padding-left:20px; border-left:1px solid var(--red); font:italic 400 22px/1.35 'Cormorant Garamond'; color:var(--ivory); }
+  .mag-cols { display:grid; grid-template-columns:repeat(4,1fr); }
+  .mag-col { padding:34px 24px 10px; border-right:1px solid var(--bd); text-decoration:none; color:var(--fg); transition:background .5s; }
+  .mag-col:first-child { padding-left:0; } .mag-col:last-child { border-right:0; }
+  .mag-col:hover { background:linear-gradient(180deg,rgba(239,68,68,.05),transparent); }
+  .mag-col .im { aspect-ratio:3/2; overflow:hidden; margin:14px 0 16px; } .mag-col .im img { width:100%; height:100%; object-fit:cover; filter:grayscale(.6); transition:filter .6s; } .mag-col:hover .im img { filter:none; }
+  .mag-col h4 { font:500 25px/1.05 'Cormorant Garamond'; color:var(--ivory); margin-bottom:8px; }
+  .mag-col p { font:300 13px/1.7 Inter; color:#a8a29a; }
+
+  /* 04 invitation cards */
+  .inv { display:grid; grid-template-columns:repeat(2,1fr); gap:28px; }
+  .card { position:relative; min-height:380px; padding:46px 40px; background:radial-gradient(circle at 50% 0%,#1a1012,#0e0d0e 70%); border:1px solid rgba(239,68,68,.22); text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:center; overflow:hidden; text-decoration:none; color:var(--fg); transition:transform .7s cubic-bezier(.2,.7,.2,1), border-color .6s; }
+  .card::before { content:''; position:absolute; inset:12px; border:1px solid rgba(239,68,68,.18); pointer-events:none; z-index:2; transition:inset .7s cubic-bezier(.2,.7,.2,1); }
+  .card .cn { position:absolute; width:14px; height:14px; border-color:var(--red); border-style:solid; z-index:2; }
+  .card .cn.a { top:20px; left:20px; border-width:1px 0 0 1px; } .card .cn.b { top:20px; right:20px; border-width:1px 1px 0 0; } .card .cn.c { bottom:20px; left:20px; border-width:0 0 1px 1px; } .card .cn.d { bottom:20px; right:20px; border-width:0 1px 1px 0; }
+  .card img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transform:scale(1.06); transition:opacity .9s, transform 1.4s cubic-bezier(.2,.7,.2,1); }
+  .card .shade { position:absolute; inset:0; background:linear-gradient(180deg,rgba(10,10,10,.55),rgba(10,10,10,.92)); opacity:0; transition:opacity .9s; }
+  .card .ct { position:relative; z-index:3; }
+  .card h4 { font:400 clamp(36px,3.6vw,52px)/1 'Cormorant Garamond'; color:var(--ivory); margin:16px 0 12px; }
+  .card p { font:300 13.5px/1.75 Inter; color:#a8a29a; max-width:380px; margin:0 auto 18px; }
+  .card:hover { transform:translateY(-6px); border-color:rgba(239,68,68,.5); } .card:hover::before { inset:18px; }
+  .card:hover img { opacity:.55; transform:scale(1); } .card:hover .shade { opacity:1; } .card:hover p { color:#d9d3c9; }
+
+  /* 05 ledger accordion */
+  .led { border-top:1px solid rgba(239,68,68,.4); }
+  .row { border-bottom:1px solid var(--bd); }
+  .row-h { all:unset; box-sizing:border-box; width:100%; cursor:pointer; display:grid; grid-template-columns:80px 1fr 180px 80px 30px; align-items:center; padding:26px 0; }
+  .row-h .rn { font:italic 400 20px 'Cormorant Garamond'; color:var(--mu); }
+  .row-h .nm { font:400 clamp(28px,3.4vw,44px)/1 'Cormorant Garamond'; color:#b5afa6; transition:color .4s, letter-spacing .6s; }
+  .row-h .ct, .row-h .yr { font:500 10px Inter; letter-spacing:.26em; text-transform:uppercase; color:var(--mu); }
+  .row-h .pl { position:relative; width:14px; height:14px; justify-self:end; } .row-h .pl::before, .row-h .pl::after { content:''; position:absolute; left:0; right:0; top:50%; height:1px; background:var(--red); transition:transform .5s; } .row-h .pl::after { transform:rotate(90deg); }
+  .row:hover .nm { color:var(--ivory); }
+  .row.open .nm { color:var(--ivory); letter-spacing:.01em; } .row.open .rn { color:var(--red); } .row.open .pl::after { transform:rotate(0); }
+  .row-b { display:grid; grid-template-rows:0fr; transition:grid-template-rows .8s cubic-bezier(.2,.7,.2,1); }
+  .row.open .row-b { grid-template-rows:1fr; }
+  .row-b > div { overflow:hidden; }
+  .row-in { display:grid; grid-template-columns:80px 1.1fr 1fr; gap:0 40px; padding:0 0 34px; }
+  .row-in .im { grid-column:2; aspect-ratio:16/9; overflow:hidden; } .row-in .im img { width:100%; height:100%; object-fit:cover; }
+  .row-in .tx { display:flex; flex-direction:column; justify-content:center; }
+  .row-in p { font:300 15px/1.85 Inter; color:#bdb7ae; margin-bottom:14px; }
+
+  /* 06 showcase rail */
+  .show { display:grid; grid-template-columns:1.5fr 1fr; gap:60px; align-items:center; }
+  .stage { position:relative; aspect-ratio:16/11; overflow:hidden; border:1px solid var(--bd); }
+  .stage img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity 1.2s ease; }
+  .stage img.on { opacity:1; animation:drift 9s ease-out forwards; }
+  @keyframes drift { from { transform:scale(1.08); } to { transform:scale(1); } }
+  .stage::after { content:''; position:absolute; inset:0; box-shadow:inset 0 0 120px rgba(0,0,0,.55); pointer-events:none; }
+  .show-cap .num { font:400 90px/1 'Cormorant Garamond'; color:transparent; -webkit-text-stroke:1px rgba(239,68,68,.6); }
+  .show-cap h3 { font:400 clamp(40px,4.4vw,62px)/1 'Cormorant Garamond'; color:var(--ivory); margin:6px 0 16px; }
+  .show-cap p { font:300 15px/1.85 Inter; color:#bdb7ae; margin:14px 0 24px; }
+  .swap > * { animation:up .9s cubic-bezier(.2,.7,.2,1) both; } .swap > *:nth-child(2) { animation-delay:.08s; } .swap > *:nth-child(3) { animation-delay:.16s; } .swap > *:nth-child(4) { animation-delay:.24s; } .swap > *:nth-child(5) { animation-delay:.32s; }
+  @keyframes up { from { opacity:0; transform:translateY(14px); } }
+  .rail { display:grid; grid-template-columns:repeat(8,1fr); gap:0; margin-top:40px; border-top:1px solid var(--bd); }
+  .rail button { all:unset; cursor:pointer; padding:16px 10px 0 0; position:relative; }
+  .rail button::before { content:''; position:absolute; left:0; top:-1px; height:1px; width:0; background:var(--red); }
+  .rail button.on::before { width:100%; transition:width 6s linear; }
+  .rail .rn { font:italic 400 15px 'Cormorant Garamond'; color:var(--mu); } .rail .nm { display:block; font:500 10px Inter; letter-spacing:.2em; text-transform:uppercase; color:var(--mu); margin-top:4px; transition:color .3s; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .rail button.on .nm, .rail button:hover .nm { color:var(--ivory); } .rail button.on .rn { color:var(--red); }
+
+  @media (max-width:860px) {
+    #index { display:none; }
+    .toc, .mag-top, .show { grid-template-columns:1fr; gap:40px; }
+    .gal { grid-template-columns:1fr 1fr; gap:40px 20px; } .art:nth-child(3n+2) { margin-top:0; } .art:nth-child(2n) { margin-top:50px; }
+    .mag-cols { grid-template-columns:1fr 1fr; } .mag-col { padding:24px 14px 10px !important; }
+    .inv { grid-template-columns:1fr; }
+    .row-h { grid-template-columns:44px 1fr 30px; } .row-h .ct, .row-h .yr { display:none; } .row-in { grid-template-columns:1fr; gap:18px; } .row-in .im { grid-column:1; }
+    .rail { grid-template-columns:repeat(4,1fr); row-gap:14px; }
+  }
+</style>
+</head>
+<body>
+<nav id="index"><a href="#x1">01 table of contents</a><a href="#x2">02 museum gallery</a><a href="#x3">03 editorial spread</a><a href="#x4">04 invitation cards</a><a href="#x5">05 ledger</a><a href="#x6">06 showcase</a></nav>
+
+<section id="x1">
+  <div class="tag"><b>01</b> — table of contents · an elegant index; hover a title and its picture fades into the frame</div>
+  <div class="wrap">
+    <div class="head reveal"><div class="eyebrow"><b>—</b> Featured Projects <b>—</b></div><h2>Selected <i>works</i></h2><div class="orn">◆</div></div>
+    <div class="toc">
+      <div class="toc-list" id="tocL"></div>
+      <div class="reveal"><div class="toc-frame"><div class="toc-img" id="tocI"></div></div><div class="toc-cap" id="tocC"></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="x2">
+  <div class="tag"><b>02</b> — museum gallery · each project hangs like a framed painting with a museum placard</div>
+  <div class="wrap">
+    <div class="head reveal"><div class="eyebrow"><b>—</b> The Collection <b>—</b></div><h2>A gallery of <i>work</i></h2><div class="orn">◆</div></div>
+    <div class="gal" id="gal"></div>
+  </div>
+</section>
+
+<section id="x3">
+  <div class="tag"><b>03</b> — editorial spread · a magazine layout: one cover story, the rest as columns</div>
+  <div class="wrap">
+    <div class="head reveal" style="margin-bottom:50px"><div class="eyebrow"><b>—</b> Featured Projects · Issue 2026 <b>—</b></div></div>
+    <div id="mag"></div>
+  </div>
+</section>
+
+<section id="x4">
+  <div class="tag"><b>04</b> — invitation cards · engraved-style cards; hovering softly reveals the screenshot behind</div>
+  <div class="wrap">
+    <div class="head reveal"><div class="eyebrow"><b>—</b> Featured Projects <b>—</b></div><h2>By <i>invitation</i></h2><div class="orn">◆</div></div>
+    <div class="inv" id="inv"></div>
+  </div>
+</section>
+
+<section id="x5">
+  <div class="tag"><b>05</b> — ledger · a fine-ruled register; open an entry to read it</div>
+  <div class="wrap">
+    <div class="head reveal"><div class="eyebrow"><b>—</b> Featured Projects <b>—</b></div><h2>The <i>register</i></h2><div class="orn">◆</div></div>
+    <div class="led" id="led"></div>
+  </div>
+</section>
+
+<section id="x6">
+  <div class="tag"><b>06</b> — showcase · one stage, crossfades slowly through the projects; pick any from the rail</div>
+  <div class="wrap">
+    <div class="show">
+      <div class="stage" id="stg"></div>
+      <div class="show-cap" id="cap"></div>
+    </div>
+    <div class="rail" id="rail"></div>
+  </div>
+</section>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const P = [
+  { t:'MediChain', c:'Blockchain', y:'2026', d:'Patient-owned medical records: AES-256 encrypted files on IPFS, every access logged on Polygon, gasless for patients.', tags:['Flutter','React','Solidity','Polygon','IPFS'] },
+  { t:'The GP Edge', c:'Web', y:'2026', d:'SaaS for General Practitioners: study analytics, AI-powered Medicare billing lookup and an exam-prep system.', tags:['Next.js','TypeScript','PostgreSQL','Gemini'] },
+  { t:'SolarMitra', c:'Mobile', y:'2026', d:'AR rooftop solar assessment: maps the roof, detects obstacles with YOLOv8 and builds a PDF report in under 2 minutes.', tags:['Flutter','ARCore','YOLOv8','TFLite'] },
+  { t:'PaperTrail', c:'AI', y:'2026', d:'RAG knowledge retrieval over PDF, Word, Excel and CSV with semantic indexing and citation-backed answers.', tags:['React','Python','ChromaDB','OpenAI'] },
+  { t:'Portfolio', c:'Web', y:'2026', d:'This site: themeable portfolio with live GitHub and LeetCode heatmaps and project detail pages.', tags:['Next.js','Tailwind','three.js'] },
+  { t:'Inboxly', c:'Web', y:'2026', d:'WhatsApp Business messaging with a sales CRM: shared inbox, bulk campaigns, workflows and a Gemini auto-reply agent.', tags:['React','Node.js','Redis','BullMQ'] },
+  { t:'GharBudget', c:'Mobile', y:'2026', d:'Household expense manager with real-time cloud sync, budgets, categories and spending charts.', tags:['React Native','Firebase'] },
+  { t:'BA Agent', c:'AI', y:'2026', d:'LLM analyst workspace that turns project evidence into reviewed, source-cited requirements, BRDs and sprint plans.', tags:['Next.js','FastAPI','OpenRouter'] },
+];
+const ROMAN = ['I','II','III','IV','V','VI','VII','VIII'];
+P.forEach((p, i) => { p.img = `img/sample-0${(i % 5) + 1}.jpg`; p.n = String(i + 1).padStart(2, '0'); p.r = ROMAN[i]; });
+const stack = (p) => `<div class="stack">${p.tags.join(' · ')}</div>`;
+
+/* 01 table of contents */
+(() => {
+  $('#tocL').innerHTML = P.map((p, i) => `<a href="#" data-i="${i}" class="reveal" style="transition-delay:${i * 60}ms"><span class="rn">${p.r}.</span><span class="nm">${p.t}</span><span class="dots"></span><span class="ct">${p.c}</span></a>`).join('');
+  $('#tocI').innerHTML = P.map((p) => `<img src="${p.img}" alt="">`).join('');
+  const links = [...document.querySelectorAll('#tocL a')], imgs = [...$('#tocI').children];
+  const show = (i) => {
+    links.forEach((l, k) => l.classList.toggle('on', k === i)); imgs.forEach((m, k) => m.classList.toggle('on', k === i));
+    $('#tocC').innerHTML = `<div class="swap"><div class="eyebrow"><b>${P[i].r}</b> &nbsp;·&nbsp; ${P[i].c} &nbsp;·&nbsp; ${P[i].y}</div><p>${P[i].d}</p></div>`;
+  };
+  // Hover, keyboard focus or a first tap on phones all show the project
+  links.forEach((l) => {
+    l.addEventListener('mouseenter', () => show(+l.dataset.i));
+    l.addEventListener('focus', () => show(+l.dataset.i));
+    l.addEventListener('click', (e) => { if (!l.classList.contains('on')) { e.preventDefault(); show(+l.dataset.i); } });
+  });
+  show(0);
+})();
+
+/* 02 museum gallery */
+(() => {
+  $('#gal').innerHTML = P.slice(0, 6).map((p, i) => `<a class="art reveal" href="#" style="transition-delay:${(i % 3) * 120}ms"><div class="canvas"><div class="mat"><img src="${p.img}" alt=""></div></div><div class="placard"><div class="no">NO. ${p.n}</div><h4>${p.t}</h4><div class="md">${p.tags.slice(0, 3).join(', ')} on screen, ${p.y}</div></div></a>`).join('');
+})();
+
+/* 03 editorial spread */
+(() => {
+  const f = P[0];
+  $('#mag').innerHTML = `<div class="mag-top"><div class="mag-img reveal"><img src="${f.img}" alt=""></div><div class="mag-cover reveal" style="transition-delay:.15s"><div class="eyebrow"><b>Cover story</b> · ${f.c}</div><h3>${f.t}: records that <i>belong</i> to patients</h3><p>${f.d} Doctors get a view-only secure viewer with watermarks and timed sessions, while every grant and revoke is written on-chain.</p><div class="mag-q">“Every view, every download, written where nobody can rewrite it.”</div><a class="link" href="#">Read the case study →</a></div></div>` +
+    `<div class="mag-cols">${P.slice(1, 5).map((p, i) => `<a class="mag-col reveal" href="#" style="transition-delay:${i * 100}ms"><div class="eyebrow"><b>${p.r}</b> · ${p.c}</div><div class="im"><img src="${p.img}" alt=""></div><h4>${p.t}</h4><p>${p.d}</p></a>`).join('')}</div>`;
+})();
+
+/* 04 invitation cards */
+(() => {
+  $('#inv').innerHTML = P.slice(0, 4).map((p, i) => `<a class="card reveal" href="#" style="transition-delay:${(i % 2) * 120}ms"><img src="${p.img}" alt=""><div class="shade"></div><span class="cn a"></span><span class="cn b"></span><span class="cn c"></span><span class="cn d"></span><div class="ct"><div class="eyebrow"><b>${p.r}</b> &nbsp;·&nbsp; ${p.c}</div><h4>${p.t}</h4><div class="orn" style="margin:0 0 18px">◆</div><p>${p.d}</p>${stack(p)}</div></a>`).join('');
+})();
+
+/* 05 ledger */
+(() => {
+  $('#led').innerHTML = P.map((p, i) => `<div class="row${i === 0 ? ' open' : ''}"><button class="row-h"><span class="rn">${p.r}.</span><span class="nm">${p.t}</span><span class="ct">${p.c}</span><span class="yr">${p.y}</span><span class="pl"></span></button><div class="row-b"><div><div class="row-in"><div class="im"><img src="${p.img}" alt=""></div><div class="tx"><p>${p.d}</p>${stack(p)}<div style="margin-top:22px"><a class="link" href="#">View project →</a></div></div></div></div></div></div>`).join('');
+  document.querySelectorAll('.row-h').forEach((h) => h.onclick = () => { const r = h.parentElement, was = r.classList.contains('open'); document.querySelectorAll('.row').forEach((x) => x.classList.remove('open')); if (!was) r.classList.add('open'); });
+})();
+
+/* 06 showcase */
+(() => {
+  $('#stg').innerHTML = P.map((p) => `<img src="${p.img}" alt="">`).join('');
+  $('#rail').innerHTML = P.map((p, i) => `<button data-i="${i}"><span class="rn">${p.r}</span><span class="nm">${p.t}</span></button>`).join('');
+  const imgs = [...$('#stg').children], btns = [...$('#rail').children]; let cur = -1, timer;
+  const go = (i) => {
+    cur = i; clearTimeout(timer);
+    imgs.forEach((m, k) => { m.classList.remove('on'); if (k === i) { void m.offsetWidth; m.classList.add('on'); } });
+    btns.forEach((b, k) => { b.classList.remove('on'); if (k === i) { void b.offsetWidth; b.classList.add('on'); } });
+    const p = P[i];
+    $('#cap').innerHTML = `<div class="swap"><div class="num">${p.n}</div><div class="eyebrow"><b>${p.c}</b> · ${p.y}</div><h3>${p.t}</h3><p>${p.d}</p><div><a class="link" href="#">View project →</a></div></div>`;
+    timer = setTimeout(() => go((cur + 1) % P.length), 6000);
+  };
+  btns.forEach((b) => b.onclick = () => go(+b.dataset.i));
+  // Never move on while someone is looking at or reading it
+  const sec = $('#x6');
+  sec.addEventListener('mouseenter', () => clearTimeout(timer));
+  sec.addEventListener('mouseleave', () => { timer = setTimeout(() => go((cur + 1) % P.length), 6000); });
+  go(0);
+})();
+
+/* gentle fade-up for anything marked .reveal */
+const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: 0.15 });
+document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+</script>
+</body>
+</html>

@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Projects concepts VI</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@500;700;900&display=swap" rel="stylesheet" />
+<style>
+  :root { --bg:#0a0a0a; --fg:#ededed; --mu:#8a8a8a; --card:#111113; --bd:rgba(255,255,255,.09); --red:#ef4444; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--fg); font-family:Inter,sans-serif; overflow-x:clip; }
+  body::before { content:''; position:fixed; inset:0; z-index:-1; background-size:32px 32px; background-image:linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 0),linear-gradient(180deg,rgba(255,255,255,.03) 1px,transparent 0); }
+  section { min-height:100vh; padding:100px 20px 80px; border-bottom:1px solid var(--bd); position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .wrap { width:100%; max-width:1088px; }
+  .tag { position:absolute; top:24px; left:24px; font:500 12px 'JetBrains Mono'; color:var(--mu); z-index:5; }
+  .tag b { color:var(--red); font-weight:500; }
+  .label { font:600 12px 'JetBrains Mono'; letter-spacing:.1em; text-transform:uppercase; color:var(--mu); margin-bottom:24px; display:flex; align-items:center; gap:12px; }
+  .label span { color:var(--red); } .label::after { content:''; flex:1; height:1px; background:var(--bd); }
+  .mono { font-family:'JetBrains Mono',monospace; } .red { color:var(--red); } .mu { color:var(--mu); }
+  .meta { font:500 11px 'JetBrains Mono'; color:var(--mu); text-transform:uppercase; letter-spacing:.06em; } .meta b { color:var(--red); font-weight:500; }
+  .chip { display:inline-block; font:11px 'JetBrains Mono'; padding:3px 9px; border:1px solid var(--bd); border-radius:6px; color:var(--mu); margin:0 5px 6px 0; }
+  .btn { display:inline-flex; align-items:center; gap:6px; font:600 12px 'JetBrains Mono'; color:var(--fg); text-decoration:none; padding:8px 14px; border-radius:999px; border:1px solid var(--bd); background:transparent; cursor:pointer; transition:.2s; }
+  .btn:hover { border-color:var(--red); color:var(--red); }
+  .btn.solid { background:var(--red); border-color:var(--red); color:#140404; } .btn.solid:hover { color:#140404; filter:brightness(1.1); }
+  .btn .ar { transition:transform .25s; } .btn:hover .ar, a:hover > .ar, a:hover .go .ar { transform:translateX(3px); }
+  h4.t { font:700 22px/1.1 Outfit; letter-spacing:-.01em; }
+  .desc { color:#b5b5b5; font-size:14px; line-height:1.6; }
+  #index { position:fixed; right:18px; top:50%; transform:translateY(-50%); z-index:50; display:flex; flex-direction:column; gap:10px; }
+  #index a { font:500 11px 'JetBrains Mono'; color:var(--mu); text-decoration:none; text-align:right; } #index a:hover { color:var(--fg); }
+  .rv { opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s cubic-bezier(.2,.8,.2,1); } .rv.in { opacity:1; transform:none; }
+  .shot { position:relative; overflow:hidden; border-radius:12px; background:#151517; }
+  .shot img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .6s cubic-bezier(.2,.8,.2,1); }
+
+  /* filter chips with sliding pill (shared) */
+  .filters { position:relative; display:inline-flex; gap:2px; padding:4px; border:1px solid var(--bd); border-radius:999px; margin-bottom:24px; flex-wrap:wrap; }
+  .filters button { all:unset; position:relative; z-index:1; cursor:pointer; padding:6px 13px; font:500 12px 'JetBrains Mono'; color:var(--mu); border-radius:999px; transition:color .25s; }
+  .filters button.on { color:#140404; } .filters button:not(.on):hover { color:var(--fg); }
+  .filters button em { font-style:normal; opacity:.6; margin-left:4px; }
+  .filters .pill { position:absolute; top:4px; height:calc(100% - 8px); background:var(--red); border-radius:999px; transition:left .35s cubic-bezier(.2,.8,.2,1), width .35s cubic-bezier(.2,.8,.2,1); }
+
+  /* 01 featured + grid */
+  .feat { display:grid; grid-template-columns:1.3fr 1fr; gap:28px; padding:16px; border:1px solid var(--bd); border-radius:20px; background:var(--card); text-decoration:none; color:var(--fg); margin-bottom:16px; transition:border-color .3s, transform .3s; }
+  .feat:hover { border-color:rgba(239,68,68,.45); transform:translateY(-3px); } .feat:hover .shot img { transform:scale(1.03); }
+  .feat .shot { aspect-ratio:16/10; }
+  .feat .tx { display:flex; flex-direction:column; justify-content:center; padding:10px 10px 10px 0; }
+  .feat h3 { font:900 clamp(34px,4vw,52px)/.95 Outfit; letter-spacing:-.03em; margin:10px 0 14px; } .feat h3::first-letter { color:var(--red); }
+  .badge { align-self:flex-start; font:600 10px 'JetBrains Mono'; letter-spacing:.08em; color:var(--red); border:1px solid rgba(239,68,68,.4); background:rgba(239,68,68,.08); padding:4px 9px; border-radius:999px; }
+  .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .gc { display:flex; flex-direction:column; padding:12px; border:1px solid var(--bd); border-radius:18px; background:var(--card); text-decoration:none; color:var(--fg); transition:border-color .3s, transform .3s, opacity .3s; }
+  .gc:hover { border-color:rgba(239,68,68,.45); transform:translateY(-4px); } .gc:hover .shot img { transform:scale(1.05); }
+  .gc .shot { aspect-ratio:16/10; margin-bottom:14px; }
+  .gc .tx { padding:0 4px 4px; display:flex; flex-direction:column; flex:1; }
+  .gc h4 { margin:6px 0 8px; } .gc .desc { font-size:13px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin-bottom:12px; }
+  .go { margin-top:auto; font:600 11px 'JetBrains Mono'; color:var(--mu); display:flex; justify-content:space-between; align-items:center; transition:color .25s; } .gc:hover .go { color:var(--red); }
+  .gc.hide { display:none; } .gc.pop { animation:pop .45s cubic-bezier(.2,.8,.2,1) both; }
+  @keyframes pop { from { opacity:0; transform:translateY(12px) scale(.98); } }
+
+  /* 02 list + preview */
+  .md { display:grid; grid-template-columns:340px 1fr; gap:22px; }
+  .md-list { display:flex; flex-direction:column; gap:4px; position:relative; }
+  .md-list button { all:unset; cursor:pointer; position:relative; z-index:1; display:grid; grid-template-columns:30px 1fr auto; align-items:center; gap:10px; padding:13px 14px; border-radius:12px; transition:color .25s; color:var(--mu); }
+  .md-list button .n { font:500 11px 'JetBrains Mono'; } .md-list button .nm { font:700 16px Outfit; } .md-list button .c { font:500 10px 'JetBrains Mono'; text-transform:uppercase; }
+  .md-list button:hover { color:var(--fg); } .md-list button.on { color:var(--fg); } .md-list button.on .n { color:var(--red); }
+  .md-hl { position:absolute; left:0; right:0; border-radius:12px; background:var(--card); border:1px solid var(--bd); transition:top .35s cubic-bezier(.2,.8,.2,1), height .35s; }
+  .md-hl::before { content:''; position:absolute; left:0; top:12px; bottom:12px; width:2px; background:var(--red); border-radius:2px; }
+  .md-panel { border:1px solid var(--bd); border-radius:20px; background:var(--card); padding:16px; overflow:hidden; }
+  .md-panel .shot { aspect-ratio:16/9; }
+  .md-body { padding:18px 6px 4px; }
+  .md-body h3 { font:900 34px/1 Outfit; letter-spacing:-.02em; margin:8px 0 10px; } .md-body h3::first-letter { color:var(--red); }
+  .md-foot { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:14px; flex-wrap:wrap; }
+  .kbd { font:11px 'JetBrains Mono'; color:var(--mu); } .kbd kbd { font:inherit; border:1px solid var(--bd); border-radius:4px; padding:1px 6px; }
+  .slide-l { animation:slL .4s cubic-bezier(.2,.8,.2,1); } .slide-r { animation:slR .4s cubic-bezier(.2,.8,.2,1); }
+  @keyframes slL { from { opacity:0; transform:translateX(24px); } } @keyframes slR { from { opacity:0; transform:translateX(-24px); } }
+
+  /* 03 snap carousel */
+  .car-head { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:22px; gap:20px; }
+  .car-head h2 { font:900 clamp(34px,4.5vw,56px)/.95 Outfit; letter-spacing:-.03em; } .car-head h2 span { color:var(--red); }
+  .arrows { display:flex; gap:8px; }
+  .arrows button { all:unset; cursor:pointer; width:44px; height:44px; border-radius:50%; border:1px solid var(--bd); display:flex; align-items:center; justify-content:center; font:16px 'JetBrains Mono'; transition:.2s; }
+  .arrows button:hover:not(:disabled) { border-color:var(--red); color:var(--red); } .arrows button:disabled { opacity:.3; cursor:default; }
+  .car { display:flex; gap:16px; overflow-x:auto; scroll-snap-type:x mandatory; scroll-behavior:smooth; padding-bottom:6px; scrollbar-width:none; }
+  .car::-webkit-scrollbar { display:none; }
+  .cc { flex:0 0 calc((100% - 32px) / 2.4); scroll-snap-align:start; border:1px solid var(--bd); border-radius:18px; background:var(--card); overflow:hidden; text-decoration:none; color:var(--fg); transition:border-color .3s; }
+  .cc:hover { border-color:rgba(239,68,68,.45); } .cc:hover .shot img { transform:scale(1.04); }
+  .cc .shot { aspect-ratio:16/10; border-radius:0; }
+  .cc .tx { padding:18px; } .cc h4 { margin:6px 0 8px; } .cc .desc { font-size:13px; margin-bottom:12px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  .bar { height:2px; background:var(--bd); border-radius:2px; margin-top:18px; overflow:hidden; } .bar i { display:block; height:100%; width:30%; background:var(--red); border-radius:2px; transition:transform .2s; }
+
+  /* 04 expandable grid */
+  .xg { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; grid-auto-flow:dense; }
+  .xc { border:1px solid var(--bd); border-radius:16px; background:var(--card); overflow:hidden; cursor:pointer; transition:border-color .3s; }
+  .xc:hover { border-color:rgba(239,68,68,.45); }
+  .xc .shot { aspect-ratio:4/3; border-radius:0; }
+  .xc .hd { padding:14px; display:flex; justify-content:space-between; align-items:center; gap:10px; }
+  .xc .hd h4 { font-size:16px; }
+  .xc .pl { width:26px; height:26px; flex:none; border-radius:50%; border:1px solid var(--bd); position:relative; transition:transform .35s, border-color .3s; }
+  .xc .pl::before, .xc .pl::after { content:''; position:absolute; left:7px; right:7px; top:50%; height:1.5px; margin-top:-.75px; background:currentColor; } .xc .pl::after { transform:rotate(90deg); }
+  .xc:hover .pl { border-color:var(--red); color:var(--red); }
+  .xc .more { display:none; }
+  .xc.open { grid-column:1 / -1; display:grid; grid-template-columns:1.2fr 1fr; cursor:default; border-color:rgba(239,68,68,.45); animation:pop .45s cubic-bezier(.2,.8,.2,1); }
+  .xc.open .shot { aspect-ratio:16/10; grid-row:span 2; }
+  .xc.open .pl { transform:rotate(45deg); cursor:pointer; color:var(--red); border-color:var(--red); }
+  .xc.open .hd { padding:22px 22px 0; } .xc.open .hd h4 { font:900 32px/1 Outfit; letter-spacing:-.02em; }
+  .xc.open .more { display:block; padding:12px 22px 22px; } .xc .more .desc { margin-bottom:14px; }
+
+  /* 05 rows + drawer */
+  .rows { border-top:1px solid var(--bd); }
+  .r { display:grid; grid-template-columns:96px 1fr auto 40px; gap:20px; align-items:center; padding:14px 8px; border-bottom:1px solid var(--bd); cursor:pointer; border-radius:12px; transition:background .25s, padding .3s; }
+  .r:hover { background:var(--card); padding-left:14px; }
+  .r .shot { aspect-ratio:16/10; border-radius:8px; }
+  .r h4 { font-size:19px; margin-bottom:5px; } .r h4 .n { font:500 11px 'JetBrains Mono'; color:var(--red); margin-right:8px; vertical-align:2px; }
+  .r .desc { font-size:13px; display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; overflow:hidden; }
+  .r .tg { display:flex; gap:4px; flex-wrap:wrap; justify-content:flex-end; max-width:240px; } .r .tg .chip { margin:0; }
+  .r .ar { width:34px; height:34px; border-radius:50%; border:1px solid var(--bd); display:flex; align-items:center; justify-content:center; font:14px 'JetBrains Mono'; transition:.25s; }
+  .r:hover .ar { border-color:var(--red); color:var(--red); transform:translateX(3px); }
+  .scrim { position:fixed; inset:0; background:rgba(0,0,0,.55); backdrop-filter:blur(3px); opacity:0; pointer-events:none; transition:opacity .35s; z-index:80; }
+  .drawer { position:fixed; top:0; right:0; bottom:0; width:min(520px,100vw); background:#0e0e10; border-left:1px solid var(--bd); z-index:81; transform:translateX(100%); transition:transform .45s cubic-bezier(.2,.8,.2,1); overflow-y:auto; padding:22px; }
+  body.dopen .scrim { opacity:1; pointer-events:auto; } body.dopen .drawer { transform:none; }
+  .drawer .top { display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; }
+  .drawer .x { all:unset; cursor:pointer; width:36px; height:36px; border-radius:50%; border:1px solid var(--bd); display:flex; align-items:center; justify-content:center; } .drawer .x:hover { border-color:var(--red); color:var(--red); }
+  .drawer .shot { aspect-ratio:16/10; margin-bottom:18px; }
+  .drawer h3 { font:900 36px/1 Outfit; letter-spacing:-.02em; margin:8px 0 12px; } .drawer h3::first-letter { color:var(--red); }
+  .drawer ul { list-style:none; margin:16px 0; } .drawer li { position:relative; padding-left:18px; color:#c9c9c9; font-size:14px; line-height:1.6; margin-bottom:6px; } .drawer li::before { content:'>'; position:absolute; left:0; color:var(--red); font-family:'JetBrains Mono'; }
+
+  /* 06 bento */
+  .bento { display:grid; grid-template-columns:repeat(6,1fr); grid-auto-rows:190px; gap:14px; }
+  .bt { position:relative; border-radius:20px; overflow:hidden; border:1px solid var(--bd); background:var(--card); text-decoration:none; color:var(--fg); display:flex; flex-direction:column; justify-content:flex-end; padding:18px; transition:border-color .3s; }
+  .bt img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.5; transition:opacity .5s, transform .7s cubic-bezier(.2,.8,.2,1); }
+  .bt::before { content:''; position:absolute; inset:0; background:linear-gradient(180deg,rgba(10,10,10,.1) 20%,rgba(10,10,10,.95)); z-index:1; }
+  .bt > *:not(img) { position:relative; z-index:2; }
+  .bt h4 { margin:6px 0 0; } .bt .desc { font-size:13px; max-height:0; opacity:0; overflow:hidden; transition:max-height .45s, opacity .35s, margin .45s; }
+  .bt .num { position:absolute; top:14px; right:16px; font:900 40px/1 Outfit; color:rgba(255,255,255,.08); }
+  .bt:hover { border-color:rgba(239,68,68,.5); } .bt:hover img { opacity:.75; transform:scale(1.05); } .bt:hover .desc { max-height:70px; opacity:1; margin-top:8px; }
+  .bt.big h4 { font:900 40px/1 Outfit; letter-spacing:-.02em; } .bt.big .desc { max-height:none; opacity:1; margin-top:10px; max-width:440px; }
+  .s1 { grid-column:span 4; grid-row:span 2; } .s2 { grid-column:span 2; } .s3 { grid-column:span 2; } .s4 { grid-column:span 3; } .s5 { grid-column:span 3; } .s6 { grid-column:span 2; } .s7 { grid-column:span 2; } .s8 { grid-column:span 2; }
+
+  @media (max-width:860px) {
+    #index { display:none; }
+    .feat { grid-template-columns:1fr; } .feat .tx { padding:0 6px 6px; }
+    .grid { grid-template-columns:1fr 1fr; }
+    .md { grid-template-columns:1fr; } .md-list { flex-direction:row; overflow-x:auto; } .md-list button { grid-template-columns:auto auto; white-space:nowrap; } .md-list button .c { display:none; } .md-hl { display:none; } .md-list button.on { background:var(--card); }
+    .cc { flex-basis:82%; }
+    .xg { grid-template-columns:1fr 1fr; } .xc.open { grid-template-columns:1fr; } .xc.open .shot { grid-row:auto; }
+    .r { grid-template-columns:72px 1fr 34px; } .r .tg { display:none; }
+    .bento { grid-template-columns:1fr 1fr; grid-auto-rows:170px; } .s1 { grid-column:span 2; } .bento > *:not(.s1) { grid-column:span 1; grid-row:auto; }
+    .bt.big h4 { font-size:28px; }
+  }
+  @media (prefers-reduced-motion:reduce) { *, *::before, *::after { animation:none !important; transition:none !important; } .rv { opacity:1; transform:none; } }
+</style>
+</head>
+<body>
+<nav id="index"><a href="#x1">01 featured + grid</a><a href="#x2">02 list + preview</a><a href="#x3">03 swipe carousel</a><a href="#x4">04 expand in place</a><a href="#x5">05 rows + side panel</a><a href="#x6">06 bento</a></nav>
+
+<section id="x1">
+  <div class="tag"><b>01</b> — featured + grid · your best project on top, the rest in cards; filter by category</div>
+  <div class="wrap">
+    <div class="label"><span>//</span> Featured Projects</div>
+    <div id="feat"></div>
+    <div class="filters" id="f1"></div>
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<section id="x2">
+  <div class="tag"><b>02</b> — list + preview · pick a project on the left, its preview slides in on the right (↑ ↓ keys work too)</div>
+  <div class="wrap">
+    <div class="label"><span>//</span> Featured Projects</div>
+    <div class="md"><div class="md-list" id="mdL"><div class="md-hl" id="mdH"></div></div><div class="md-panel" id="mdP"></div></div>
+  </div>
+</section>
+
+<section id="x3">
+  <div class="tag"><b>03</b> — swipe carousel · native swipe on phones, arrows on desktop, cards snap into place</div>
+  <div class="wrap">
+    <div class="label"><span>//</span> Featured Projects</div>
+    <div class="car-head"><h2>Things I've <span>built</span></h2><div class="arrows"><button id="cPrev" aria-label="Previous">←</button><button id="cNext" aria-label="Next">→</button></div></div>
+    <div class="car" id="car"></div>
+    <div class="bar"><i id="cBar"></i></div>
+  </div>
+</section>
+
+<section id="x4">
+  <div class="tag"><b>04</b> — expand in place · a tidy grid; click a card and it opens full width right where it is</div>
+  <div class="wrap">
+    <div class="label"><span>//</span> Featured Projects</div>
+    <div class="xg" id="xg"></div>
+  </div>
+</section>
+
+<section id="x5">
+  <div class="tag"><b>05</b> — rows + side panel · scannable list; click a row and the details slide in from the right (Esc closes)</div>
+  <div class="wrap">
+    <div class="label"><span>//</span> Featured Projects</div>
+    <div class="filters" id="f5"></div>
+    <div class="rows" id="rows"></div>
+  </div>
+</section>
+
+<section id="x6">
+  <div class="tag"><b>06</b> — bento · mixed-size tiles like your Skills section; hover shows a short description</div>
+  <div class="wrap">
+    <div class="label"><span>//</span> Featured Projects</div>
+    <div class="bento" id="bento"></div>
+  </div>
+</section>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-hidden="true"></aside>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const P = [
+  { t:'MediChain', c:'Blockchain', y:'2026', d:'Patient-owned medical records: AES-256 encrypted files on IPFS, every access logged on Polygon, gasless for patients.', tags:['Flutter','React','Solidity','Polygon','IPFS'], f:['AES-256 encrypted storage on IPFS','On-chain audit trail of every access','Gasless for patients via ERC-2771'] },
+  { t:'The GP Edge', c:'Web', y:'2026', d:'SaaS for General Practitioners: study analytics, AI-powered Medicare billing lookup and an exam-prep system.', tags:['Next.js','TypeScript','PostgreSQL','Gemini'], f:['Real-time study analytics','AI Medicare billing lookup','Mock tests with PDF reports'] },
+  { t:'SolarMitra', c:'Mobile', y:'2026', d:'AR rooftop solar assessment: maps the roof, detects obstacles with YOLOv8 and builds a PDF report in under 2 minutes.', tags:['Flutter','ARCore','YOLOv8','TFLite'], f:['AR rooftop mapping','On-device obstacle detection','Subsidy and ROI estimates'] },
+  { t:'PaperTrail', c:'AI', y:'2026', d:'RAG knowledge retrieval over PDF, Word, Excel and CSV with semantic indexing and citation-backed answers.', tags:['React','Python','ChromaDB','OpenAI'], f:['Upload PDF, Word, Excel, CSV','Semantic indexing','Citation-backed answers'] },
+  { t:'Portfolio', c:'Web', y:'2026', d:'This site: themeable portfolio with live GitHub and LeetCode heatmaps and project detail pages.', tags:['Next.js','Tailwind','three.js'], f:['Five colour themes','Live activity heatmaps','Static detail pages'] },
+  { t:'Inboxly', c:'Web', y:'2026', d:'WhatsApp Business messaging with a sales CRM: shared inbox, bulk campaigns, workflows and a Gemini auto-reply agent.', tags:['React','Node.js','Redis','BullMQ'], f:['Shared WhatsApp inbox','Bulk campaigns','Gemini auto-reply agent'] },
+  { t:'GharBudget', c:'Mobile', y:'2026', d:'Household expense manager with real-time cloud sync, budgets, categories and spending charts.', tags:['React Native','Firebase'], f:['Real-time cloud sync','Budgets and categories','Spending charts'] },
+  { t:'BA Agent', c:'AI', y:'2026', d:'LLM analyst workspace that turns project evidence into reviewed, source-cited requirements, BRDs and sprint plans.', tags:['Next.js','FastAPI','OpenRouter'], f:['Source-cited requirements','BRD, SRS and sprint plans','Human approval at every step'] },
+];
+P.forEach((p, i) => { p.img = `img/sample-0${(i % 5) + 1}.jpg`; p.n = String(i + 1).padStart(2, '0'); });
+const chips = (p, max = 9) => p.tags.slice(0, max).map((t) => `<span class="chip">${t}</span>`).join('');
+const meta = (p) => `<div class="meta"><b>${p.n}</b> · ${p.c} · ${p.y}</div>`;
+const CATS = ['All', ...new Set(P.map((p) => p.c))];
+
+// Filter chips with a sliding red pill; calls onPick(category)
+function filters(el, onPick) {
+  el.innerHTML = '<span class="pill"></span>' + CATS.map((c) => `<button data-c="${c}">${c}<em>${c === 'All' ? P.length : P.filter((p) => p.c === c).length}</em></button>`).join('');
+  const pill = el.querySelector('.pill'), btns = [...el.querySelectorAll('button')];
+  const pick = (b) => { btns.forEach((x) => x.classList.toggle('on', x === b)); pill.style.left = b.offsetLeft + 'px'; pill.style.width = b.offsetWidth + 'px'; onPick(b.dataset.c); };
+  btns.forEach((b) => b.onclick = () => pick(b));
+  pick(btns[0]);
+}
+
+/* 01 featured + grid */
+(() => {
+  const f = P[0];
+  $('#feat').innerHTML = `<a class="feat rv" href="#"><div class="shot"><img src="${f.img}" alt=""></div><div class="tx"><span class="badge">★ FEATURED</span><h3>${f.t}</h3><p class="desc" style="margin-bottom:14px">${f.d}</p><div>${chips(f)}</div><span class="btn solid" style="align-self:flex-start;margin-top:10px">View project <span class="ar">→</span></span></div></a>`;
+  const rest = P.slice(1);
+  $('#grid').innerHTML = rest.map((p) => `<a class="gc rv" href="#" data-c="${p.c}"><div class="shot"><img src="${p.img}" alt=""></div><div class="tx">${meta(p)}<h4 class="t">${p.t}</h4><p class="desc">${p.d}</p><div class="go"><span>${p.tags.slice(0, 2).join(' · ')}</span><span class="ar">View →</span></div></div></a>`).join('');
+  const cards = [...$('#grid').children];
+  filters($('#f1'), (c) => cards.forEach((el, k) => {
+    const show = c === 'All' || el.dataset.c === c;
+    el.classList.toggle('hide', !show); el.classList.remove('pop');
+    if (show) { void el.offsetWidth; el.style.animationDelay = k * 40 + 'ms'; el.classList.add('pop'); }
+  }));
+})();
+
+/* 02 list + preview */
+(() => {
+  const L = $('#mdL'), H = $('#mdH');
+  L.insertAdjacentHTML('beforeend', P.map((p, i) => `<button data-i="${i}"><span class="n">${p.n}</span><span class="nm">${p.t}</span><span class="c">${p.c}</span></button>`).join(''));
+  const btns = [...L.querySelectorAll('button')]; let cur = 0;
+  const show = (i) => {
+    const dir = i >= cur ? 'slide-l' : 'slide-r'; cur = i; const p = P[i], b = btns[i];
+    btns.forEach((x) => x.classList.toggle('on', x === b));
+    H.style.top = b.offsetTop + 'px'; H.style.height = b.offsetHeight + 'px';
+    $('#mdP').innerHTML = `<div class="${dir}"><div class="shot"><img src="${p.img}" alt=""></div><div class="md-body">${meta(p)}<h3>${p.t}</h3><p class="desc">${p.d}</p><div style="margin-top:12px">${chips(p)}</div><div class="md-foot"><a class="btn solid" href="#">View project <span class="ar">→</span></a><span class="kbd"><kbd>↑</kbd> <kbd>↓</kbd> to browse</span></div></div></div>`;
+  };
+  btns.forEach((b) => b.onclick = () => show(+b.dataset.i));
+  L.addEventListener('keydown', (e) => { if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); const i = (cur + (e.key === 'ArrowDown' ? 1 : -1) + P.length) % P.length; show(i); btns[i].focus(); } });
+  cur = 0; show(0); addEventListener('resize', () => show(cur));
+})();
+
+/* 03 swipe carousel */
+(() => {
+  const C = $('#car');
+  C.innerHTML = P.map((p) => `<a class="cc" href="#"><div class="shot"><img src="${p.img}" alt=""></div><div class="tx">${meta(p)}<h4 class="t">${p.t}</h4><p class="desc">${p.d}</p><div>${chips(p, 3)}</div></div></a>`).join('');
+  const step = () => C.children[0].offsetWidth + 16;
+  $('#cPrev').onclick = () => C.scrollBy({ left: -step() }); $('#cNext').onclick = () => C.scrollBy({ left: step() });
+  const upd = () => {
+    const max = C.scrollWidth - C.clientWidth, p = max ? C.scrollLeft / max : 0, w = C.clientWidth / C.scrollWidth;
+    $('#cBar').style.width = w * 100 + '%'; $('#cBar').style.transform = `translateX(${p * (1 / w - 1) * 100}%)`;
+    $('#cPrev').disabled = C.scrollLeft < 4; $('#cNext').disabled = C.scrollLeft > max - 4;
+  };
+  C.addEventListener('scroll', upd, { passive: true }); addEventListener('resize', upd); upd();
+})();
+
+/* 04 expand in place */
+(() => {
+  const G = $('#xg');
+  G.innerHTML = P.map((p) => `<div class="xc rv" tabindex="0"><div class="shot"><img src="${p.img}" alt=""></div><div class="hd"><div>${meta(p)}<h4 class="t" style="margin-top:5px">${p.t}</h4></div><span class="pl"></span></div><div class="more"><p class="desc">${p.d}</p><div style="margin-bottom:14px">${chips(p)}</div><a class="btn solid" href="#">View project <span class="ar">→</span></a></div></div>`).join('');
+  const cards = [...G.children];
+  const toggle = (el) => { const was = el.classList.contains('open'); cards.forEach((x) => x.classList.remove('open')); if (!was) { el.classList.add('open'); setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 60); } };
+  cards.forEach((el) => {
+    el.addEventListener('click', (e) => { if (e.target.closest('a')) return; if (el.classList.contains('open') && !e.target.closest('.pl')) return; toggle(el); });
+    el.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(el); } });
+  });
+})();
+
+/* 05 rows + drawer */
+(() => {
+  const R = $('#rows');
+  R.innerHTML = P.map((p, i) => `<div class="r rv" data-i="${i}" data-c="${p.c}" tabindex="0"><div class="shot"><img src="${p.img}" alt=""></div><div><h4 class="t"><span class="n">${p.n}</span>${p.t}</h4><p class="desc">${p.d}</p></div><div class="tg">${chips(p, 3)}</div><span class="ar">→</span></div>`).join('');
+  const rows = [...R.children], D = $('#drawer');
+  const open = (i) => {
+    const p = P[i];
+    D.innerHTML = `<div class="top">${meta(p)}<button class="x" aria-label="Close">✕</button></div><div class="shot"><img src="${p.img}" alt=""></div><h3>${p.t}</h3><p class="desc">${p.d}</p><ul>${p.f.map((x) => `<li>${x}</li>`).join('')}</ul><div style="margin-bottom:18px">${chips(p)}</div><div style="display:flex;gap:8px"><a class="btn solid" href="#">Open full page <span class="ar">→</span></a><a class="btn" href="#">GitHub</a></div>`;
+    D.querySelector('.x').onclick = close; document.body.classList.add('dopen'); D.setAttribute('aria-hidden', 'false');
+  };
+  const close = () => { document.body.classList.remove('dopen'); D.setAttribute('aria-hidden', 'true'); };
+  rows.forEach((r) => { r.onclick = () => open(+r.dataset.i); r.onkeydown = (e) => { if (e.key === 'Enter') open(+r.dataset.i); }; });
+  $('#scrim').onclick = close; addEventListener('keydown', (e) => e.key === 'Escape' && close());
+  filters($('#f5'), (c) => rows.forEach((r) => { const s = c === 'All' || r.dataset.c === c; r.style.display = s ? '' : 'none'; if (s) { r.classList.remove('pop'); void r.offsetWidth; r.classList.add('pop'); } }));
+})();
+
+/* 06 bento */
+(() => {
+  $('#bento').innerHTML = P.map((p, i) => `<a class="bt s${i + 1} rv${i === 0 ? ' big' : ''}" href="#"><img src="${p.img}" alt=""><span class="num">${p.n}</span><div class="meta"><b>${p.c}</b> · ${p.y}</div><h4 class="t">${p.t}</h4><p class="desc">${p.d}</p></a>`).join('');
+})();
+
+/* gentle fade-up when things scroll into view */
+const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: 0.12 });
+document.querySelectorAll('.rv').forEach((el, i) => { el.style.transitionDelay = (i % 4) * 70 + 'ms'; io.observe(el); });
+</script>
+</body>
+</html>

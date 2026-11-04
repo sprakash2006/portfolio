@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Projects concepts II</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@500;700;900&display=swap" rel="stylesheet" />
+<style>
+  :root { --bg:#0a0a0a; --fg:#ededed; --mu:#8a8a8a; --card:#111113; --bd:rgba(255,255,255,.09); --red:#ef4444; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--fg); font-family:Inter,sans-serif; overflow-x:clip; }
+  body::before { content:''; position:fixed; inset:0; z-index:-1; background-size:32px 32px; background-image:linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 0),linear-gradient(180deg,rgba(255,255,255,.03) 1px,transparent 0); }
+  section { min-height:100vh; padding:90px 20px 80px; border-bottom:1px solid var(--bd); position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .wrap { width:100%; max-width:1088px; }
+  .tag { position:absolute; top:24px; left:24px; font:500 12px 'JetBrains Mono'; color:var(--mu); z-index:5; }
+  .tag b { color:var(--red); font-weight:500; }
+  .label { font:600 12px 'JetBrains Mono'; letter-spacing:.1em; text-transform:uppercase; color:var(--mu); margin-bottom:28px; display:flex; align-items:center; gap:12px; }
+  .label span { color:var(--red); } .label::after { content:''; flex:1; height:1px; background:var(--bd); }
+  .mono { font-family:'JetBrains Mono',monospace; } .red { color:var(--red); } .mu { color:var(--mu); }
+  .chip { display:inline-block; font:11px 'JetBrains Mono'; padding:3px 9px; border:1px solid var(--bd); border-radius:6px; color:var(--mu); margin:0 5px 6px 0; }
+  .btn { display:inline-flex; align-items:center; gap:6px; font:600 12px 'JetBrains Mono'; color:var(--fg); text-decoration:none; padding:8px 14px; border-radius:999px; border:1px solid var(--bd); background:transparent; cursor:pointer; transition:.2s; }
+  .btn:hover { border-color:var(--red); color:var(--red); }
+  .btn.solid { background:var(--red); border-color:var(--red); color:#140404; } .btn.solid:hover { color:#140404; filter:brightness(1.1); }
+  .big { font:900 clamp(40px,6vw,84px)/.9 Outfit; letter-spacing:-.04em; text-transform:uppercase; }
+  .big span, h4 .r { color:var(--red); }
+  #index { position:fixed; right:18px; top:50%; transform:translateY(-50%); z-index:50; display:flex; flex-direction:column; gap:10px; }
+  #index a { font:500 11px 'JetBrains Mono'; color:var(--mu); text-decoration:none; text-align:right; } #index a:hover { color:var(--fg); }
+
+  /* 01 scroll zoom (kept) */
+  #x1 { display:block; padding:0; min-height:0; }
+  .zm { height:230vh; position:relative; }
+  .zm-pin { position:sticky; top:0; height:100vh; overflow:hidden; display:flex; align-items:center; justify-content:center; }
+  .zm-title { position:absolute; z-index:1; font:900 clamp(56px,13vw,200px)/.85 Outfit; letter-spacing:-.05em; text-transform:uppercase; text-align:center; white-space:nowrap; }
+  .zm-title span { color:var(--red); }
+  .zm-img { position:relative; z-index:2; width:100vw; height:100vh; overflow:hidden; }
+  .zm-img img { width:100%; height:100%; object-fit:cover; display:block; }
+  .zm-img::after { content:''; position:absolute; inset:0; background:linear-gradient(90deg,rgba(10,10,10,.92),rgba(10,10,10,.35) 60%,transparent); opacity:var(--o,0); }
+  .zm-info { position:absolute; z-index:3; left:7vw; bottom:12vh; max-width:480px; opacity:0; }
+  .zm-info h4 { font:900 clamp(40px,5vw,72px)/.9 Outfit; text-transform:uppercase; letter-spacing:-.04em; margin:10px 0 14px; }
+  .zm-info h4::first-letter { color:var(--red); }
+  .zm-info p { color:#d4d4d4; font-size:15px; line-height:1.6; margin-bottom:16px; }
+  .zm-n { position:absolute; z-index:3; right:5vw; top:12vh; font:700 13px 'JetBrains Mono'; color:var(--mu); } .zm-n b { color:var(--fg); font-size:30px; }
+
+  /* 02 flashlight */
+  .spot { position:relative; display:grid; grid-template-columns:repeat(4,1fr); gap:14px; --x:50%; --y:50%; }
+  .spot::after { content:''; position:absolute; inset:-30px; pointer-events:none; z-index:3; background:radial-gradient(circle 240px at var(--x) var(--y), transparent 0, rgba(10,10,10,.55) 45%, rgba(10,10,10,.96) 75%); transition:background .05s; }
+  .sc { position:relative; border-radius:18px; overflow:hidden; background:var(--card); border:1px solid var(--bd); aspect-ratio:3/4; display:flex; flex-direction:column; justify-content:flex-end; padding:18px; text-decoration:none; color:var(--fg); }
+  .sc img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.5; transition:transform .8s, opacity .4s; }
+  .sc::before { content:''; position:absolute; inset:0; background:linear-gradient(180deg,transparent 35%,rgba(10,10,10,.95)); z-index:1; }
+  .sc > * { position:relative; z-index:2; }
+  .sc:hover img { transform:scale(1.08); opacity:.8; }
+  .sc:hover { border-color:rgba(239,68,68,.6); }
+  .sc h4 { font:900 24px/1 Outfit; text-transform:uppercase; letter-spacing:-.02em; margin-top:6px; }
+  .sc p { font-size:12.5px; color:#cfcfcf; line-height:1.5; max-height:0; overflow:hidden; transition:max-height .5s, margin .5s; }
+  .sc:hover p { max-height:120px; margin-top:8px; }
+  .spot-hint { text-align:center; margin-top:22px; font:12px 'JetBrains Mono'; color:var(--mu); }
+
+  /* 03 desk */
+  .desk { position:relative; height:620px; border:1px dashed var(--bd); border-radius:24px; overflow:hidden; background:radial-gradient(circle at 50% 40%,rgba(239,68,68,.06),transparent 60%); }
+  .pol { position:absolute; width:240px; height:290px; perspective:1000px; cursor:grab; touch-action:none; user-select:none; }
+  .pol:active { cursor:grabbing; }
+  .pol .in { position:relative; width:100%; height:100%; transform-style:preserve-3d; transition:transform .7s cubic-bezier(.2,.8,.2,1); }
+  .pol.flip .in { transform:rotateY(180deg); }
+  .pol .fc, .pol .bk { position:absolute; inset:0; backface-visibility:hidden; border-radius:6px; box-shadow:0 18px 40px rgba(0,0,0,.6); }
+  .pol .fc { background:#ece8e1; padding:12px 12px 0; }
+  .pol .fc img { width:100%; height:200px; object-fit:cover; display:block; pointer-events:none; filter:saturate(.9); }
+  .pol .fc .cap { font:900 22px Outfit; color:#141414; text-transform:uppercase; letter-spacing:-.02em; padding:14px 2px 0; display:flex; justify-content:space-between; align-items:baseline; }
+  .pol .fc .cap em { font:500 11px 'JetBrains Mono'; color:#b91c1c; font-style:normal; }
+  .pol .bk { background:var(--card); border:1px solid rgba(239,68,68,.5); transform:rotateY(180deg); padding:18px; display:flex; flex-direction:column; }
+  .pol .bk h4 { font:900 22px Outfit; text-transform:uppercase; margin:6px 0 8px; }
+  .pol .bk p { font-size:12.5px; line-height:1.55; color:#c9c9c9; margin-bottom:10px; }
+  .pol .tape { position:absolute; top:-10px; left:50%; width:80px; height:22px; margin-left:-40px; background:rgba(239,68,68,.55); transform:rotate(-4deg); z-index:2; backface-visibility:hidden; }
+
+  /* 04 marquee */
+  #x4 { padding-left:0; padding-right:0; }
+  .mq { width:100%; overflow:hidden; padding:10px 0; }
+  .mq-t { display:flex; gap:18px; width:max-content; will-change:transform; }
+  .mc { flex:0 0 380px; height:230px; border-radius:18px; overflow:hidden; position:relative; border:1px solid var(--bd); transition:transform .4s cubic-bezier(.2,.8,.2,1), border-color .3s; text-decoration:none; color:var(--fg); }
+  .mc img { width:100%; height:100%; object-fit:cover; opacity:.55; transition:opacity .3s; }
+  .mc::after { content:''; position:absolute; inset:0; background:linear-gradient(0deg,rgba(10,10,10,.92),transparent 60%); }
+  .mc .tx { position:absolute; left:18px; bottom:16px; right:18px; z-index:2; display:flex; justify-content:space-between; align-items:flex-end; }
+  .mc h4 { font:900 28px/1 Outfit; text-transform:uppercase; letter-spacing:-.02em; }
+  .mc .go { font:600 11px 'JetBrains Mono'; background:var(--red); color:#140404; padding:5px 10px; border-radius:999px; opacity:0; transform:translateY(6px); transition:.3s; }
+  .mc:hover { transform:scale(1.04); border-color:rgba(239,68,68,.6); } .mc:hover img { opacity:.9; } .mc:hover .go { opacity:1; transform:none; }
+  .mq-mid { text-align:center; padding:34px 20px; }
+  .mq-mid .big { font-size:clamp(46px,9vw,130px); }
+  .mq-mid .hint { font:12px 'JetBrains Mono'; color:var(--mu); margin-top:14px; }
+
+  /* 05 orbit */
+  .orb-wrap { display:grid; grid-template-columns:1.1fr 1fr; gap:40px; align-items:center; }
+  .orb { position:relative; aspect-ratio:1; max-width:560px; width:100%; margin:0 auto; }
+  .ring { position:absolute; border:1px dashed rgba(255,255,255,.12); border-radius:50%; left:50%; top:50%; transform:translate(-50%,-50%); }
+  .core { position:absolute; left:50%; top:50%; width:120px; height:120px; margin:-60px; border-radius:50%; background:radial-gradient(circle,#ef4444,#7f1d1d 70%); box-shadow:0 0 80px rgba(239,68,68,.5); display:flex; flex-direction:column; align-items:center; justify-content:center; color:#140404; font:900 34px/1 Outfit; }
+  .core small { font:600 10px 'JetBrains Mono'; letter-spacing:.1em; }
+  .pl { position:absolute; left:50%; top:50%; width:74px; height:74px; margin:-37px; border-radius:50%; overflow:hidden; border:2px solid var(--bd); cursor:pointer; transition:border-color .3s, width .3s, height .3s, margin .3s; background:var(--card); }
+  .pl img { width:100%; height:100%; object-fit:cover; opacity:.75; }
+  .pl:hover, .pl.on { border-color:var(--red); width:92px; height:92px; margin:-46px; } .pl.on img { opacity:1; }
+  .pl-l { position:absolute; left:50%; top:50%; font:600 11px 'JetBrains Mono'; color:var(--mu); white-space:nowrap; pointer-events:none; transform:translate(-50%,46px); }
+  .orb-panel h4 { font:900 clamp(38px,5vw,64px)/.9 Outfit; text-transform:uppercase; letter-spacing:-.04em; margin:12px 0 14px; }
+  .orb-panel h4::first-letter { color:var(--red); }
+  .orb-panel p { color:#c9c9c9; font-size:15px; line-height:1.65; margin-bottom:16px; }
+  .orb-panel .shot { aspect-ratio:16/9; border-radius:14px; overflow:hidden; border:1px solid var(--bd); margin-bottom:18px; }
+  .orb-panel .shot img { width:100%; height:100%; object-fit:cover; display:block; animation:fadeIn .5s; }
+  @keyframes fadeIn { from { opacity:0; transform:scale(1.05); } }
+
+  /* 06 split-flap */
+  .board { background:#070707; border:1px solid var(--bd); border-radius:16px; padding:22px; box-shadow:inset 0 0 60px rgba(0,0,0,.8); }
+  .bh { display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; font:700 13px 'JetBrains Mono'; color:var(--red); letter-spacing:.14em; }
+  .bh .clk { color:#f5d36a; }
+  .brow { display:grid; grid-template-columns:auto 1fr auto auto; gap:22px; align-items:center; padding:7px 10px; border-radius:8px; cursor:pointer; transition:background .2s; }
+  .brow:hover, .brow.on { background:rgba(239,68,68,.08); }
+  .brow.hd { cursor:default; background:none; font:600 10px 'JetBrains Mono'; color:var(--mu); letter-spacing:.12em; padding-bottom:4px; }
+  .cells { display:flex; gap:3px; }
+  .fl { width:24px; height:34px; display:flex; align-items:center; justify-content:center; background:linear-gradient(180deg,#1b1b1d 50%,#151517 50%); border-radius:4px; font:700 18px 'JetBrains Mono'; color:#f2f2f2; position:relative; }
+  .fl::after { content:''; position:absolute; left:0; right:0; top:50%; height:1px; background:#000; }
+  .brow.on .fl { color:#fca5a5; }
+  .fl.y { color:#f5d36a; }
+  .bdet { display:grid; grid-template-columns:1.2fr 1fr; gap:26px; margin-top:20px; padding-top:20px; border-top:1px dashed var(--bd); }
+  .bdet .shot { aspect-ratio:16/9; border-radius:12px; overflow:hidden; border:1px solid var(--bd); }
+  .bdet .shot img { width:100%; height:100%; object-fit:cover; display:block; animation:fadeIn .5s; }
+  .bdet h4 { font:900 34px/1 Outfit; text-transform:uppercase; margin:8px 0 12px; }
+  .bdet p { color:#c9c9c9; font-size:14px; line-height:1.6; margin-bottom:14px; }
+
+  /* 07 flipbook */
+  #x7 { display:block; padding:0; min-height:0; }
+  .fb { height:650vh; position:relative; }
+  .fb-pin { position:sticky; top:0; height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; perspective:2200px; overflow:hidden; }
+  .book { position:relative; width:min(94vw,1000px); height:min(62vh,560px); transform:rotateX(14deg); transform-style:preserve-3d; }
+  .book::before { content:''; position:absolute; left:50%; top:0; bottom:0; width:2px; margin-left:-1px; background:rgba(0,0,0,.6); z-index:60; }
+  .pg { position:absolute; top:0; width:50%; height:100%; background:var(--card); border:1px solid var(--bd); overflow:hidden; }
+  .pg.l { left:0; border-radius:16px 0 0 16px; } .pg.r { left:50%; border-radius:0 16px 16px 0; }
+  .leaf { position:absolute; left:50%; top:0; width:50%; height:100%; transform-origin:left center; transform-style:preserve-3d; }
+  .leaf .f, .leaf .b { position:absolute; inset:0; backface-visibility:hidden; background:var(--card); border:1px solid var(--bd); overflow:hidden; }
+  .leaf .f { border-radius:0 16px 16px 0; padding:clamp(18px,3vw,40px); display:flex; flex-direction:column; }
+  .leaf .b { transform:rotateY(180deg); border-radius:16px 0 0 16px; }
+  .leaf .f::after { content:''; position:absolute; inset:0; background:linear-gradient(90deg,rgba(0,0,0,.35),transparent 18%); pointer-events:none; opacity:var(--sh,1); }
+  .shotpg img { width:100%; height:100%; object-fit:cover; display:block; }
+  .shotpg .n { position:absolute; left:18px; top:16px; font:700 12px 'JetBrains Mono'; background:var(--red); color:#140404; padding:4px 10px; border-radius:999px; }
+  .leaf h4 { font:900 clamp(30px,4vw,58px)/.9 Outfit; text-transform:uppercase; letter-spacing:-.04em; margin:12px 0 16px; }
+  .leaf h4::first-letter { color:var(--red); }
+  .leaf p { color:#c9c9c9; font-size:clamp(12.5px,1.3vw,15px); line-height:1.65; margin-bottom:16px; }
+  .leaf .foot { margin-top:auto; display:flex; justify-content:space-between; align-items:center; font:11px 'JetBrains Mono'; color:var(--mu); }
+  .fb-hint { margin-top:28px; font:12px 'JetBrains Mono'; color:var(--mu); }
+
+  @media (max-width:760px) {
+    #index { display:none; }
+    .spot { grid-template-columns:1fr 1fr; } .spot::after { display:none; }
+    .desk { height:760px; } .pol { width:170px; height:220px; } .pol .fc img { height:140px; }
+    .mc { flex-basis:260px; height:170px; }
+    .orb-wrap, .bdet { grid-template-columns:1fr; }
+    .fl { width:15px; height:24px; font-size:12px; } .brow { gap:10px; } .brow > :nth-child(3) { display:none; }
+    .leaf p { display:none; }
+  }
+</style>
+</head>
+<body>
+<nav id="index"><a href="#x1">01 scroll zoom (kept)</a><a href="#x2">02 flashlight</a><a href="#x3">03 desk polaroids</a><a href="#x4">04 velocity marquee</a><a href="#x5">05 orbit</a><a href="#x6">06 departure board</a><a href="#x7">07 flipbook</a></nav>
+
+<section id="x1">
+  <div class="tag" style="position:absolute"><b>01</b> — scroll zoom (kept) · the screenshot grows out of the name until it fills the screen</div>
+  <div id="zms"></div>
+</section>
+
+<section id="x2">
+  <div class="tag"><b>02</b> — flashlight · the grid is in the dark; your cursor is a torch that lights the projects up</div>
+  <div class="wrap">
+    <div class="label"><span>//</span> Featured Projects</div>
+    <div class="spot" id="spot"></div>
+    <div class="spot-hint">move your cursor around ↑</div>
+  </div>
+</section>
+
+<section id="x3">
+  <div class="tag"><b>03</b> — desk polaroids · screenshots scattered on a desk; drag them around, click one to flip it</div>
+  <div class="wrap">
+    <div class="label"><span>//</span> Featured Projects</div>
+    <div class="desk" id="desk"></div>
+  </div>
+</section>
+
+<section id="x4">
+  <div class="tag"><b>04</b> — velocity marquee · two endless rows in opposite directions; scrolling speeds them up and skews them</div>
+  <div class="mq"><div class="mq-t" id="mq1"></div></div>
+  <div class="mq-mid"><div class="label" style="justify-content:center;margin-bottom:10px"><span>//</span> Featured Projects</div><div class="big">Selected <span>work</span></div><div class="hint">8 projects · scroll faster ↓</div></div>
+  <div class="mq"><div class="mq-t" id="mq2"></div></div>
+</section>
+
+<section id="x5">
+  <div class="tag"><b>05</b> — orbit · projects circle a red core like planets; click one to bring it into focus</div>
+  <div class="wrap orb-wrap">
+    <div class="orb" id="orb"><div class="ring" style="width:56%;height:56%"></div><div class="ring" style="width:92%;height:92%"></div><div class="core">08<small>PROJECTS</small></div></div>
+    <div class="orb-panel" id="orbP"></div>
+  </div>
+</section>
+
+<section id="x6">
+  <div class="tag"><b>06</b> — departure board · split-flap letters flip into each project; pick a row to "board" it</div>
+  <div class="wrap">
+    <div class="label"><span>//</span> Featured Projects</div>
+    <div class="board">
+      <div class="bh"><span>● DEPARTURES — PRAKASH/PROJECTS</span><span class="clk" id="clk">00:00</span></div>
+      <div class="brow hd"><span>NO</span><span>PROJECT</span><span>TYPE</span><span>YEAR</span></div>
+      <div id="rowsB"></div>
+      <div class="bdet" id="bdet"></div>
+    </div>
+  </div>
+</section>
+
+<section id="x7">
+  <div class="tag" style="position:absolute"><b>07</b> — flipbook · the projects are pages of a book; scrolling turns the pages</div>
+  <div class="fb" id="fb">
+    <div class="fb-pin">
+      <div class="label" style="margin-bottom:26px"><span>//</span> Featured Projects</div>
+      <div class="book" id="book"></div>
+      <div class="fb-hint"><b class="red" id="fbN">01</b> / 08 · keep scrolling to turn the page</div>
+    </div>
+  </div>
+</section>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const P = [
+  { t:'MediChain', c:'Blockchain', y:'2026', d:'Patient-owned medical records: AES-256 encrypted files on IPFS, every access logged on Polygon, gasless for patients.', tags:['Flutter','React','Solidity','Polygon','IPFS'] },
+  { t:'The GP Edge', c:'Web', y:'2026', d:'SaaS for General Practitioners: study analytics, AI-powered Medicare billing lookup and an exam-prep system.', tags:['Next.js','TypeScript','PostgreSQL','Gemini'] },
+  { t:'SolarMitra', c:'Mobile', y:'2026', d:'AR rooftop solar assessment: maps the roof, detects obstacles with YOLOv8 and builds a PDF report in under 2 minutes.', tags:['Flutter','ARCore','YOLOv8','TFLite'] },
+  { t:'PaperTrail', c:'AI', y:'2026', d:'RAG knowledge retrieval over PDF, Word, Excel and CSV with semantic indexing and citation-backed answers.', tags:['React','Python','ChromaDB','OpenAI'] },
+  { t:'Portfolio', c:'Web', y:'2026', d:'This site: themeable portfolio with live GitHub and LeetCode heatmaps and project detail pages.', tags:['Next.js','Tailwind','three.js'] },
+  { t:'Inboxly', c:'Web', y:'2026', d:'WhatsApp Business messaging with a sales CRM: shared inbox, bulk campaigns, workflows and a Gemini auto-reply agent.', tags:['React','Node.js','Redis','BullMQ'] },
+  { t:'GharBudget', c:'Mobile', y:'2026', d:'Household expense manager with real-time cloud sync, budgets, categories and spending charts.', tags:['React Native','Firebase'] },
+  { t:'BA Agent', c:'AI', y:'2026', d:'LLM analyst workspace that turns project evidence into reviewed, source-cited requirements, BRDs and sprint plans.', tags:['Next.js','FastAPI','OpenRouter'] },
+];
+P.forEach((p, i) => { p.img = `img/sample-0${(i % 5) + 1}.jpg`; p.n = String(i + 1).padStart(2, '0'); });
+const chips = (p) => p.tags.map((t) => `<span class="chip">${t}</span>`).join('');
+const red1 = (s) => `<span>${s[0]}</span>${s.slice(1)}`;
+const clamp = (v) => Math.min(1, Math.max(0, v));
+
+/* 01 scroll zoom */
+(() => {
+  $('#zms').innerHTML = P.slice(0, 3).map((p) => `<div class="zm"><div class="zm-pin"><div class="zm-title">${red1(p.t)}</div><div class="zm-img"><img src="${p.img}" alt=""></div><div class="zm-n"><b>${p.n}</b> / 08</div><div class="zm-info"><div class="mono red" style="font-size:12px">${p.c} · ${p.y}</div><h4>${p.t}</h4><p>${p.d}</p><div style="margin-bottom:14px">${chips(p)}</div><a class="btn solid" href="#">View project →</a></div></div></div>`).join('');
+  const zs = [...document.querySelectorAll('.zm')];
+  const ease = (t) => t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+  const tick = () => zs.forEach((z) => {
+    const r = z.getBoundingClientRect(), p = clamp(-r.top / (r.height - innerHeight));
+    const g = ease(Math.min(1, p / 0.65)), box = z.querySelector('.zm-img');
+    box.style.clipPath = `inset(${(1 - g) * 36}% ${(1 - g) * 34}% round ${(1 - g) * 28}px)`;
+    box.querySelector('img').style.transform = `scale(${1.25 - g * 0.25})`;
+    box.style.setProperty('--o', Math.max(0, (p - 0.55) / 0.3));
+    const info = z.querySelector('.zm-info'), k = clamp((p - 0.62) / 0.25);
+    info.style.opacity = k; info.style.transform = `translateY(${(1 - k) * 30}px)`;
+    z.querySelector('.zm-title').style.opacity = 1 - g;
+  });
+  addEventListener('scroll', tick, { passive: true }); addEventListener('resize', tick); tick();
+})();
+
+/* 02 flashlight */
+(() => {
+  const S = $('#spot');
+  S.innerHTML = P.map((p) => `<a class="sc" href="#"><img src="${p.img}" alt=""><span class="mono red" style="font-size:11px">${p.n} · ${p.c}</span><h4>${p.t}</h4><p>${p.d}</p></a>`).join('');
+  let x = 0.5, y = 0.5, tx = 0.5, ty = 0.5;
+  S.addEventListener('pointermove', (e) => { const r = S.getBoundingClientRect(); tx = (e.clientX - r.left) / r.width; ty = (e.clientY - r.top) / r.height; });
+  (function loop() { x += (tx - x) * 0.15; y += (ty - y) * 0.15; S.style.setProperty('--x', x * 100 + '%'); S.style.setProperty('--y', y * 100 + '%'); requestAnimationFrame(loop); })();
+})();
+
+/* 03 desk */
+(() => {
+  const D = $('#desk');
+  D.innerHTML = P.map((p) => `<div class="pol"><div class="in"><div class="fc"><div class="tape"></div><img src="${p.img}" alt=""><div class="cap">${p.t}<em>${p.n}</em></div></div><div class="bk"><span class="mono red" style="font-size:11px">${p.n} · ${p.c} · ${p.y}</span><h4>${p.t}</h4><p>${p.d}</p><div>${chips(p)}</div><a class="btn solid" href="#" style="margin-top:auto;align-self:flex-start" onpointerdown="event.stopPropagation()">View project →</a></div></div></div>`).join('');
+  const pols = [...D.children]; let z = 10;
+  const place = () => {
+    const W = D.clientWidth, H = D.clientHeight, w = pols[0].offsetWidth, h = pols[0].offsetHeight;
+    const cols = W > 760 ? 4 : 2, rows = Math.ceil(P.length / cols);
+    pols.forEach((el, i) => {
+      const cx = ((i % cols) + 0.5) / cols * W - w / 2 + (Math.random() - .5) * 50;
+      const cy = (Math.floor(i / cols) + 0.5) / rows * H - h / 2 + (Math.random() - .5) * 40;
+      el.dataset.x = cx; el.dataset.y = cy; el.dataset.r = (Math.random() - .5) * 18;
+      el.style.transform = `translate(${cx}px,${cy}px) rotate(${el.dataset.r}deg)`;
+    });
+  };
+  pols.forEach((el) => {
+    let sx, sy, ox, oy, moved = false, down = false;
+    el.addEventListener('pointerdown', (e) => { down = true; moved = false; sx = e.clientX; sy = e.clientY; ox = +el.dataset.x; oy = +el.dataset.y; el.style.zIndex = ++z; el.setPointerCapture(e.pointerId); el.style.transition = 'none'; });
+    el.addEventListener('pointermove', (e) => { if (!down) return; const dx = e.clientX - sx, dy = e.clientY - sy; if (Math.hypot(dx, dy) > 4) moved = true; el.dataset.x = ox + dx; el.dataset.y = oy + dy; el.style.transform = `translate(${ox + dx}px,${oy + dy}px) rotate(${el.dataset.r * 0.3}deg) scale(1.05)`; });
+    el.addEventListener('pointerup', () => { down = false; el.style.transition = 'transform .4s cubic-bezier(.2,.8,.2,1)'; if (!moved) el.classList.toggle('flip'); else el.dataset.r = el.dataset.r * 0.3; el.style.transform = `translate(${el.dataset.x}px,${el.dataset.y}px) rotate(${el.dataset.r}deg)`; });
+  });
+  place(); addEventListener('resize', place);
+})();
+
+/* 04 marquee */
+(() => {
+  const card = (p) => `<a class="mc" href="#"><img src="${p.img}" alt=""><div class="tx"><div><div class="mono red" style="font-size:11px;margin-bottom:6px">${p.n} · ${p.c}</div><h4>${p.t}</h4></div><span class="go">View →</span></div></a>`;
+  const A = P.slice(0, 4), B = P.slice(4);
+  const rows = [[$('#mq1'), A, -1], [$('#mq2'), B, 1]].map(([el, list, dir]) => { el.innerHTML = [...list, ...list, ...list, ...list].map(card).join(''); return { el, dir, x: 0, paused: false }; });
+  rows.forEach((r) => { r.el.addEventListener('mouseenter', () => r.paused = true); r.el.addEventListener('mouseleave', () => r.paused = false); });
+  let lastY = scrollY, vel = 0;
+  (function loop() {
+    const dy = scrollY - lastY; lastY = scrollY; vel += (dy - vel) * 0.1;
+    rows.forEach((r) => {
+      const half = r.el.scrollWidth / 2;
+      if (!r.paused) r.x += r.dir * (0.6 + Math.abs(vel) * 0.5);
+      if (r.x <= -half) r.x += half; if (r.x > 0) r.x -= half;
+      r.el.style.transform = `translateX(${r.x}px) skewX(${Math.max(-10, Math.min(10, vel * -0.4 * r.dir))}deg)`;
+    });
+    requestAnimationFrame(loop);
+  })();
+})();
+
+/* 05 orbit */
+(() => {
+  const O = $('#orb');
+  P.forEach((p, i) => O.insertAdjacentHTML('beforeend', `<div class="pl" data-i="${i}"><img src="${p.img}" alt=""></div><div class="pl-l" data-l="${i}">${p.t}</div>`));
+  const pls = [...O.querySelectorAll('.pl')], lbl = [...O.querySelectorAll('.pl-l')];
+  let a = 0, paused = false, cur = 0;
+  const show = (i) => {
+    cur = i; const p = P[i];
+    pls.forEach((el, k) => el.classList.toggle('on', k === i));
+    $('#orbP').innerHTML = `<div class="label" style="margin-bottom:0"><span>//</span> Featured Projects</div><h4>${p.t}</h4><div class="shot"><img src="${p.img}" alt=""></div><div class="mono red" style="font-size:12px;margin-bottom:10px">${p.n} / 08 · ${p.c} · ${p.y}</div><p>${p.d}</p><div style="margin-bottom:16px">${chips(p)}</div><a class="btn solid" href="#">View project →</a>`;
+  };
+  pls.forEach((el) => { el.onclick = () => show(+el.dataset.i); el.onmouseenter = () => paused = true; el.onmouseleave = () => paused = false; });
+  (function loop() {
+    if (!paused) a += 0.0025;
+    const R = O.clientWidth / 2;
+    pls.forEach((el, i) => {
+      const inner = i < 3, n = inner ? 3 : 5, k = inner ? i : i - 3;
+      const r = (inner ? 0.56 : 0.92) * R;
+      const ang = (inner ? a * 1.6 : -a) + (k / n) * Math.PI * 2;
+      const x = Math.cos(ang) * r, y = Math.sin(ang) * r;
+      el.style.transform = `translate(${x}px,${y}px)`; lbl[i].style.transform = `translate(calc(-50% + ${x}px), ${y + 54}px)`;
+    });
+    requestAnimationFrame(loop);
+  })();
+  show(0);
+})();
+
+/* 06 departure board */
+(() => {
+  const CH = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ';
+  const cells = (s, len, cls = '') => s.toUpperCase().padEnd(len).slice(0, len).split('').map((c) => `<span class="fl ${cls}" data-c="${c}"> </span>`).join('');
+  $('#rowsB').innerHTML = P.map((p, i) => `<div class="brow" data-i="${i}"><div class="cells">${cells(p.n, 2, 'y')}</div><div class="cells">${cells(p.t, 12)}</div><div class="cells">${cells(p.c, 10)}</div><div class="cells">${cells(p.y, 4, 'y')}</div></div>`).join('');
+  const flip = (row) => row.querySelectorAll('.fl').forEach((f, k) => {
+    let n = 6 + Math.floor(Math.random() * 10) + k % 6;
+    const t = setInterval(() => { f.textContent = n-- > 0 ? CH[Math.floor(Math.random() * CH.length)] : f.dataset.c; if (n < 0) clearInterval(t); }, 55);
+  });
+  const rows = [...document.querySelectorAll('.brow[data-i]')];
+  const pick = (i) => {
+    rows.forEach((r, k) => r.classList.toggle('on', k === i)); flip(rows[i]);
+    const p = P[i];
+    $('#bdet').innerHTML = `<div class="shot"><img src="${p.img}" alt=""></div><div><div class="mono" style="font-size:12px;color:#f5d36a">NOW BOARDING · GATE ${p.n}</div><h4>${p.t}</h4><p>${p.d}</p><div style="margin-bottom:14px">${chips(p)}</div><a class="btn solid" href="#">View project →</a></div>`;
+  };
+  rows.forEach((r) => r.onclick = () => pick(+r.dataset.i));
+  new IntersectionObserver((es, o) => es.forEach((e) => { if (e.isIntersecting) { rows.forEach((r, i) => setTimeout(() => flip(r), i * 120)); o.disconnect(); } }), { threshold: 0.3 }).observe($('.board'));
+  pick(0);
+  const clk = () => { const d = new Date(); $('#clk').textContent = d.toTimeString().slice(0, 5); }; clk(); setInterval(clk, 10000);
+})();
+
+/* 07 flipbook */
+(() => {
+  const B = $('#book');
+  const shot = (p) => `<div class="shotpg" style="position:relative;height:100%"><img src="${p.img}" alt=""><span class="n">${p.n} / 08</span></div>`;
+  const text = (p) => `<span class="mono red" style="font-size:12px">${p.n} · ${p.c} · ${p.y}</span><h4>${p.t}</h4><p>${p.d}</p><div>${chips(p)}</div><div class="foot"><a class="btn solid" href="#">View project →</a><span>p. ${p.n}</span></div>`;
+  // leaf i: front = details of project i (right page), back = screenshot of project i+1 (left page)
+  B.innerHTML = `<div class="pg l">${shot(P[0])}</div><div class="pg r"></div>` +
+    P.map((p, i) => `<div class="leaf" style="z-index:${P.length - i}"><div class="f">${text(p)}</div><div class="b">${P[i + 1] ? shot(P[i + 1]) : ''}</div></div>`).join('');
+  const leaves = [...B.querySelectorAll('.leaf')], fb = $('#fb'), flips = P.length - 1;
+  const tick = () => {
+    const r = fb.getBoundingClientRect(), p = clamp(-r.top / (r.height - innerHeight)) * flips;
+    leaves.forEach((l, i) => {
+      if (i >= flips) return;
+      const t = clamp(p - i), e = t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+      l.style.transform = `rotateY(${-180 * e}deg)`;
+      l.style.zIndex = e > 0.5 ? 10 + i : P.length - i + 10 + P.length;
+      l.querySelector('.f').style.setProperty('--sh', 1 + e * 2);
+    });
+    $('#fbN').textContent = String(Math.min(P.length, Math.round(p) + 1)).padStart(2, '0');
+  };
+  addEventListener('scroll', tick, { passive: true }); tick();
+})();
+</script>
+</body>
+</html>

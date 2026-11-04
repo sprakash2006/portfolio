@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Footer concepts II</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@500;700;900&family=Sacramento&display=swap" rel="stylesheet" />
+<style>
+  :root { --bg:#0a0a0a; --fg:#ededed; --mu:#8a8a8a; --card:#111113; --bd:rgba(255,255,255,.09); --red:#ef4444; --green:#22c55e; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--fg); font-family:Inter,sans-serif; overflow-x:clip; }
+  body::before { content:''; position:fixed; inset:0; z-index:-1; background-size:32px 32px; background-image:linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 0),linear-gradient(180deg,rgba(255,255,255,.03) 1px,transparent 0); }
+  section { min-height:100vh; padding:90px 20px 0; border-bottom:4px solid #1a1a1c; position:relative; display:flex; flex-direction:column; justify-content:flex-end; align-items:center; }
+  .wrap { width:100%; max-width:1040px; }
+  .tag { position:absolute; top:24px; left:24px; right:24px; font:500 12px 'JetBrains Mono'; color:var(--mu); }
+  .tag b { color:var(--red); font-weight:500; }
+  .label { font:600 12px 'JetBrains Mono'; letter-spacing:.1em; text-transform:uppercase; color:var(--mu); margin-bottom:26px; display:flex; align-items:center; gap:12px; }
+  .label span { color:var(--red); } .label::after { content:''; flex:1; height:1px; background:var(--bd); }
+  a { color:inherit; text-decoration:none; }
+  .mu { color:var(--mu); }
+  .field { width:100%; border:1px solid var(--bd); background:rgba(17,17,19,.6); border-radius:12px; padding:11px 13px; color:var(--fg); font:14px Inter; outline:none; transition:border-color .2s; resize:none; }
+  .field::placeholder { color:#5e5e5e; } .field:focus { border-color:rgba(239,68,68,.55); }
+  .send { all:unset; cursor:pointer; display:inline-flex; align-items:center; gap:8px; background:var(--red); color:#140404; font:600 13px 'JetBrains Mono'; padding:11px 18px; border-radius:999px; transition:transform .25s, box-shadow .25s; box-shadow:0 10px 30px rgba(239,68,68,.25); }
+  .send:hover { transform:translateY(-2px); box-shadow:0 16px 40px rgba(239,68,68,.4); }
+  .bar { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; padding:22px 0 26px; border-top:1px solid var(--bd); font:12px 'JetBrains Mono'; color:var(--mu); }
+  .bar nav { display:flex; gap:18px; flex-wrap:wrap; } .bar nav a:hover { color:var(--fg); }
+  .top { all:unset; cursor:pointer; } .top:hover { color:var(--red); }
+  .avail { display:inline-flex; align-items:center; gap:8px; font:500 12px 'JetBrains Mono'; color:var(--green); border:1px solid rgba(34,197,94,.3); background:rgba(34,197,94,.07); padding:5px 11px; border-radius:999px; }
+  .avail i { width:7px; height:7px; border-radius:50%; background:var(--green); animation:ping 2s infinite; } @keyframes ping { 0% { box-shadow:0 0 0 0 rgba(34,197,94,.6); } 70%,100% { box-shadow:0 0 0 8px rgba(34,197,94,0); } }
+  #index { position:fixed; right:18px; top:50%; transform:translateY(-50%); z-index:50; display:flex; flex-direction:column; gap:10px; }
+  #index a { font:500 11px 'JetBrains Mono'; color:var(--mu); text-align:right; } #index a:hover { color:var(--fg); }
+  svg.i { width:18px; height:18px; }
+
+  /* 01 postcard */
+  .post { display:grid; grid-template-columns:1fr 1px 1fr; gap:34px; background:#efe9df; color:#1b1b1b; border-radius:10px; padding:34px; margin-bottom:50px; box-shadow:0 40px 90px rgba(0,0,0,.6); transform:rotate(-1deg); position:relative; transition:transform .5s cubic-bezier(.2,.8,.2,1); }
+  .post:hover { transform:rotate(0); }
+  .post::before { content:''; position:absolute; inset:10px; border:2px dashed rgba(239,68,68,.35); border-radius:6px; pointer-events:none; }
+  .post .div { background:rgba(0,0,0,.15); }
+  .post h3 { font:400 54px/1 Sacramento; color:#b91c1c; margin-bottom:10px; }
+  .post p { font:15px/1.7 Inter; color:#3a3a3a; }
+  .post .line { width:100%; border:0; border-bottom:1px solid rgba(0,0,0,.25); background:transparent; padding:10px 2px; font:15px Inter; color:#1b1b1b; outline:none; } .post .line:focus { border-bottom-color:#b91c1c; }
+  .post textarea.line { resize:none; line-height:1.9; background:repeating-linear-gradient(transparent 0 33px,rgba(0,0,0,.18) 33px 34px); border:0; }
+  .stamp { float:right; width:84px; height:100px; background:var(--red); color:#140404; display:flex; flex-direction:column; align-items:center; justify-content:center; font:900 13px Outfit; text-align:center; line-height:1.15; outline:4px dotted #efe9df; outline-offset:-3px; transform:rotate(4deg); margin:0 0 10px 10px; }
+  .stamp b { font-size:28px; } .postmark { position:absolute; right:120px; top:26px; width:86px; height:86px; border:2px solid rgba(0,0,0,.25); border-radius:50%; display:flex; align-items:center; justify-content:center; text-align:center; font:600 9px 'JetBrains Mono'; color:rgba(0,0,0,.4); transform:rotate(-12deg); }
+  .post .send { box-shadow:none; }
+
+  /* 02 giant email */
+  .ge { text-align:center; margin-bottom:40px; }
+  .ge .q { font:500 14px 'JetBrains Mono'; color:var(--mu); margin-bottom:18px; }
+  .bigmail { position:relative; display:inline-block; font:900 clamp(30px,6.4vw,86px)/1.05 Outfit; letter-spacing:-.04em; color:transparent; -webkit-text-stroke:1px rgba(255,255,255,.4); background:linear-gradient(90deg,var(--red),#f87171) no-repeat; background-size:0% 100%; -webkit-background-clip:text; background-clip:text; transition:background-size .7s cubic-bezier(.2,.8,.2,1), -webkit-text-stroke-color .4s; }
+  .bigmail:hover { background-size:100% 100%; -webkit-text-stroke-color:transparent; }
+  .ge .acts { display:flex; justify-content:center; gap:10px; margin-top:24px; flex-wrap:wrap; }
+  .ghost { all:unset; cursor:pointer; font:600 13px 'JetBrains Mono'; padding:11px 18px; border-radius:999px; border:1px solid var(--bd); transition:.25s; } .ghost:hover { border-color:rgba(239,68,68,.6); color:var(--red); }
+  .drawer { display:grid; grid-template-rows:0fr; transition:grid-template-rows .6s cubic-bezier(.2,.8,.2,1); } .drawer.open { grid-template-rows:1fr; } .drawer > div { overflow:hidden; }
+  .drawer form { max-width:620px; margin:26px auto 0; display:grid; gap:10px; text-align:left; } .drawer .two { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .icons-row { display:flex; justify-content:center; gap:28px; margin-top:34px; font:13px Inter; } .icons-row a { display:flex; gap:8px; align-items:center; color:var(--mu); transition:color .2s; } .icons-row a:hover { color:var(--fg); }
+
+  /* 03 signature sign-off */
+  .so { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:end; margin-bottom:40px; }
+  .so .thanks { font:500 13px 'JetBrains Mono'; color:var(--mu); }
+  .so h3 { font:700 clamp(30px,3.6vw,44px)/1.1 Outfit; letter-spacing:-.025em; margin:12px 0 4px; }
+  .sig { width:100%; max-width:460px; height:150px; overflow:visible; }
+  .sig text { font:400 120px Sacramento; fill:transparent; stroke:#ededed; stroke-width:.8; stroke-dasharray:1400; stroke-dashoffset:1400; }
+  .sig.in text { animation:draw 2.8s ease forwards, fillin .8s 2.4s forwards; }
+  .sig tspan.r { stroke:var(--red); }
+  @keyframes draw { to { stroke-dashoffset:0; } } @keyframes fillin { to { fill:#ededed; } }
+  .sig.in tspan.r { animation:fillr .8s 2.4s forwards; } @keyframes fillr { to { fill:var(--red); } }
+  .so .links { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:20px; }
+  .so .links a { display:flex; align-items:center; gap:10px; padding:12px 14px; border:1px solid var(--bd); border-radius:14px; background:var(--card); font:500 13.5px Inter; transition:border-color .25s, transform .25s; } .so .links a:hover { border-color:rgba(239,68,68,.5); transform:translateY(-2px); }
+  .so form { display:grid; gap:10px; }
+
+  /* 04 method cards */
+  .mc { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:14px; }
+  .m { position:relative; border:1px solid var(--bd); border-radius:20px; background:var(--card); padding:20px; min-height:170px; display:flex; flex-direction:column; overflow:hidden; transition:border-color .3s, transform .3s; }
+  .m:hover { border-color:rgba(239,68,68,.5); transform:translateY(-4px); }
+  .m .ic { width:42px; height:42px; border-radius:12px; border:1px solid var(--bd); display:flex; align-items:center; justify-content:center; transition:.3s; } .m:hover .ic { background:var(--red); color:#140404; border-color:var(--red); }
+  .m b { font:700 18px Outfit; margin-top:auto; } .m span { font:12px 'JetBrains Mono'; color:var(--mu); margin-top:4px; word-break:break-all; }
+  .m .act { position:absolute; top:20px; right:20px; font:600 11px 'JetBrains Mono'; color:var(--red); opacity:0; transform:translateX(-6px); transition:.3s; } .m:hover .act { opacity:1; transform:none; }
+  .wide { border:1px solid var(--bd); border-radius:20px; background:var(--card); padding:22px; display:grid; grid-template-columns:240px 1fr; gap:26px; margin-bottom:40px; }
+  .wide h4 { font:700 22px/1.15 Outfit; } .wide form { display:grid; grid-template-columns:1fr 1fr; gap:10px; } .wide textarea { grid-column:1 / -1; } .wide .r { grid-column:1 / -1; display:flex; justify-content:flex-end; }
+
+  /* 05 location map */
+  .loc { display:grid; grid-template-columns:1.1fr 1fr; gap:22px; margin-bottom:40px; }
+  .map { position:relative; border:1px solid var(--bd); border-radius:24px; background:var(--card); overflow:hidden; min-height:420px; }
+  .map svg { position:absolute; inset:0; width:100%; height:100%; }
+  .map .info { position:absolute; left:22px; bottom:20px; right:22px; display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:12px; }
+  .map .city { font:900 34px/1 Outfit; letter-spacing:-.02em; } .map .city span { color:var(--red); }
+  .map .time { font:700 30px 'JetBrains Mono'; text-align:right; } .map .time small { display:block; font:11px 'JetBrains Mono'; color:var(--mu); }
+  .pinpulse { animation:pp 2s infinite; transform-box:fill-box; transform-origin:center; } @keyframes pp { 0% { transform:scale(1); opacity:.7; } 100% { transform:scale(4); opacity:0; } }
+  .loc form { border:1px solid var(--bd); border-radius:24px; background:var(--card); padding:24px; display:grid; gap:10px; align-content:start; }
+  .loc form h4 { font:700 22px Outfit; }
+
+  /* 06 FAQ + form */
+  .fq { display:grid; grid-template-columns:1fr 1fr; gap:40px; margin-bottom:40px; align-items:start; }
+  .fq h3 { font:900 clamp(34px,4vw,52px)/.95 Outfit; letter-spacing:-.035em; margin-bottom:22px; } .fq h3 span { color:var(--red); }
+  .qa { border-top:1px solid var(--bd); } .qa:last-child { border-bottom:1px solid var(--bd); }
+  .qa button { all:unset; box-sizing:border-box; width:100%; cursor:pointer; display:flex; justify-content:space-between; align-items:center; padding:16px 2px; font:600 15px Inter; }
+  .qa button i { font-style:normal; color:var(--red); transition:transform .35s; } .qa.open button i { transform:rotate(45deg); }
+  .qa .a { display:grid; grid-template-rows:0fr; transition:grid-template-rows .45s cubic-bezier(.2,.8,.2,1); } .qa.open .a { grid-template-rows:1fr; } .qa .a > div { overflow:hidden; } .qa .a p { color:#b5b5b5; font-size:14px; line-height:1.65; padding:0 2px 16px; }
+  .fq form { border:1px solid var(--bd); border-radius:22px; background:var(--card); padding:24px; display:grid; gap:10px; }
+
+  @media (max-width:860px) {
+    #index { display:none; }
+    .post { grid-template-columns:1fr; } .post .div { display:none; } .postmark { display:none; }
+    .so, .loc, .fq { grid-template-columns:1fr; } .mc { grid-template-columns:1fr 1fr; } .wide { grid-template-columns:1fr; } .drawer .two, .wide form { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+<nav id="index"><a href="#x1">01 postcard</a><a href="#x2">02 giant email</a><a href="#x3">03 signature</a><a href="#x4">04 contact cards</a><a href="#x5">05 location</a><a href="#x6">06 FAQ + form</a></nav>
+
+<section id="x1"><div class="tag"><b>01</b> — postcard · the contact form is a postcard: write on the right, stamp and postmark from Pune</div>
+  <div class="wrap"><div class="label"><span>//</span> Contact</div>
+    <form class="post" onsubmit="return false">
+      <div><h3>Say hello!</h3><p>I'm looking for web and software developer internships, and I'm open to freelance gigs and interesting collaborations. Drop me a line and I'll write back within a day.</p><p style="margin-top:18px;font:13px 'JetBrains Mono';color:#6b6b6b">prakashswami.dev@gmail.com<br/>+91 8767690131</p></div>
+      <div class="div"></div>
+      <div><div class="stamp"><b>PS</b>PUNE<br/>INDIA</div><div class="postmark">PUNE<br/><span data-day></span></div>
+        <input class="line" placeholder="From: your name"><input class="line" placeholder="Reply to: your email"><textarea class="line" rows="4" placeholder="Your message…"></textarea>
+        <div style="margin-top:14px"><button class="send">Post it ✉</button></div></div>
+    </form>
+    <div class="bar"><span>© <span data-year></span> Prakash Swami</span><nav data-nav></nav><button class="top" data-top>Back to top ↑</button></div></div></section>
+
+<section id="x2"><div class="tag"><b>02</b> — giant email · the email itself is the hero; it fills red on hover. The form opens below only if they want it</div>
+  <div class="wrap"><div class="label"><span>//</span> Contact</div>
+    <div class="ge"><div class="q">Got a role or a project? Let's talk —</div><a class="bigmail" href="#">prakashswami.dev@gmail.com</a>
+      <div class="acts"><button class="send" id="openF">Write a message ↓</button><button class="ghost" data-copy>Copy email</button></div>
+      <div class="drawer" id="drw"><div><form onsubmit="return false"><div class="two"><input class="field" placeholder="Your name"><input class="field" placeholder="Your email"></div><textarea class="field" rows="5" placeholder="Tell me about it…"></textarea><div><button class="send">Send →</button></div></form></div></div>
+      <div class="icons-row" data-iconrow></div></div>
+    <div class="bar"><span>© <span data-year></span> Prakash Swami</span><nav data-nav></nav><button class="top" data-top>Back to top ↑</button></div></div></section>
+
+<section id="x3"><div class="tag"><b>03</b> — signature · a warm sign-off: your name signs itself (like the hero), links and the form beside it</div>
+  <div class="wrap"><div class="label"><span>//</span> Contact</div>
+    <div class="so"><div><div class="thanks">Thanks for scrolling this far —</div><h3>Let's make something<br/>worth shipping.</h3>
+      <svg class="sig" id="sig" viewBox="0 0 460 150"><text x="4" y="112"><tspan class="r">P</tspan>rakash <tspan class="r">S</tspan>wami</text></svg>
+      <div class="links" data-links></div></div>
+      <form onsubmit="return false"><div class="avail" style="justify-self:start;margin-bottom:6px"><i></i>Open to internships &amp; freelance</div><input class="field" placeholder="Your name"><input class="field" placeholder="Your email"><textarea class="field" rows="5" placeholder="Your message…"></textarea><div><button class="send">Send message →</button></div></form></div>
+    <div class="bar"><span>© <span data-year></span> · Made with care in Pune</span><nav data-nav></nav><button class="top" data-top>Back to top ↑</button></div></div></section>
+
+<section id="x4"><div class="tag"><b>04</b> — contact cards · every way to reach you as a card (email, LinkedIn, GitHub, call), the form in one wide card below</div>
+  <div class="wrap"><div class="label"><span>//</span> Contact</div>
+    <div class="mc" data-cards></div>
+    <div class="wide"><div><h4>Or send a message here.</h4><p class="mu" style="font-size:13px;line-height:1.6;margin-top:10px">It lands straight in my inbox. I usually reply within a day.</p></div><form onsubmit="return false"><input class="field" placeholder="Your name"><input class="field" placeholder="Your email"><textarea class="field" rows="4" placeholder="Your message…"></textarea><div class="r"><button class="send">Send →</button></div></form></div>
+    <div class="bar"><span>© <span data-year></span> Prakash Swami</span><nav data-nav></nav><button class="top" data-top>Back to top ↑</button></div></div></section>
+
+<section id="x5"><div class="tag"><b>05</b> — location · a dot map of India with Pune pulsing and your live local time; the form beside it</div>
+  <div class="wrap"><div class="label"><span>//</span> Contact</div>
+    <div class="loc"><div class="map"><svg id="mapsvg" viewBox="0 0 400 420"></svg><div class="info"><div><div class="avail" style="margin-bottom:10px"><i></i>Available</div><div class="city">Pune<span>,</span> India</div><div class="mu" style="font:12px 'JetBrains Mono';margin-top:6px">18.52° N, 73.85° E</div></div><div class="time"><span data-clock></span><small>local time · IST</small></div></div></div>
+      <form onsubmit="return false"><h4>Let's talk.</h4><p class="mu" style="font-size:13px;line-height:1.6;margin-bottom:6px">Internships, freelance or just an idea, I reply within a day.</p><input class="field" placeholder="Your name"><input class="field" placeholder="Your email"><textarea class="field" rows="5" placeholder="Your message…"></textarea><div><button class="send">Send message →</button></div><div class="icons-row" data-iconrow style="justify-content:flex-start;margin-top:10px"></div></form></div>
+    <div class="bar"><span>© <span data-year></span> Prakash Swami</span><nav data-nav></nav><button class="top" data-top>Back to top ↑</button></div></div></section>
+
+<section id="x6"><div class="tag"><b>06</b> — FAQ + form · answers the usual questions first (availability, roles, reply time), then the form</div>
+  <div class="wrap"><div class="label"><span>//</span> Contact</div>
+    <div class="fq"><div><h3>Before you <span>write</span>.</h3><div id="qas"></div></div>
+      <form onsubmit="return false"><div class="avail" style="justify-self:start;margin-bottom:6px"><i></i>Open to internships &amp; freelance</div><input class="field" placeholder="Your name"><input class="field" placeholder="Your email"><textarea class="field" rows="6" placeholder="Your message…"></textarea><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px"><button class="send">Send message →</button><span class="mu" style="font:12px 'JetBrains Mono'">or prakashswami.dev@gmail.com</span></div></form></div>
+    <div class="bar"><span>© <span data-year></span> Prakash Swami</span><nav data-nav></nav><button class="top" data-top>Back to top ↑</button></div></div></section>
+
+<script>
+const $$ = (s) => [...document.querySelectorAll(s)];
+const I = {
+  gh: '<svg class="i" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-6 0-1.2.5-2.3 1.2-3.1-.1-.4-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.7 1.6.2 2.8.1 3.2.8.8 1.2 1.9 1.2 3.1 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .5z"/></svg>',
+  li: '<svg class="i" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.75h4v11H3zm7 0h3.8v1.6h.06c.53-1 1.84-2.06 3.79-2.06 4.05 0 4.8 2.67 4.8 6.13v6.33h-4v-5.6c0-1.34-.03-3.06-1.86-3.06-1.87 0-2.16 1.46-2.16 2.96v5.7h-4z"/></svg>',
+  lc: '<svg class="i" viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 1.6a1.4 1.4 0 0 0-2 .1L4.7 9a5.3 5.3 0 0 0 0 7.2l4.2 4.5a5.3 5.3 0 0 0 7.5.3l2.4-2.3a1.4 1.4 0 1 0-1.9-2l-2.4 2.3a2.5 2.5 0 0 1-3.5-.2l-4.2-4.5a2.5 2.5 0 0 1 0-3.4l6.7-7.3a1.4 1.4 0 0 0 0-2zM9.7 12.4a1.4 1.4 0 0 0 0 2.8h9.6a1.4 1.4 0 0 0 0-2.8z"/></svg>',
+  ml: '<svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>',
+  ph: '<svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>',
+  cv: '<svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg>',
+};
+const NAV = ['About', 'Education', 'Experience', 'Skills', 'Projects', 'Activity'];
+$$('[data-nav]').forEach((el) => el.innerHTML = NAV.map((n) => `<a href="#">${n}</a>`).join(''));
+$$('[data-year]').forEach((el) => el.textContent = new Date().getFullYear());
+$$('[data-day]').forEach((el) => el.textContent = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }).toUpperCase());
+$$('[data-top]').forEach((b) => b.onclick = () => scrollTo({ top: 0, behavior: 'smooth' }));
+$$('[data-copy]').forEach((b) => b.onclick = () => { navigator.clipboard?.writeText('prakashswami.dev@gmail.com'); b.textContent = 'Copied ✓'; setTimeout(() => b.textContent = 'Copy email', 1600); });
+$$('[data-iconrow]').forEach((el) => el.innerHTML = [['gh', 'GitHub'], ['li', 'LinkedIn'], ['lc', 'LeetCode'], ['cv', 'Résumé']].map(([k, n]) => `<a href="#">${I[k]}${n}</a>`).join(''));
+$$('[data-links]').forEach((el) => el.innerHTML = [['ml', 'Email me'], ['li', 'LinkedIn'], ['gh', 'GitHub'], ['cv', 'Résumé']].map(([k, n]) => `<a href="#">${I[k]}${n}</a>`).join(''));
+$$('[data-cards]').forEach((el) => el.innerHTML = [['ml', 'Email', 'prakashswami.dev@gmail.com', 'Write ↗'], ['li', 'LinkedIn', 'in/prakash-swami', 'Connect ↗'], ['gh', 'GitHub', '@sprakash2006', 'Follow ↗'], ['ph', 'Call', '+91 8767690131', 'Call ↗']].map(([k, n, v, a]) => `<a class="m" href="#"><span class="ic">${I[k]}</span><span class="act">${a}</span><b>${n}</b><span>${v}</span></a>`).join(''));
+const clock = () => $$('[data-clock]').forEach((el) => el.textContent = new Date().toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit' }));
+clock(); setInterval(clock, 30000);
+document.getElementById('openF').onclick = (e) => { const d = document.getElementById('drw'); d.classList.toggle('open'); e.target.textContent = d.classList.contains('open') ? 'Close ↑' : 'Write a message ↓'; };
+new IntersectionObserver(([e], o) => { if (e.isIntersecting) { e.target.classList.add('in'); o.disconnect(); } }, { threshold: 0.5 }).observe(document.getElementById('sig'));
+
+/* rough dot map of India, Pune marked */
+(() => {
+  const poly = [[120,40],[175,20],[215,45],[230,90],[300,110],[345,140],[330,170],[285,175],[270,215],[250,250],[225,300],[205,345],[190,395],[172,360],[150,305],[128,260],[105,230],[70,215],[55,180],[85,160],[95,120],[105,80]];
+  const inside = (x, y) => { let c = false; for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) { const [xi, yi] = poly[i], [xj, yj] = poly[j]; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) c = !c; } return c; };
+  let dots = '';
+  for (let y = 10; y < 410; y += 10) for (let x = 40; x < 360; x += 10) if (inside(x, y)) dots += `<circle cx="${x}" cy="${y}" r="2.2" fill="rgba(255,255,255,.16)"/>`;
+  const px = 118, py = 252;
+  document.getElementById('mapsvg').innerHTML = dots + `<circle class="pinpulse" cx="${px}" cy="${py}" r="6" fill="#ef4444"/><circle cx="${px}" cy="${py}" r="6" fill="#ef4444"/><line x1="${px}" y1="${py}" x2="${px + 60}" y2="${py - 40}" stroke="rgba(239,68,68,.6)"/><text x="${px + 64}" y="${py - 42}" fill="#ededed" font-family="JetBrains Mono" font-size="12">Pune</text>`;
+})();
+
+/* FAQ */
+(() => {
+  const qa = [['Are you available right now?', "Yes. I'm actively looking for web and software developer internships, and I take on freelance work alongside my B.Tech at VIT Pune."], ['What kind of work do you do?', 'Full-stack web apps (Next.js, React, Node, PostgreSQL), mobile apps with Flutter, and AI features with LLMs and RAG.'], ['Remote or on-site?', "Both work. I'm based in Pune (IST) and happy to work remotely with any time zone."], ['How fast do you reply?', 'Usually within a day. For anything urgent, email or call is quickest.']];
+  document.getElementById('qas').innerHTML = qa.map(([q, a], k) => `<div class="qa${k === 0 ? ' open' : ''}"><button type="button">${q}<i>+</i></button><div class="a"><div><p>${a}</p></div></div></div>`).join('');
+  $$('.qa button').forEach((b) => b.onclick = () => b.parentElement.classList.toggle('open'));
+})();
+</script>
+</body>
+</html>

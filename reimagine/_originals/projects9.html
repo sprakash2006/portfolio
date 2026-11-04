@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Projects layouts</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@500;700;900&display=swap" rel="stylesheet" />
+<style>
+  :root { --bg:#0a0a0a; --fg:#ededed; --mu:#8a8a8a; --card:#111113; --bd:rgba(255,255,255,.09); --red:#ef4444; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--fg); font-family:Inter,sans-serif; overflow-x:clip; }
+  body::before { content:''; position:fixed; inset:0; z-index:-1; background-size:32px 32px; background-image:linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 0),linear-gradient(180deg,rgba(255,255,255,.03) 1px,transparent 0); }
+  section { padding:110px 20px 110px; border-bottom:1px solid var(--bd); position:relative; display:flex; flex-direction:column; align-items:center; }
+  .wrap { width:100%; max-width:1088px; }
+  .tag { position:absolute; top:24px; left:24px; right:24px; font:500 12px 'JetBrains Mono'; color:var(--mu); }
+  .tag b { color:var(--red); font-weight:500; }
+  .label { font:600 12px 'JetBrains Mono'; letter-spacing:.1em; text-transform:uppercase; color:var(--mu); margin-bottom:34px; display:flex; align-items:center; gap:12px; }
+  .label span { color:var(--red); } .label::after { content:''; flex:1; height:1px; background:var(--bd); }
+  .meta { font:500 11px 'JetBrains Mono'; color:var(--mu); text-transform:uppercase; letter-spacing:.06em; } .meta b { color:var(--red); font-weight:500; }
+  .chip { display:inline-block; font:11px 'JetBrains Mono'; padding:3px 9px; border:1px solid var(--bd); border-radius:6px; color:#a3a3a3; margin:0 5px 6px 0; }
+  .ttl { font:900 clamp(32px,3.8vw,50px)/.95 Outfit; letter-spacing:-.03em; } .ttl::first-letter { color:var(--red); }
+  .desc { color:#b5b5b5; font-size:15px; line-height:1.65; }
+  #index { position:fixed; right:18px; top:50%; transform:translateY(-50%); z-index:50; display:flex; flex-direction:column; gap:10px; }
+  #index a { font:500 11px 'JetBrains Mono'; color:var(--mu); text-decoration:none; text-align:right; } #index a:hover { color:var(--fg); }
+  .rv { opacity:0; transform:translateY(26px); transition:opacity .8s, transform .8s cubic-bezier(.2,.8,.2,1); } .rv.in { opacity:1; transform:none; }
+
+  /* the highlighted "more details" button + quick links (shared) */
+  .more { position:relative; display:inline-flex; align-items:center; gap:10px; font:600 13px 'JetBrains Mono'; text-decoration:none; color:#140404; background:var(--red); padding:12px 20px; border-radius:999px; overflow:hidden; box-shadow:0 10px 30px rgba(239,68,68,.25); transition:box-shadow .3s, transform .3s; }
+  .more::before { content:''; position:absolute; inset:0; background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.45) 50%,transparent 70%); transform:translateX(-120%); transition:transform .8s; }
+  .more:hover { transform:translateY(-2px); box-shadow:0 16px 40px rgba(239,68,68,.4); } .more:hover::before { transform:translateX(120%); }
+  .more .ar { transition:transform .3s; } .more:hover .ar { transform:translateX(4px); }
+  .links { display:flex; flex-wrap:wrap; gap:8px; }
+  .ql { display:inline-flex; align-items:center; gap:7px; font:500 12px 'JetBrains Mono'; color:#c9c9c9; text-decoration:none; padding:9px 13px; border:1px solid var(--bd); border-radius:999px; transition:border-color .25s, color .25s, background .25s; }
+  .ql svg { width:15px; height:15px; } .ql:hover { border-color:rgba(239,68,68,.6); color:var(--fg); background:rgba(239,68,68,.06); }
+  .ql.icon { padding:0; width:40px; height:40px; justify-content:center; } .ql.icon span { display:none; }
+  .actions { display:flex; flex-wrap:wrap; align-items:center; gap:12px; margin-top:24px; }
+
+  /* the "video" (shared) — cycles screenshots like a muted autoplay clip until real videos exist */
+  .vid { position:relative; overflow:hidden; background:#000; aspect-ratio:16/10; }
+  .vid img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity .8s; transform:scale(1.04); }
+  .vid img.on { opacity:1; animation:kb 3.2s linear forwards; }
+  @keyframes kb { to { transform:scale(1); } }
+  .vid .ctrl { position:absolute; left:12px; right:12px; bottom:10px; display:flex; align-items:center; gap:10px; z-index:2; opacity:.0; transition:opacity .3s; }
+  .vid:hover .ctrl { opacity:1; }
+  .vid .pp { all:unset; cursor:pointer; width:28px; height:28px; border-radius:50%; background:rgba(0,0,0,.6); display:flex; align-items:center; justify-content:center; font-size:10px; color:#fff; }
+  .vid .prog { flex:1; height:3px; border-radius:3px; background:rgba(255,255,255,.25); overflow:hidden; } .vid .prog i { display:block; height:100%; width:0; background:var(--red); }
+  .vid .live { position:absolute; top:12px; left:12px; z-index:2; font:600 10px 'JetBrains Mono'; letter-spacing:.06em; background:rgba(0,0,0,.6); color:#fff; padding:4px 8px; border-radius:999px; display:flex; align-items:center; gap:6px; }
+  .vid .live::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--red); animation:blink 1.4s infinite; }
+  @keyframes blink { 50% { opacity:.2; } }
+
+  /* 01 browser-frame rows */
+  .r1 { display:grid; grid-template-columns:1.15fr 1fr; gap:56px; align-items:center; margin-bottom:110px; }
+  .browser { border:1px solid var(--bd); border-radius:14px; overflow:hidden; background:#141416; box-shadow:0 40px 80px rgba(0,0,0,.5); transition:transform .5s cubic-bezier(.2,.8,.2,1); }
+  .r1:hover .browser { transform:translateY(-4px); }
+  .bbar { display:flex; align-items:center; gap:6px; padding:10px 12px; border-bottom:1px solid var(--bd); }
+  .bbar i { width:10px; height:10px; border-radius:50%; background:#2b2b2e; } .bbar i:first-child { background:var(--red); }
+  .bbar span { margin-left:10px; flex:1; font:11px 'JetBrains Mono'; color:var(--mu); background:#0d0d0f; border-radius:6px; padding:5px 10px; }
+  .r1 .ttl { margin:10px 0 14px; }
+  .r1 .stack { margin-top:16px; }
+
+  /* 02 one big card per project */
+  .c2 { display:grid; grid-template-columns:1.2fr 1fr; border:1px solid var(--bd); border-radius:24px; background:var(--card); overflow:hidden; margin-bottom:26px; transition:border-color .3s; }
+  .c2:hover { border-color:rgba(239,68,68,.4); }
+  .c2 .vid { aspect-ratio:auto; min-height:380px; height:100%; }
+  .c2 .side { padding:34px; display:flex; flex-direction:column; }
+  .c2 .top { display:flex; justify-content:space-between; align-items:center; }
+  .c2 .num { font:900 54px/1 Outfit; color:rgba(255,255,255,.06); }
+  .c2 .ttl { margin:6px 0 14px; }
+  .c2 .actions { margin-top:auto; padding-top:24px; border-top:1px solid var(--bd); justify-content:space-between; }
+
+  /* 03 media + thumbnails */
+  .r3 { display:grid; grid-template-columns:1.2fr 1fr; gap:50px; align-items:center; margin-bottom:110px; }
+  .r3 .main { border-radius:18px; overflow:hidden; border:1px solid var(--bd); }
+  .thumbs { display:flex; gap:8px; margin-top:10px; }
+  .thumbs button { all:unset; cursor:pointer; position:relative; flex:1; aspect-ratio:16/10; border-radius:8px; overflow:hidden; border:1px solid var(--bd); opacity:.5; transition:opacity .25s, border-color .25s; }
+  .thumbs button img { width:100%; height:100%; object-fit:cover; display:block; }
+  .thumbs button.on, .thumbs button:hover { opacity:1; } .thumbs button.on { border-color:var(--red); }
+  .thumbs .playic { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:12px; color:#fff; background:rgba(0,0,0,.35); }
+  .r3 .main .still { width:100%; aspect-ratio:16/10; object-fit:cover; display:block; animation:fadeIn .45s; }
+  @keyframes fadeIn { from { opacity:0; } }
+  .r3 .ttl { margin:10px 0 14px; }
+
+  /* 04 tabs showcase */
+  .tabs { position:relative; display:flex; gap:2px; padding:4px; border:1px solid var(--bd); border-radius:999px; margin-bottom:26px; overflow-x:auto; scrollbar-width:none; }
+  .tabs button { all:unset; position:relative; z-index:1; cursor:pointer; white-space:nowrap; padding:8px 15px; font:500 12px 'JetBrains Mono'; color:var(--mu); border-radius:999px; transition:color .25s; }
+  .tabs button.on { color:#140404; } .tabs button:not(.on):hover { color:var(--fg); }
+  .tabs .pill { position:absolute; top:4px; height:calc(100% - 8px); background:var(--red); border-radius:999px; transition:left .4s cubic-bezier(.2,.8,.2,1), width .4s cubic-bezier(.2,.8,.2,1); }
+  .stage4 { border:1px solid var(--bd); border-radius:24px; background:var(--card); padding:16px; display:grid; grid-template-columns:1.2fr 1fr; gap:34px; min-height:420px; overflow:hidden; }
+  .stage4 .vid { border-radius:14px; }
+  .stage4 .side { padding:16px 16px 16px 0; display:flex; flex-direction:column; justify-content:center; }
+  .stage4 .ttl { margin:10px 0 14px; }
+  .inL { animation:inL .5s cubic-bezier(.2,.8,.2,1); } .inR { animation:inR .5s cubic-bezier(.2,.8,.2,1); }
+  @keyframes inL { from { opacity:0; transform:translateX(30px); } } @keyframes inR { from { opacity:0; transform:translateX(-30px); } }
+  .counter { display:flex; justify-content:space-between; align-items:center; margin-top:16px; font:12px 'JetBrains Mono'; color:var(--mu); }
+  .counter button { all:unset; cursor:pointer; width:38px; height:38px; border-radius:50%; border:1px solid var(--bd); display:inline-flex; align-items:center; justify-content:center; margin-left:6px; transition:.2s; } .counter button:hover { border-color:var(--red); color:var(--red); }
+
+  /* 05 hover-to-play minimal rows */
+  .r5 { display:grid; grid-template-columns:60px 1fr 1.1fr; gap:36px; align-items:center; padding:36px 0; border-bottom:1px solid var(--bd); }
+  .r5:first-child { border-top:1px solid var(--bd); }
+  .r5 .n { font:900 40px Outfit; color:transparent; -webkit-text-stroke:1px rgba(255,255,255,.2); align-self:start; transition:-webkit-text-stroke-color .3s; }
+  .r5:hover .n { -webkit-text-stroke-color:var(--red); }
+  .r5 .vid { border-radius:14px; }
+  .r5 .vid .poster-ic { position:absolute; inset:0; z-index:2; display:flex; align-items:center; justify-content:center; transition:opacity .3s; }
+  .r5 .vid .poster-ic span { width:56px; height:56px; border-radius:50%; background:rgba(239,68,68,.9); color:#140404; display:flex; align-items:center; justify-content:center; font-size:16px; box-shadow:0 0 0 8px rgba(239,68,68,.2); }
+  .r5 .vid.playing .poster-ic { opacity:0; }
+  .r5 .ttl { margin:8px 0 12px; font-size:clamp(28px,3.2vw,42px); }
+  .r5 .desc { font-size:14px; }
+  .r5 .actions { margin-top:18px; }
+
+  /* 06 device frames */
+  .r6 { display:grid; grid-template-columns:1.15fr 1fr; gap:56px; align-items:center; margin-bottom:110px; }
+  .dev-zone { position:relative; display:flex; justify-content:center; align-items:center; min-height:420px; }
+  .dev-zone::before { content:''; position:absolute; width:70%; aspect-ratio:1; border-radius:50%; background:radial-gradient(circle,rgba(239,68,68,.2),transparent 65%); filter:blur(10px); }
+  .laptop { position:relative; width:100%; }
+  .laptop .lid { border:10px solid #1c1c1f; border-bottom-width:14px; border-radius:16px 16px 4px 4px; background:#000; overflow:hidden; }
+  .laptop .base { height:14px; margin:0 -6%; background:linear-gradient(#2c2c30,#161618); border-radius:0 0 14px 14px; position:relative; } .laptop .base::before { content:''; position:absolute; left:50%; width:90px; margin-left:-45px; height:5px; background:#0e0e10; border-radius:0 0 6px 6px; }
+  .phone { position:relative; width:230px; border:10px solid #1c1c1f; border-radius:36px; overflow:hidden; background:#000; box-shadow:0 40px 80px rgba(0,0,0,.6); }
+  .phone::before { content:''; position:absolute; top:8px; left:50%; width:70px; height:18px; margin-left:-35px; border-radius:12px; background:#000; z-index:3; }
+  .phone .vid { aspect-ratio:9/19; }
+  .r6 .dev { transition:transform .6s cubic-bezier(.2,.8,.2,1); } .r6:hover .dev { transform:translateY(-6px) rotate(-1deg); }
+  .r6 .ttl { margin:10px 0 14px; }
+  .kind { display:inline-flex; align-items:center; gap:6px; font:600 10px 'JetBrains Mono'; letter-spacing:.08em; color:var(--red); border:1px solid rgba(239,68,68,.4); background:rgba(239,68,68,.08); padding:4px 9px; border-radius:999px; margin-left:8px; vertical-align:1px; }
+
+  @media (max-width:860px) {
+    #index { display:none; }
+    .r1, .c2, .r3, .stage4, .r6 { grid-template-columns:1fr; gap:24px; }
+    .c2 .vid { min-height:0; aspect-ratio:16/10; } .c2 .side { padding:22px; }
+    .stage4 .side { padding:0 6px 6px; }
+    .r5 { grid-template-columns:1fr; gap:16px; } .r5 .n { display:none; }
+    .dev-zone { min-height:0; }
+  }
+</style>
+</head>
+<body>
+<nav id="index"><a href="#x1">01 browser frame</a><a href="#x2">02 big card</a><a href="#x3">03 video + gallery</a><a href="#x4">04 tabs</a><a href="#x5">05 hover to play</a><a href="#x6">06 device frames</a></nav>
+
+<section id="x1">
+  <div class="tag"><b>01</b> — browser frame · the video plays inside a little browser window; info on the right</div>
+  <div class="wrap"><div class="label"><span>//</span> Featured Projects</div><div id="s1"></div></div>
+</section>
+
+<section id="x2">
+  <div class="tag"><b>02</b> — big card · each project is one card: video left, details right, links along the bottom</div>
+  <div class="wrap"><div class="label"><span>//</span> Featured Projects</div><div id="s2"></div></div>
+</section>
+
+<section id="x3">
+  <div class="tag"><b>03</b> — video + gallery · the video first, with screenshot thumbnails underneath to flick through</div>
+  <div class="wrap"><div class="label"><span>//</span> Featured Projects</div><div id="s3"></div></div>
+</section>
+
+<section id="x4">
+  <div class="tag"><b>04</b> — tabs · one showcase area; pick a project from the tabs (or arrows) and it slides in. Compact: all 8 in one screen</div>
+  <div class="wrap"><div class="label"><span>//</span> Featured Projects</div><div class="tabs" id="tabs4"></div><div id="s4"></div></div>
+</section>
+
+<section id="x5">
+  <div class="tag"><b>05</b> — hover to play · calm rows with a poster image; the video plays only while you hover it</div>
+  <div class="wrap"><div class="label"><span>//</span> Featured Projects</div><div id="s5"></div></div>
+</section>
+
+<section id="x6">
+  <div class="tag"><b>06</b> — device frames · web projects play in a laptop, mobile apps in a phone</div>
+  <div class="wrap"><div class="label"><span>//</span> Featured Projects</div><div id="s6"></div></div>
+</section>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const P = [
+  { s:'medichain', t:'MediChain', c:'Blockchain', y:'2026', m:true, d:'Patient-owned medical records: AES-256 encrypted files on IPFS, every access logged on Polygon, gasless for patients.', tags:['Flutter','React','Solidity','Polygon','IPFS'] },
+  { s:'the-gp-edge', t:'The GP Edge', c:'Web', y:'2026', d:'SaaS for General Practitioners: study analytics, AI-powered Medicare billing lookup and an exam-prep system.', tags:['Next.js','TypeScript','PostgreSQL','Gemini'] },
+  { s:'solarmitra', t:'SolarMitra', c:'Mobile', y:'2026', m:true, d:'AR rooftop solar assessment: maps the roof, detects obstacles with YOLOv8 and builds a PDF report in under 2 minutes.', tags:['Flutter','ARCore','YOLOv8','TFLite'] },
+  { s:'papertrail', t:'PaperTrail', c:'AI', y:'2026', d:'RAG knowledge retrieval over PDF, Word, Excel and CSV with semantic indexing and citation-backed answers.', tags:['React','Python','ChromaDB','OpenAI'] },
+  { s:'portfolio', t:'Portfolio', c:'Web', y:'2026', d:'This site: themeable portfolio with live GitHub and LeetCode heatmaps and project detail pages.', tags:['Next.js','Tailwind','three.js'] },
+  { s:'inboxly', t:'Inboxly', c:'Web', y:'2026', d:'WhatsApp Business messaging with a sales CRM: shared inbox, bulk campaigns, workflows and a Gemini auto-reply agent.', tags:['React','Node.js','Redis','BullMQ'] },
+  { s:'gharbudget', t:'GharBudget', c:'Mobile', y:'2026', m:true, d:'Household expense manager with real-time cloud sync, budgets, categories and spending charts.', tags:['React Native','Firebase'] },
+  { s:'ai-business-analyst-agent', t:'BA Agent', c:'AI', y:'2026', d:'LLM analyst workspace that turns project evidence into reviewed, source-cited requirements, BRDs and sprint plans.', tags:['Next.js','FastAPI','OpenRouter'] },
+];
+P.forEach((p, i) => { p.n = String(i + 1).padStart(2, '0'); p.shots = [0, 1, 2, 3].map((k) => `img/sample-0${((i + k) % 5) + 1}.jpg`); });
+const ICON = {
+  gh: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-6 0-1.2.5-2.3 1.2-3.1-.1-.4-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.7 1.6.2 2.8.1 3.2.8.8 1.2 1.9 1.2 3.1 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .5z"/></svg>',
+  live: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3h7v7"/><path d="M10 14 21 3"/><path d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"/></svg>',
+  md: '<svg viewBox="0 0 24 24" fill="currentColor"><ellipse cx="6.5" cy="12" rx="6.5" ry="7"/><ellipse cx="17" cy="12" rx="3.3" ry="6.6"/><ellipse cx="22.2" cy="12" rx="1.3" ry="6"/></svg>',
+};
+const links = (p, iconOnly) => `<div class="links"><a class="ql${iconOnly ? ' icon' : ''}" href="#" title="GitHub">${ICON.gh}<span>GitHub</span></a><a class="ql${iconOnly ? ' icon' : ''}" href="#" title="Live project">${ICON.live}<span>Live</span></a><a class="ql${iconOnly ? ' icon' : ''}" href="#" title="Medium article">${ICON.md}<span>Medium</span></a></div>`;
+const more = (p) => `<a class="more" href="/projects/${p.s}">More detailed info <span class="ar">→</span></a>`;
+const chips = (p, m = 9) => p.tags.slice(0, m).map((t) => `<span class="chip">${t}</span>`).join('');
+const meta = (p) => `<div class="meta"><b>${p.n}</b> · ${p.c} · ${p.y}</div>`;
+const vidHTML = (p, opts = '') => `<div class="vid" data-v ${opts}>${p.shots.map((s) => `<img src="${s}" alt="">`).join('')}<span class="live">PREVIEW</span><div class="ctrl"><button class="pp">❚❚</button><div class="prog"><i></i></div></div></div>`;
+
+// A fake "muted autoplay video": crossfades the screenshots with a progress bar.
+// mode "view" plays while on screen, "hover" plays only while hovered.
+function wireVideo(v, mode = 'view') {
+  const imgs = [...v.querySelectorAll('img')], bar = v.querySelector('.prog i'), pp = v.querySelector('.pp');
+  let k = 0, t0 = 0, playing = false, user = true, seen = false, raf;
+  const show = () => imgs.forEach((im, j) => { im.classList.remove('on'); if (j === k) { void im.offsetWidth; im.classList.add('on'); } });
+  const tick = (now) => {
+    if (!playing) return;
+    if (!t0) t0 = now;
+    const p = (now - t0) / 3000;
+    bar.style.width = ((k + Math.min(1, p)) / imgs.length) * 100 + '%';
+    if (p >= 1) { k = (k + 1) % imgs.length; t0 = now; show(); }
+    raf = requestAnimationFrame(tick);
+  };
+  const play = () => { if (playing) return; playing = true; t0 = 0; pp.textContent = '❚❚'; v.classList.add('playing'); raf = requestAnimationFrame(tick); };
+  const pause = () => { playing = false; cancelAnimationFrame(raf); pp.textContent = '▶'; v.classList.remove('playing'); };
+  show();
+  pp.onclick = (e) => { e.preventDefault(); e.stopPropagation(); user = !playing; playing ? pause() : play(); };
+  if (mode === 'hover') { pause(); v.addEventListener('mouseenter', play); v.addEventListener('mouseleave', pause); v.addEventListener('click', () => (playing ? pause() : play())); }
+  else new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting && user) play(); else if (!e.isIntersecting) pause(); }), { threshold: 0.4 }).observe(v);
+  return { show: (i) => { k = i; t0 = 0; show(); } };
+}
+
+/* 01 browser frame */
+$('#s1').innerHTML = P.map((p) => `<div class="r1"><div class="browser rv"><div class="bbar"><i></i><i></i><i></i><span>${p.s}.app</span></div>${vidHTML(p)}</div><div class="rv">${meta(p)}<div class="ttl">${p.t}</div><p class="desc">${p.d}</p><div class="stack">${chips(p, 5)}</div><div class="actions">${more(p)}${links(p, true)}</div></div></div>`).join('');
+
+/* 02 big card */
+$('#s2').innerHTML = P.map((p) => `<div class="c2 rv">${vidHTML(p)}<div class="side"><div class="top">${meta(p)}<span class="num">${p.n}</span></div><div class="ttl">${p.t}</div><p class="desc">${p.d}</p><div style="margin-top:14px">${chips(p, 5)}</div><div class="actions">${links(p)}${more(p)}</div></div></div>`).join('');
+
+/* 03 video + gallery */
+$('#s3').innerHTML = P.map((p, i) => `<div class="r3" data-i="${i}"><div class="rv"><div class="main">${vidHTML(p)}</div><div class="thumbs"><button class="on" data-k="v"><img src="${p.shots[0]}" alt=""><span class="playic">▶</span></button>${p.shots.map((s, k) => `<button data-k="${k}"><img src="${s}" alt=""></button>`).join('')}</div></div><div class="rv">${meta(p)}<div class="ttl">${p.t}</div><p class="desc">${p.d}</p><div style="margin-top:14px">${chips(p, 5)}</div><div class="actions">${more(p)}</div><div style="margin-top:14px">${links(p)}</div></div></div>`).join('');
+document.querySelectorAll('.r3').forEach((r) => {
+  const p = P[+r.dataset.i], main = r.querySelector('.main'), btns = [...r.querySelectorAll('.thumbs button')];
+  btns.forEach((b) => b.onclick = () => {
+    btns.forEach((x) => x.classList.toggle('on', x === b));
+    if (b.dataset.k === 'v') { main.innerHTML = vidHTML(p); wireVideo(main.querySelector('.vid')); }
+    else main.innerHTML = `<img class="still" src="${p.shots[+b.dataset.k]}" alt="">`;
+  });
+});
+
+/* 04 tabs */
+(() => {
+  const T = $('#tabs4');
+  T.innerHTML = '<span class="pill"></span>' + P.map((p, i) => `<button data-i="${i}">${p.t}</button>`).join('');
+  const pill = T.querySelector('.pill'), btns = [...T.querySelectorAll('button')]; let cur = -1;
+  const go = (i) => {
+    const dir = i > cur ? 'inL' : 'inR'; cur = i; const p = P[i], b = btns[i];
+    btns.forEach((x) => x.classList.toggle('on', x === b)); pill.style.left = b.offsetLeft + 'px'; pill.style.width = b.offsetWidth + 'px';
+    b.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'smooth' });
+    $('#s4').innerHTML = `<div class="stage4 ${dir}">${vidHTML(p)}<div class="side">${meta(p)}<div class="ttl">${p.t}</div><p class="desc">${p.d}</p><div style="margin-top:14px">${chips(p, 5)}</div><div class="actions">${more(p)}${links(p, true)}</div></div></div><div class="counter"><span>${p.n} / 0${P.length}</span><span><button id="t4p">←</button><button id="t4n">→</button></span></div>`;
+    wireVideo($('#s4 .vid'));
+    $('#t4p').onclick = () => go((cur - 1 + P.length) % P.length); $('#t4n').onclick = () => go((cur + 1) % P.length);
+  };
+  btns.forEach((b) => b.onclick = () => go(+b.dataset.i));
+  go(0); addEventListener('resize', () => { const b = btns[cur]; pill.style.left = b.offsetLeft + 'px'; pill.style.width = b.offsetWidth + 'px'; });
+})();
+
+/* 05 hover to play */
+$('#s5').innerHTML = P.map((p) => `<div class="r5 rv"><span class="n">${p.n}</span><div>${vidHTML(p).replace('<span class="live">PREVIEW</span>', '<div class="poster-ic"><span>▶</span></div>')}</div><div>${meta(p)}<div class="ttl">${p.t}</div><p class="desc">${p.d}</p><div class="actions">${more(p)}${links(p, true)}</div></div></div>`).join('');
+
+/* 06 device frames */
+$('#s6').innerHTML = P.map((p) => `<div class="r6"><div class="dev-zone rv"><div class="dev ${p.m ? 'phone' : 'laptop'}">${p.m ? vidHTML(p) : `<div class="lid">${vidHTML(p)}</div><div class="base"></div>`}</div></div><div class="rv">${meta(p)}<div class="ttl">${p.t}</div><span class="kind">${p.m ? '▯ MOBILE APP' : '▭ WEB APP'}</span><p class="desc" style="margin-top:14px">${p.d}</p><div style="margin-top:14px">${chips(p, 5)}</div><div class="actions">${more(p)}${links(p, true)}</div></div></div>`).join('');
+
+// Wire every static video (section 4 wires its own when switching)
+document.querySelectorAll('#s1 .vid, #s2 .vid, #s3 .vid, #s6 .vid').forEach((v) => wireVideo(v));
+document.querySelectorAll('#s5 .vid').forEach((v) => wireVideo(v, 'hover'));
+
+const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: 0.15 });
+document.querySelectorAll('.rv').forEach((el, i) => { el.style.transitionDelay = (i % 2) * 120 + 'ms'; io.observe(el); });
+</script>
+</body>
+</html>

@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Projects concepts VIII</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@500;700;900&display=swap" rel="stylesheet" />
+<style>
+  :root { --bg:#0a0a0a; --fg:#ededed; --mu:#8a8a8a; --card:#111113; --bd:rgba(255,255,255,.09); --red:#ef4444; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--fg); font-family:Inter,sans-serif; overflow-x:clip; }
+  body::before { content:''; position:fixed; inset:0; z-index:-1; background-size:32px 32px; background-image:linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 0),linear-gradient(180deg,rgba(255,255,255,.03) 1px,transparent 0); }
+  section { padding:110px 20px 120px; border-bottom:1px solid var(--bd); position:relative; display:flex; flex-direction:column; align-items:center; }
+  .wrap { width:100%; max-width:1088px; }
+  .tag { position:absolute; top:24px; left:24px; right:24px; font:500 12px 'JetBrains Mono'; color:var(--mu); z-index:5; }
+  .tag b { color:var(--red); font-weight:500; }
+  .label { font:600 12px 'JetBrains Mono'; letter-spacing:.1em; text-transform:uppercase; color:var(--mu); margin-bottom:34px; display:flex; align-items:center; gap:12px; }
+  .label span { color:var(--red); } .label::after { content:''; flex:1; height:1px; background:var(--bd); }
+  .meta { font:500 11px 'JetBrains Mono'; color:var(--mu); text-transform:uppercase; letter-spacing:.06em; } .meta b { color:var(--red); font-weight:500; }
+  .chip { display:inline-block; font:11px 'JetBrains Mono'; padding:3px 9px; border:1px solid var(--bd); border-radius:6px; color:#a3a3a3; margin:0 5px 6px 0; }
+  .btn { display:inline-flex; align-items:center; gap:6px; font:600 12px 'JetBrains Mono'; text-decoration:none; padding:8px 14px; border-radius:999px; background:var(--red); color:#140404; transition:filter .2s; }
+  .btn .ar, .go .ar { display:inline-block; transition:transform .25s; }
+  a:hover .btn .ar, a:hover .go .ar { transform:translateX(4px); }
+  .desc { color:#b5b5b5; font-size:14px; line-height:1.6; }
+  .ttl { font:900 clamp(30px,3.6vw,46px)/.95 Outfit; letter-spacing:-.03em; } .ttl::first-letter { color:var(--red); }
+  .go { font:600 12px 'JetBrains Mono'; color:var(--fg); display:inline-flex; gap:6px; align-items:center; }
+  #index { position:fixed; right:18px; top:50%; transform:translateY(-50%); z-index:50; display:flex; flex-direction:column; gap:10px; }
+  #index a { font:500 11px 'JetBrains Mono'; color:var(--mu); text-decoration:none; text-align:right; } #index a:hover { color:var(--fg); }
+
+  /* 01 zoom-lite cards: the bit you liked from scroll zoom, without pinning */
+  .zl { display:block; text-decoration:none; color:var(--fg); margin-bottom:90px; }
+  .zl-frame { position:relative; height:min(78vh,620px); border-radius:24px; overflow:hidden; will-change:clip-path; }
+  .zl-frame img { width:100%; height:100%; object-fit:cover; display:block; will-change:transform; }
+  .zl-frame::after { content:''; position:absolute; inset:0; background:linear-gradient(0deg,rgba(10,10,10,.92),rgba(10,10,10,.1) 55%); }
+  .zl-in { position:absolute; left:0; right:0; bottom:0; z-index:2; padding:34px; display:flex; justify-content:space-between; align-items:flex-end; gap:30px; }
+  .zl-in .ttl { font-size:clamp(40px,6vw,84px); margin:8px 0 12px; }
+  .zl-in .desc { max-width:520px; color:#d4d4d4; }
+  .zl-n { position:absolute; top:26px; right:30px; z-index:2; font:900 40px Outfit; color:rgba(255,255,255,.85); }
+  .zl:hover .btn { filter:brightness(1.1); }
+
+  /* 02 red curtain cards */
+  .rc { display:grid; grid-template-columns:1fr 1fr; gap:22px; }
+  .rcc { position:relative; display:block; border:1px solid var(--bd); border-radius:20px; background:var(--card); padding:14px; text-decoration:none; color:var(--fg); overflow:hidden; transition:border-color .3s, transform .4s cubic-bezier(.2,.8,.2,1); }
+  .rcc:hover { border-color:rgba(239,68,68,.5); transform:translateY(-4px); }
+  .rcc .im { aspect-ratio:16/10; border-radius:12px; overflow:hidden; position:relative; }
+  .rcc .im img { width:100%; height:100%; object-fit:cover; transform:scale(1.12); transition:transform 1.2s cubic-bezier(.2,.8,.2,1); }
+  .rcc:hover .im img { transform:scale(1.05) !important; }
+  .rcc .im::after { content:''; position:absolute; inset:0; background:var(--red); transform-origin:right; transition:transform .9s cubic-bezier(.77,0,.18,1); }
+  .rcc .tx { padding:18px 6px 6px; }
+  .rcc .tx > * { opacity:0; transform:translateY(14px); transition:opacity .6s, transform .6s cubic-bezier(.2,.8,.2,1); }
+  .rcc .ttl { margin:8px 0 10px; font-size:30px; }
+  .rcc .row { display:flex; justify-content:space-between; align-items:center; margin-top:14px; }
+  .rcc.in .im::after { transform:scaleX(0); }
+  .rcc.in .im img { transform:scale(1); }
+  .rcc.in .tx > * { opacity:1; transform:none; }
+  .rcc.in .tx > *:nth-child(1) { transition-delay:.45s; } .rcc.in .tx > *:nth-child(2) { transition-delay:.52s; } .rcc.in .tx > *:nth-child(3) { transition-delay:.59s; } .rcc.in .tx > *:nth-child(4) { transition-delay:.66s; }
+  .rcc:nth-child(even) { margin-top:70px; }
+
+  /* 03 glass bar showcase */
+  .gb { display:grid; grid-template-columns:repeat(5,1fr); gap:20px; }
+  .gbc { position:relative; display:block; border-radius:22px; overflow:hidden; height:440px; text-decoration:none; color:var(--fg); border:1px solid var(--bd); }
+  .gbc:nth-child(4n+1), .gbc:nth-child(4n+4) { grid-column:span 3; } .gbc:nth-child(4n+2), .gbc:nth-child(4n+3) { grid-column:span 2; }
+  .gbc img { position:absolute; left:0; top:-12%; width:100%; height:124%; object-fit:cover; will-change:transform; transition:filter .5s; filter:brightness(.8); }
+  .gbc:hover img { filter:brightness(1); }
+  .glass { position:absolute; left:14px; right:14px; bottom:14px; padding:18px 20px; border-radius:16px; background:rgba(14,14,16,.55); backdrop-filter:blur(16px) saturate(1.4); -webkit-backdrop-filter:blur(16px) saturate(1.4); border:1px solid rgba(255,255,255,.1); transform:translateY(calc(100% + 20px)); transition:transform .8s cubic-bezier(.2,.8,.2,1); }
+  .gbc.in .glass { transform:none; }
+  .glass .top { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+  .glass .ttl { font-size:28px; margin-top:6px; }
+  .glass .arr { width:40px; height:40px; flex:none; border-radius:50%; background:var(--red); color:#140404; display:flex; align-items:center; justify-content:center; font:600 15px 'JetBrains Mono'; transition:transform .3s; }
+  .gbc:hover .arr { transform:rotate(-45deg); }
+  .glass .more { display:grid; grid-template-rows:0fr; transition:grid-template-rows .5s cubic-bezier(.2,.8,.2,1); } .glass .more > div { overflow:hidden; }
+  .gbc:hover .glass .more { grid-template-rows:1fr; }
+  .glass .desc { font-size:13px; padding-top:10px; color:#d0d0d0; }
+
+  /* 04 number cards */
+  .nc { display:grid; grid-template-columns:1fr 1fr; gap:110px 40px; padding-top:40px; }
+  .ncc { position:relative; display:block; text-decoration:none; color:var(--fg); }
+  .ncc:nth-child(even) { transform:translateY(120px); }
+  .ncc .big { position:absolute; top:-70px; left:-10px; z-index:0; font:900 clamp(110px,14vw,190px)/1 Outfit; letter-spacing:-.05em; color:transparent; -webkit-text-stroke:1.5px rgba(239,68,68,.35); will-change:transform; pointer-events:none; }
+  .ncc .body { position:relative; z-index:1; border:1px solid var(--bd); border-radius:20px; background:rgba(17,17,19,.92); padding:14px; transition:border-color .3s, transform .4s cubic-bezier(.2,.8,.2,1); }
+  .ncc:hover .body { border-color:rgba(239,68,68,.5); transform:translateY(-4px); }
+  .ncc .im { aspect-ratio:16/10; border-radius:12px; overflow:hidden; } .ncc .im img { width:100%; height:100%; object-fit:cover; transition:transform .7s cubic-bezier(.2,.8,.2,1); } .ncc:hover .im img { transform:scale(1.05); }
+  .ncc .tx { padding:16px 6px 6px; } .ncc .ttl { font-size:28px; margin:6px 0 8px; } .ncc .desc { font-size:13px; margin-bottom:12px; }
+  .ncc .rise { opacity:0; transform:translateY(40px); transition:opacity .8s, transform .8s cubic-bezier(.2,.8,.2,1); } .ncc.in .rise { opacity:1; transform:none; }
+
+  /* 05 line rows with hover preview */
+  .lr { position:relative; }
+  .lrr { position:relative; display:grid; grid-template-columns:70px 1fr 220px 120px; gap:20px; align-items:center; padding:28px 10px; text-decoration:none; color:var(--fg); }
+  .lrr::after { content:''; position:absolute; left:0; right:0; bottom:0; height:1px; background:var(--bd); transform:scaleX(0); transform-origin:left; transition:transform 1.1s cubic-bezier(.2,.8,.2,1); }
+  .lrr::before { content:''; position:absolute; left:0; bottom:0; height:1px; width:100%; background:var(--red); transform:scaleX(0); transform-origin:left; transition:transform .5s cubic-bezier(.2,.8,.2,1); z-index:1; }
+  .lrr.in::after { transform:scaleX(1); } .lrr:hover::before { transform:scaleX(1); }
+  .lrr .n { font:500 12px 'JetBrains Mono'; color:var(--mu); }
+  .lrr .ttl { font-size:clamp(28px,3.8vw,48px); transition:transform .4s cubic-bezier(.2,.8,.2,1); }
+  .lrr:hover .ttl { transform:translateX(10px); } .lrr:hover .n { color:var(--red); }
+  .lrr .tags { font:12px 'JetBrains Mono'; color:var(--mu); }
+  .lrr .go { justify-self:end; color:var(--mu); transition:color .25s; } .lrr:hover .go { color:var(--red); }
+  .lrr > * { opacity:0; transform:translateY(16px); transition:opacity .6s, transform .6s cubic-bezier(.2,.8,.2,1); }
+  .lrr.in > * { opacity:1; transform:none; } .lrr.in > *:nth-child(2) { transition-delay:.06s; } .lrr.in > *:nth-child(3) { transition-delay:.12s; } .lrr.in > *:nth-child(4) { transition-delay:.18s; }
+  .lrr:hover .ttl { transition-delay:0s; }
+  .peek { position:absolute; width:300px; aspect-ratio:16/10; border-radius:14px; overflow:hidden; pointer-events:none; z-index:5; right:170px; top:0; opacity:0; transform:scale(.9) rotate(-3deg); transition:opacity .3s, transform .4s cubic-bezier(.2,.8,.2,1), top .45s cubic-bezier(.2,.8,.2,1); box-shadow:0 30px 70px rgba(0,0,0,.6); border:1px solid var(--bd); }
+  .peek.on { opacity:1; transform:scale(1) rotate(-3deg); }
+  .peek img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity .3s; } .peek img.on { opacity:1; }
+
+  @media (max-width:860px) {
+    #index { display:none; }
+    .zl-frame { height:70vh; } .zl-in { flex-direction:column; align-items:flex-start; padding:22px; }
+    .rc, .nc { grid-template-columns:1fr; } .rcc:nth-child(even) { margin-top:0; } .ncc:nth-child(even) { transform:none; } .nc { gap:90px; }
+    .gb { grid-template-columns:1fr; } .gbc { grid-column:auto !important; height:380px; } .glass .more { grid-template-rows:1fr; }
+    .lrr { grid-template-columns:40px 1fr auto; } .lrr .tags { display:none; } .peek { display:none; }
+  }
+  @media (prefers-reduced-motion:reduce) { *, *::before, *::after { transition:none !important; } }
+</style>
+</head>
+<body>
+<nav id="index"><a href="#x1">01 zoom-lite cards</a><a href="#x2">02 red curtain</a><a href="#x3">03 glass bar</a><a href="#x4">04 number cards</a><a href="#x5">05 line rows</a></nav>
+
+<section id="x1">
+  <div class="tag"><b>01</b> — zoom-lite · the scroll zoom you liked, simplified: each big card opens out as it scrolls in, the page never stops</div>
+  <div class="wrap"><div class="label"><span>//</span> Featured Projects</div><div id="zl"></div></div>
+</section>
+
+<section id="x2">
+  <div class="tag"><b>02</b> — red curtain · a red panel slides off each screenshot as it scrolls in, then the text follows</div>
+  <div class="wrap"><div class="label"><span>//</span> Featured Projects</div><div class="rc" id="rc"></div></div>
+</section>
+
+<section id="x3">
+  <div class="tag"><b>03</b> — glass bar · wide and narrow image cards; a frosted info bar slides up, images drift gently, hover shows more</div>
+  <div class="wrap"><div class="label"><span>//</span> Featured Projects</div><div class="gb" id="gb"></div></div>
+</section>
+
+<section id="x4">
+  <div class="tag"><b>04</b> — number cards · big outlined numbers drift behind staggered cards as you scroll</div>
+  <div class="wrap"><div class="label"><span>//</span> Featured Projects</div><div class="nc" id="nc"></div></div>
+</section>
+
+<section id="x5">
+  <div class="tag"><b>05</b> — line rows · a clean list that draws its lines as you scroll; hovering a row floats its screenshot</div>
+  <div class="wrap"><div class="label"><span>//</span> Featured Projects</div><div class="lr" id="lr"><div class="peek" id="peek"></div></div></div>
+</section>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const P = [
+  { t:'MediChain', c:'Blockchain', y:'2026', d:'Patient-owned medical records: AES-256 encrypted files on IPFS, every access logged on Polygon, gasless for patients.', tags:['Flutter','React','Solidity','Polygon','IPFS'] },
+  { t:'The GP Edge', c:'Web', y:'2026', d:'SaaS for General Practitioners: study analytics, AI-powered Medicare billing lookup and an exam-prep system.', tags:['Next.js','TypeScript','PostgreSQL','Gemini'] },
+  { t:'SolarMitra', c:'Mobile', y:'2026', d:'AR rooftop solar assessment: maps the roof, detects obstacles with YOLOv8 and builds a PDF report in under 2 minutes.', tags:['Flutter','ARCore','YOLOv8','TFLite'] },
+  { t:'PaperTrail', c:'AI', y:'2026', d:'RAG knowledge retrieval over PDF, Word, Excel and CSV with semantic indexing and citation-backed answers.', tags:['React','Python','ChromaDB','OpenAI'] },
+  { t:'Portfolio', c:'Web', y:'2026', d:'This site: themeable portfolio with live GitHub and LeetCode heatmaps and project detail pages.', tags:['Next.js','Tailwind','three.js'] },
+  { t:'Inboxly', c:'Web', y:'2026', d:'WhatsApp Business messaging with a sales CRM: shared inbox, bulk campaigns, workflows and a Gemini auto-reply agent.', tags:['React','Node.js','Redis','BullMQ'] },
+  { t:'GharBudget', c:'Mobile', y:'2026', d:'Household expense manager with real-time cloud sync, budgets, categories and spending charts.', tags:['React Native','Firebase'] },
+  { t:'BA Agent', c:'AI', y:'2026', d:'LLM analyst workspace that turns project evidence into reviewed, source-cited requirements, BRDs and sprint plans.', tags:['Next.js','FastAPI','OpenRouter'] },
+];
+P.forEach((p, i) => { p.img = `img/sample-0${(i % 5) + 1}.jpg`; p.n = String(i + 1).padStart(2, '0'); });
+const chips = (p, m = 9) => p.tags.slice(0, m).map((t) => `<span class="chip">${t}</span>`).join('');
+const meta = (p) => `<div class="meta"><b>${p.n}</b> · ${p.c} · ${p.y}</div>`;
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+const effects = [];
+(function loop() { effects.forEach((f) => f()); requestAnimationFrame(loop); })();
+const smoothed = (calc, apply, k = 0.12) => { let v = calc(); effects.push(() => { v += (calc() - v) * k; apply(v); }); };
+// One-time "in view" class for the CSS-driven reveals
+const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: 0.25 });
+
+/* 01 zoom-lite */
+(() => {
+  $('#zl').innerHTML = P.slice(0, 4).map((p) => `<a class="zl" href="#"><div class="zl-frame"><img src="${p.img}" alt=""><span class="zl-n">${p.n}</span><div class="zl-in"><div>${meta(p)}<div class="ttl">${p.t}</div><p class="desc">${p.d}</p></div><span class="btn">View project <span class="ar">→</span></span></div></div></a>`).join('');
+  document.querySelectorAll('.zl').forEach((z) => {
+    const f = z.querySelector('.zl-frame'), img = f.querySelector('img'), txt = [...f.querySelectorAll('.zl-in, .zl-n')];
+    // 0 when the card's top enters the bottom of the screen, 1 when it reaches 25% from the top
+    smoothed(() => clamp((innerHeight - f.getBoundingClientRect().top) / (innerHeight * 0.75)), (v) => {
+      const e = easeOut(v);
+      f.style.clipPath = `inset(${(1 - e) * 10}% ${(1 - e) * 14}% round ${24 + (1 - e) * 16}px)`;
+      img.style.transform = `scale(${1.2 - e * 0.2})`;
+      const t = clamp((v - 0.55) / 0.35);
+      txt.forEach((el) => { el.style.opacity = t; el.style.transform = `translateY(${(1 - t) * 20}px)`; });
+    });
+  });
+})();
+
+/* 02 red curtain */
+(() => {
+  $('#rc').innerHTML = P.map((p) => `<a class="rcc" href="#"><div class="im"><img src="${p.img}" alt=""></div><div class="tx">${meta(p)}<div class="ttl">${p.t}</div><p class="desc">${p.d}</p><div class="row"><div>${chips(p, 3)}</div><span class="go">View <span class="ar">→</span></span></div></div></a>`).join('');
+  document.querySelectorAll('.rcc').forEach((c) => io.observe(c));
+})();
+
+/* 03 glass bar */
+(() => {
+  $('#gb').innerHTML = P.map((p) => `<a class="gbc" href="#"><img src="${p.img}" alt=""><div class="glass"><div class="top"><div>${meta(p)}<div class="ttl">${p.t}</div></div><span class="arr">→</span></div><div class="more"><div><p class="desc">${p.d}</p><div style="margin-top:10px">${chips(p, 4)}</div></div></div></div></a>`).join('');
+  document.querySelectorAll('.gbc').forEach((c) => {
+    io.observe(c);
+    const img = c.querySelector('img');
+    smoothed(() => { const r = c.getBoundingClientRect(); return (r.top + r.height / 2 - innerHeight / 2) / innerHeight; }, (v) => { img.style.transform = `translateY(${clamp(v, -1, 1) * -9}%)`; }, 0.15);
+  });
+})();
+
+/* 04 number cards */
+(() => {
+  $('#nc').innerHTML = P.map((p) => `<a class="ncc" href="#"><span class="big">${p.n}</span><div class="rise"><div class="body"><div class="im"><img src="${p.img}" alt=""></div><div class="tx">${meta(p)}<div class="ttl">${p.t}</div><p class="desc">${p.d}</p><span class="go">View project <span class="ar">→</span></span></div></div></div></a>`).join('');
+  document.querySelectorAll('.ncc').forEach((c) => {
+    io.observe(c);
+    const big = c.querySelector('.big');
+    smoothed(() => { const r = c.getBoundingClientRect(); return (r.top + r.height / 2 - innerHeight / 2) / innerHeight; }, (v) => { big.style.transform = `translateY(${clamp(v, -1.2, 1.2) * 70}px)`; }, 0.15);
+  });
+})();
+
+/* 05 line rows */
+(() => {
+  const L = $('#lr'), peek = $('#peek');
+  L.insertAdjacentHTML('beforeend', P.map((p, i) => `<a class="lrr" href="#" data-i="${i}"><span class="n">${p.n}</span><span class="ttl">${p.t}</span><span class="tags">${p.c} · ${p.tags.slice(0, 2).join(', ')}</span><span class="go">View <span class="ar">→</span></span></a>`).join(''));
+  peek.innerHTML = P.map((p) => `<img src="${p.img}" alt="">`).join('');
+  const imgs = [...peek.children];
+  L.querySelectorAll('.lrr').forEach((r) => {
+    io.observe(r);
+    r.addEventListener('mouseenter', () => {
+      imgs.forEach((m, k) => m.classList.toggle('on', k === +r.dataset.i));
+      peek.style.top = r.offsetTop + r.offsetHeight / 2 - peek.offsetHeight / 2 + 'px';
+      peek.classList.add('on');
+    });
+  });
+  L.addEventListener('mouseleave', () => peek.classList.remove('on'));
+})();
+</script>
+</body>
+</html>

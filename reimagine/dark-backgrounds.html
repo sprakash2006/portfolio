@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Dark Backgrounds</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@500;700;900&display=swap" rel="stylesheet" />
+<style>
+  :root { --fg:#ededed; --mu:#8a8a8a; --bd:rgba(255,255,255,.1); --red:#ef4444; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html, body { height:100%; }
+  body { background:#000; color:var(--fg); font-family:Inter,sans-serif; overflow:hidden; }
+  canvas { position:fixed; inset:0; width:100%; height:100%; display:block; }
+
+  .info { position:fixed; top:20px; left:20px; z-index:3; max-width:360px; padding:14px 16px; border:1px solid var(--bd); border-radius:14px; background:rgba(8,8,8,.6); backdrop-filter:blur(10px); }
+  .info .num { font:700 12px 'JetBrains Mono'; color:var(--red); }
+  .info h2 { font:700 20px Outfit; margin:2px 0 6px; }
+  .info p { font-size:13px; line-height:1.5; color:var(--mu); }
+  .info .keys { margin-top:10px; font:500 11px 'JetBrains Mono'; color:#666; }
+
+  .demo { position:fixed; inset:0; z-index:2; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:0 16px 80px; pointer-events:none; transition:opacity .4s; }
+  .demo.hide { opacity:0; }
+  .demo .tag { font:500 12px 'JetBrains Mono'; color:var(--mu); border:1px solid var(--bd); border-radius:999px; padding:5px 12px; background:rgba(0,0,0,.35); }
+  .demo .tag b { color:var(--red); font-weight:500; }
+  .demo h1 { font:900 clamp(40px,7vw,84px)/1.02 Outfit; letter-spacing:-.03em; margin:18px 0 14px; max-width:820px; }
+  .demo h1 span { color:var(--red); }
+  .demo p { color:var(--mu); font-size:16px; line-height:1.6; max-width:520px; }
+  .demo .btns { display:flex; gap:10px; margin-top:24px; }
+  .demo .btns a { font:500 14px Inter; padding:10px 18px; border-radius:10px; border:1px solid var(--bd); background:rgba(10,10,10,.6); }
+  .demo .btns a.p { background:var(--fg); color:#000; border-color:var(--fg); }
+  .demo .card { margin-top:34px; width:min(520px,100%); text-align:left; border:1px solid var(--bd); border-radius:14px; background:rgba(10,10,10,.65); padding:16px 18px; display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+  .demo .card div { font:500 11px 'JetBrains Mono'; color:var(--mu); }
+  .demo .card strong { display:block; font:700 22px Outfit; color:var(--fg); margin-bottom:2px; }
+
+  .bar { position:fixed; left:50%; bottom:18px; transform:translateX(-50%); z-index:3; display:flex; gap:4px; padding:5px; max-width:calc(100% - 32px); overflow-x:auto; border:1px solid var(--bd); border-radius:999px; background:rgba(8,8,8,.7); backdrop-filter:blur(10px); scrollbar-width:none; }
+  .bar button { all:unset; cursor:pointer; white-space:nowrap; font:500 12px 'JetBrains Mono'; color:var(--mu); padding:7px 12px; border-radius:999px; transition:.2s; }
+  .bar button b { color:var(--red); font-weight:500; margin-right:6px; }
+  .bar button:hover { color:var(--fg); }
+  .bar button.on { background:rgba(255,255,255,.08); color:var(--fg); }
+  .bar button.tog { border-left:1px solid var(--bd); border-radius:0 999px 999px 0; }
+
+  @media (max-width:700px) {
+    .info { top:12px; left:12px; right:12px; max-width:none; padding:10px 12px; }
+    .info p, .info .keys { display:none; }
+    .demo .card { display:none; }
+  }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+
+<div class="info">
+  <div class="num" id="num">01 / 09</div>
+  <h2 id="name"></h2>
+  <p id="desc"></p>
+  <div class="keys">← → switch · H hide content · move the mouse</div>
+</div>
+
+<div class="demo" id="demo">
+  <div class="tag"><b>●</b> available for work</div>
+  <h1>Building calm, fast things <span>for the web.</span></h1>
+  <p>Sample content so you can judge how readable each background is behind real text and cards.</p>
+  <div class="btns"><a class="p">View projects</a><a>Contact</a></div>
+  <div class="card">
+    <div><strong>24</strong>projects</div>
+    <div><strong>12</strong>certificates</div>
+    <div><strong>3y</strong>experience</div>
+  </div>
+</div>
+
+<nav class="bar" id="bar"></nav>
+
+<script>
+const cv = document.getElementById('c');
+const ctx = cv.getContext('2d');
+const DPR = Math.min(window.devicePixelRatio || 1, 1.5);
+let W = 0, H = 0;
+const RED = '239,68,68';
+const M = { x: innerWidth * .7, y: innerHeight * .3, tx: innerWidth * .7, ty: innerHeight * .3, moved: false };
+const rand = (a, b) => a + Math.random() * (b - a);
+const TAU = Math.PI * 2;
+
+// ---------- 3D Perlin noise ----------
+const noise = (() => {
+  const p = new Uint8Array(512), b = [...Array(256).keys()];
+  for (let i = 255; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [b[i], b[j]] = [b[j], b[i]]; }
+  for (let i = 0; i < 512; i++) p[i] = b[i & 255];
+  const f = t => t * t * t * (t * (t * 6 - 15) + 10), l = (a, b, t) => a + (b - a) * t;
+  const g = (h, x, y, z) => { h &= 15; const u = h < 8 ? x : y, v = h < 4 ? y : h === 12 || h === 14 ? x : z; return ((h & 1) ? -u : u) + ((h & 2) ? -v : v); };
+  return (x, y, z) => {
+    const X = Math.floor(x) & 255, Y = Math.floor(y) & 255, Z = Math.floor(z) & 255;
+    x -= Math.floor(x); y -= Math.floor(y); z -= Math.floor(z);
+    const u = f(x), v = f(y), w = f(z);
+    const A = p[X] + Y, AA = p[A] + Z, AB = p[A + 1] + Z, B = p[X + 1] + Y, BA = p[B] + Z, BB = p[B + 1] + Z;
+    return l(l(l(g(p[AA], x, y, z), g(p[BA], x - 1, y, z), u), l(g(p[AB], x, y - 1, z), g(p[BB], x - 1, y - 1, z), u), v),
+             l(l(g(p[AA + 1], x, y, z - 1), g(p[BA + 1], x - 1, y, z - 1), u), l(g(p[AB + 1], x, y - 1, z - 1), g(p[BB + 1], x - 1, y - 1, z - 1), u), v), w);
+  };
+})();
+
+// Film-grain tile, reused by a few backgrounds
+const grain = (() => {
+  const c = document.createElement('canvas'); c.width = c.height = 160;
+  const g = c.getContext('2d'), d = g.createImageData(160, 160);
+  for (let i = 0; i < d.data.length; i += 4) { const v = Math.random() * 255; d.data[i] = d.data[i + 1] = d.data[i + 2] = v; d.data[i + 3] = 255; }
+  g.putImageData(d, 0, 0); return c;
+})();
+const drawGrain = (alpha) => {
+  ctx.save(); ctx.globalAlpha = alpha; ctx.globalCompositeOperation = 'overlay';
+  ctx.translate(-Math.random() * 160, -Math.random() * 160);
+  ctx.fillStyle = ctx.createPattern(grain, 'repeat'); ctx.fillRect(0, 0, W + 160, H + 160);
+  ctx.restore();
+};
+const offscreen = (scale) => {
+  const c = document.createElement('canvas');
+  c.width = Math.ceil(W / scale); c.height = Math.ceil(H / scale);
+  return [c, c.getContext('2d')];
+};
+
+// ---------- Backgrounds ----------
+const BGS = [
+{
+  name: 'Ember Drift',
+  desc: 'Warm sparks rise slowly from a red glow at the bottom of the page and swerve around the cursor. Cosy, alive and on-brand with the red accent.',
+  spawn(any) { return { x: rand(0, W), y: any ? rand(0, H) : H + 10, vy: rand(14, 55), s: rand(.5, 2), ph: rand(0, TAU), hue: rand(2, 30), lt: rand(52, 68) }; },
+  setup() { this.p = Array.from({ length: Math.round(W * H / 6500) }, () => this.spawn(true)); },
+  draw(t, dt) {
+    ctx.fillStyle = '#050202'; ctx.fillRect(0, 0, W, H);
+    const g = ctx.createRadialGradient(W / 2, H * 1.2, 0, W / 2, H * 1.2, Math.max(W, H) * .85);
+    g.addColorStop(0, `rgba(${RED},.24)`); g.addColorStop(.5, 'rgba(127,29,29,.08)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    ctx.globalCompositeOperation = 'lighter';
+    for (const p of this.p) {
+      p.y -= p.vy * dt;
+      p.x += Math.sin(t * .7 + p.ph) * 14 * dt;
+      const dx = p.x - M.x, dy = p.y - M.y, d = Math.hypot(dx, dy);
+      if (d < 140 && d > 0) { p.x += dx / d * (140 - d) * 1.6 * dt; p.y += dy / d * (140 - d) * .8 * dt; }
+      if (p.y < -10) Object.assign(p, this.spawn(false));
+      const a = Math.min(1, p.y / H * 1.4) * (.55 + .45 * Math.sin(t * 3 + p.ph));
+      if (a <= 0) continue;
+      ctx.fillStyle = `hsla(${p.hue},100%,${p.lt}%,${a * .12})`;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.s * 5, 0, TAU); ctx.fill();
+      ctx.fillStyle = `hsla(${p.hue},100%,${p.lt + 12}%,${a})`;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.s, 0, TAU); ctx.fill();
+    }
+  },
+},
+{
+  name: 'Crimson Aurora',
+  desc: 'Soft curtains of red and violet light ripple slowly across a starry sky. Calm and atmospheric, with plenty of dark space for content.',
+  setup() {
+    [this.c, this.o] = offscreen(6);
+    this.stars = Array.from({ length: Math.round(W * H / 2600) }, () => ({ x: rand(0, W), y: rand(0, H), s: rand(.3, 1.1), ph: rand(0, TAU) }));
+  },
+  draw(t) {
+    const o = this.o, ow = this.c.width, oh = this.c.height;
+    o.globalCompositeOperation = 'source-over'; o.filter = 'none';
+    o.fillStyle = '#000'; o.fillRect(0, 0, ow, oh);
+    o.globalCompositeOperation = 'lighter'; o.filter = 'blur(3px)';
+    const bands = [
+      { c: RED, y: .26, a: .5, amp: .14, f: 1, th: .3 },
+      { c: '124,58,237', y: .36, a: .26, amp: .12, f: 1.5, th: .26 },
+      { c: '190,18,60', y: .46, a: .32, amp: .16, f: .8, th: .34 },
+    ];
+    const mx = (M.x / W - .5) * .4;
+    bands.forEach((b, i) => {
+      const top = [];
+      for (let x = -4; x <= ow + 4; x += 2) {
+        const nx = x / ow;
+        top.push([x, oh * (b.y + b.amp * noise(nx * 2 * b.f + mx, i * 9.3, t * .07) + .03 * Math.sin(nx * 9 + t * .4 + i))]);
+      }
+      o.beginPath();
+      top.forEach(([x, y], k) => k ? o.lineTo(x, y) : o.moveTo(x, y));
+      for (let k = top.length - 1; k >= 0; k--) {
+        const [x, y] = top[k];
+        o.lineTo(x, y + oh * b.th * (.55 + .45 * noise(x / ow * 3, i * 4.1 + 50, t * .09)));
+      }
+      o.closePath();
+      const g = o.createLinearGradient(0, oh * (b.y - .15), 0, oh * (b.y + b.th + .1));
+      g.addColorStop(0, `rgba(${b.c},${b.a})`); g.addColorStop(.35, `rgba(${b.c},${b.a * .5})`); g.addColorStop(1, `rgba(${b.c},0)`);
+      o.fillStyle = g; o.fill();
+    });
+    ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+    for (const s of this.stars) {
+      ctx.fillStyle = `rgba(255,255,255,${.25 + .5 * Math.sin(t * 1.3 + s.ph) ** 2})`;
+      ctx.fillRect(s.x, s.y, s.s, s.s);
+    }
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(this.c, 0, 0, W, H);
+    ctx.globalCompositeOperation = 'source-over';
+    const v = ctx.createLinearGradient(0, H * .55, 0, H);
+    v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(0,0,0,.7)');
+    ctx.fillStyle = v; ctx.fillRect(0, 0, W, H);
+  },
+},
+{
+  name: 'Dot Matrix',
+  desc: 'A calm grid of dots that breathes like a slow wave. The cursor sends ripples through it and the peaks glow red. Clean, techy and minimal.',
+  setup() { this.sp = Math.max(22, Math.round(Math.min(W, H) / 36)); },
+  draw(t) {
+    ctx.fillStyle = '#030303'; ctx.fillRect(0, 0, W, H);
+    const sp = this.sp;
+    for (let y = sp / 2; y < H; y += sp) {
+      for (let x = sp / 2; x < W; x += sp) {
+        const n = noise(x * .0035, y * .0035, t * .18);
+        const d = Math.hypot(x - M.x, y - M.y);
+        const v = n * 1.3 + Math.sin(d * .045 - t * 3.2) * Math.exp(-d / 240) * .8;
+        const k = Math.max(0, v + .55);
+        const r = .6 + k * 1.5;
+        ctx.fillStyle = v > .5 ? `rgba(${RED},${Math.min(1, .35 + k * .4)})` : `rgba(255,255,255,${.07 + k * .35})`;
+        ctx.beginPath(); ctx.arc(x, y, r, 0, TAU); ctx.fill();
+      }
+    }
+  },
+},
+{
+  name: 'Flow Field',
+  desc: 'Thousands of fine particles follow invisible currents and leave silky trails, a few of them red. The cursor stirs the current like a finger in water.',
+  setup() {
+    ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+    const spawn = () => ({ x: rand(0, W), y: rand(0, H), life: rand(80, 260), red: Math.random() < .06 });
+    this.spawn = spawn;
+    this.p = Array.from({ length: Math.min(2000, Math.round(W * H / 900)) }, spawn);
+  },
+  draw(t) {
+    ctx.fillStyle = 'rgba(0,0,0,.07)'; ctx.fillRect(0, 0, W, H);
+    ctx.lineWidth = .8;
+    for (const red of [false, true]) {
+      ctx.beginPath();
+      for (const p of this.p) {
+        if (p.red !== red) continue;
+        let a = noise(p.x * .0016, p.y * .0016, t * .04) * TAU * 1.6;
+        const dx = p.x - M.x, dy = p.y - M.y, d = Math.hypot(dx, dy);
+        if (d < 200) a += (1 - d / 200) * 2.2;
+        const nx = p.x + Math.cos(a) * 1.3, ny = p.y + Math.sin(a) * 1.3;
+        ctx.moveTo(p.x, p.y); ctx.lineTo(nx, ny);
+        p.x = nx; p.y = ny;
+        if (--p.life < 0 || nx < 0 || nx > W || ny < 0 || ny > H) Object.assign(p, this.spawn(), { red: p.red });
+      }
+      ctx.strokeStyle = red ? `rgba(${RED},.45)` : 'rgba(255,255,255,.14)';
+      ctx.stroke();
+    }
+  },
+},
+{
+  name: 'Red Horizon',
+  desc: 'A glowing striped sun sinks behind an endless grid that glides towards you. Bold and cinematic; the vanishing point follows the cursor a little.',
+  setup() { this.stars = Array.from({ length: Math.round(W * H / 5000) }, () => ({ x: rand(0, W), y: rand(0, H * .55), s: rand(.4, 1.2), ph: rand(0, TAU) })); },
+  draw(t) {
+    const hz = H * .6, vx = W / 2 + (M.x - W / 2) * .12;
+    const sky = ctx.createLinearGradient(0, 0, 0, hz);
+    sky.addColorStop(0, '#000'); sky.addColorStop(.7, '#070102'); sky.addColorStop(1, '#2a0707');
+    ctx.fillStyle = sky; ctx.fillRect(0, 0, W, hz);
+    for (const s of this.stars) { ctx.fillStyle = `rgba(255,255,255,${(.2 + .5 * Math.sin(t + s.ph) ** 2) * (1 - s.y / hz)})`; ctx.fillRect(s.x, s.y, s.s, s.s); }
+    // Sun
+    const r = Math.min(W, H) * .17, sx = W / 2 + (M.x - W / 2) * .04, sy = hz - r * .3;
+    const glow = ctx.createRadialGradient(sx, sy, r * .5, sx, sy, r * 3.2);
+    glow.addColorStop(0, `rgba(${RED},.28)`); glow.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = glow; ctx.fillRect(0, 0, W, hz);
+    ctx.save();
+    ctx.beginPath(); ctx.arc(sx, sy, r, 0, TAU); ctx.clip();
+    const sg = ctx.createLinearGradient(0, sy - r, 0, sy + r);
+    sg.addColorStop(0, '#fecaca'); sg.addColorStop(.45, '#ef4444'); sg.addColorStop(1, '#7f1d1d');
+    ctx.fillStyle = sg; ctx.fillRect(sx - r, sy - r, r * 2, r * 2);
+    ctx.fillStyle = '#120304';
+    for (let i = 0; i < 7; i++) {
+      const y = sy + r * (.02 + i * .15) + ((t * 6) % (r * .15));
+      ctx.fillRect(sx - r, y, r * 2, 1 + i * 1.3);
+    }
+    ctx.restore();
+    // Floor
+    ctx.fillStyle = '#000'; ctx.fillRect(0, hz, W, H - hz);
+    ctx.strokeStyle = `rgba(${RED},.38)`; ctx.lineWidth = 1;
+    ctx.beginPath();
+    for (let i = -40; i <= 40; i++) { ctx.moveTo(vx + i * 6, hz); ctx.lineTo(vx + i * W * .07, H); }
+    const off = (t * .5) % 1;
+    for (let k = 0; k < 40; k++) {
+      const z = k + 1 - off, y = hz + (H - hz) * .35 / z;
+      if (y > H) continue;
+      ctx.moveTo(0, y); ctx.lineTo(W, y);
+    }
+    ctx.stroke();
+    const fade = ctx.createLinearGradient(0, hz, 0, hz + (H - hz) * .35);
+    fade.addColorStop(0, 'rgba(0,0,0,1)'); fade.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = fade; ctx.fillRect(0, hz, W, H - hz);
+    const line = ctx.createLinearGradient(0, hz - 30, 0, hz + 30);
+    line.addColorStop(0, 'rgba(0,0,0,0)'); line.addColorStop(.5, `rgba(${RED},.35)`); line.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = line; ctx.fillRect(0, hz - 30, W, 60);
+    // Darken the top so headings stay readable
+    const top = ctx.createLinearGradient(0, 0, 0, H * .5);
+    top.addColorStop(0, 'rgba(0,0,0,.5)'); top.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = top; ctx.fillRect(0, 0, W, H * .5);
+  },
+},
+{
+  name: 'Code Rain',
+  desc: 'Columns of code symbols fall quietly in dim grey, with the odd red stream. A developer classic, toned down so it never fights the content.',
+  setup() {
+    this.fs = 16; this.acc = 0;
+    this.chars = '01{}[]<>/=;:+*#$&アイウエオカキクケコサシスセソ'.split('');
+    this.cols = Array.from({ length: Math.ceil(W / this.fs) }, () => ({ y: rand(-H / this.fs, 0), sp: rand(.25, .8), red: Math.random() < .07, cell: -1, ch: '' }));
+    ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+  },
+  draw(t, dt) {
+    this.acc += dt; if (this.acc < 1 / 30) return; this.acc = 0;
+    const fs = this.fs;
+    ctx.fillStyle = 'rgba(0,0,0,.075)'; ctx.fillRect(0, 0, W, H);
+    ctx.font = `500 ${fs - 2}px 'JetBrains Mono', monospace`; ctx.textBaseline = 'top';
+    this.cols.forEach((c, i) => {
+      c.y += c.sp;
+      const cell = Math.floor(c.y);
+      if (cell === c.cell) return;
+      const x = i * fs;
+      if (c.cell >= 0) {
+        ctx.fillStyle = '#000'; ctx.fillRect(x, c.cell * fs, fs, fs);
+        ctx.fillStyle = c.red ? 'rgba(185,28,28,.85)' : 'rgba(113,113,122,.6)';
+        ctx.fillText(c.ch, x + 2, c.cell * fs);
+      }
+      c.cell = cell; c.ch = this.chars[Math.floor(Math.random() * this.chars.length)];
+      const near = Math.abs(x - M.x) < 90;
+      ctx.fillStyle = c.red ? '#fca5a5' : near ? '#fff' : 'rgba(228,228,231,.75)';
+      ctx.fillText(c.ch, x + 2, cell * fs);
+      if (cell * fs > H && Math.random() > .96) Object.assign(c, { y: rand(-20, 0), cell: -1, sp: rand(.25, .8) });
+    });
+  },
+},
+{
+  name: 'Molten Mesh',
+  desc: 'Large blurred blobs of crimson, maroon and plum melt slowly into each other under a fine film grain. Premium and moody; one blob follows the cursor.',
+  setup() {
+    [this.c, this.o] = offscreen(8);
+    const cols = [RED, '153,27,27', '127,29,29', '88,28,135', '190,18,60', '69,10,10'];
+    this.b = cols.map((c, i) => ({ c, sx: rand(.05, .14), sy: rand(.05, .14), p: rand(0, TAU), q: rand(0, TAU), r: rand(.3, .55), a: i === 0 ? .55 : rand(.35, .55) }));
+  },
+  draw(t) {
+    const o = this.o, ow = this.c.width, oh = this.c.height;
+    o.globalCompositeOperation = 'source-over'; o.fillStyle = '#030102'; o.fillRect(0, 0, ow, oh);
+    o.globalCompositeOperation = 'lighter';
+    this.b.forEach((b, i) => {
+      let x = ow * (.5 + .42 * Math.sin(t * b.sx + b.p)), y = oh * (.5 + .42 * Math.cos(t * b.sy + b.q));
+      if (i === 0) { x += (M.x / W * ow - x) * .45; y += (M.y / H * oh - y) * .45; }
+      const r = Math.max(ow, oh) * b.r;
+      const g = o.createRadialGradient(x, y, 0, x, y, r);
+      g.addColorStop(0, `rgba(${b.c},${b.a})`); g.addColorStop(1, `rgba(${b.c},0)`);
+      o.fillStyle = g; o.fillRect(0, 0, ow, oh);
+    });
+    ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(this.c, 0, 0, W, H);
+    ctx.fillStyle = 'rgba(0,0,0,.35)'; ctx.fillRect(0, 0, W, H);
+    drawGrain(.12);
+  },
+},
+{
+  name: 'Event Horizon',
+  desc: 'A black hole with a swirling disc of glowing matter, hot white near the centre and cooling to red and grey further out. Dramatic and hypnotic.',
+  setup() {
+    const R = Math.min(W, H) * .55;
+    this.rmin = R * .17; this.rmax = R * 1.25;
+    this.p = Array.from({ length: Math.min(2600, Math.round(W * H / 450)) }, () => {
+      const r = this.rmin * 1.05 + Math.random() ** 1.6 * (this.rmax - this.rmin);
+      return { r, a: rand(0, TAU), j: rand(-.04, .04) };
+    });
+    ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+  },
+  draw(t, dt) {
+    ctx.fillStyle = 'rgba(0,0,0,.2)'; ctx.fillRect(0, 0, W, H);
+    const cx = W * .5 + (M.x - W / 2) * .04, cy = H * .45 + (M.y - H / 2) * .04, tilt = .34;
+    const bins = [[], [], [], []];
+    for (const p of this.p) {
+      p.a += dt * 1.4 * (this.rmin / p.r) ** 1.3;
+      const x = cx + Math.cos(p.a) * p.r, y = cy + Math.sin(p.a) * p.r * (tilt + p.j);
+      const k = (p.r - this.rmin) / (this.rmax - this.rmin);
+      bins[k < .08 ? 0 : k < .25 ? 1 : k < .55 ? 2 : 3].push(x, y);
+    }
+    ctx.globalCompositeOperation = 'lighter';
+    ['rgba(255,237,225,.9)', 'rgba(251,146,60,.55)', `rgba(${RED},.45)`, 'rgba(161,161,170,.22)'].forEach((c, i) => {
+      ctx.fillStyle = c; ctx.beginPath();
+      const s = i === 0 ? 1.6 : 1.2;
+      for (let n = 0; n < bins[i].length; n += 2) ctx.rect(bins[i][n], bins[i][n + 1], s, s);
+      ctx.fill();
+    });
+    ctx.globalCompositeOperation = 'source-over';
+    const g = ctx.createRadialGradient(cx, cy, this.rmin * .7, cx, cy, this.rmin * 2.4);
+    g.addColorStop(0, `rgba(${RED},.35)`); g.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(cx, cy, this.rmin * 2.4, 0, TAU); ctx.fill();
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.fillStyle = '#000'; ctx.beginPath(); ctx.arc(cx, cy, this.rmin * .82, 0, TAU); ctx.fill();
+    ctx.strokeStyle = 'rgba(255,220,200,.75)'; ctx.lineWidth = 1.4;
+    ctx.beginPath(); ctx.arc(cx, cy, this.rmin * .84, 0, TAU); ctx.stroke();
+  },
+},
+{
+  name: 'Spotlight Grid',
+  desc: 'A quiet blueprint grid that only comes alive where the cursor is: lines brighten and cells flicker red like a status board. The most minimal option.',
+  setup() { this.g = 44; this.cells = []; },
+  draw(t, dt) {
+    ctx.fillStyle = '#050505'; ctx.fillRect(0, 0, W, H);
+    const gs = this.g;
+    const lx = M.moved ? M.x : W * (.5 + .3 * Math.sin(t * .3));
+    const ly = M.moved ? M.y : H * (.4 + .2 * Math.sin(t * .47));
+    const glow = ctx.createRadialGradient(lx, ly, 0, lx, ly, 460);
+    glow.addColorStop(0, `rgba(${RED},.09)`); glow.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = glow; ctx.fillRect(0, 0, W, H);
+    if (Math.random() < dt * 9) {
+      const a = rand(0, TAU), d = Math.abs(rand(-1, 1) * rand(0, 1)) * 320;
+      this.cells.push({ i: Math.floor((lx + Math.cos(a) * d) / gs), j: Math.floor((ly + Math.sin(a) * d) / gs), life: 1, red: Math.random() < .7 });
+    }
+    this.cells = this.cells.filter(c => (c.life -= dt * .7) > 0);
+    for (const c of this.cells) {
+      ctx.fillStyle = c.red ? `rgba(${RED},${c.life * .22})` : `rgba(255,255,255,${c.life * .08})`;
+      ctx.fillRect(c.i * gs + 1, c.j * gs + 1, gs - 1, gs - 1);
+    }
+    const ls = ctx.createRadialGradient(lx, ly, 0, lx, ly, 360);
+    ls.addColorStop(0, 'rgba(255,255,255,.26)'); ls.addColorStop(.6, 'rgba(255,255,255,.07)'); ls.addColorStop(1, 'rgba(255,255,255,.035)');
+    ctx.strokeStyle = ls; ctx.lineWidth = 1;
+    ctx.beginPath();
+    for (let x = .5; x < W; x += gs) { ctx.moveTo(x, 0); ctx.lineTo(x, H); }
+    for (let y = .5; y < H; y += gs) { ctx.moveTo(0, y); ctx.lineTo(W, y); }
+    ctx.stroke();
+    drawGrain(.08);
+  },
+},
+];
+
+// ---------- Picker ----------
+const bar = document.getElementById('bar'), demo = document.getElementById('demo');
+let cur = 0;
+BGS.forEach((b, i) => {
+  const btn = document.createElement('button');
+  btn.innerHTML = `<b>${String(i + 1).padStart(2, '0')}</b>${b.name}`;
+  btn.onclick = () => select(i);
+  bar.appendChild(btn);
+});
+const tog = document.createElement('button');
+tog.className = 'tog'; tog.textContent = 'Hide content';
+tog.onclick = () => toggleDemo();
+bar.appendChild(tog);
+
+function toggleDemo() {
+  demo.classList.toggle('hide');
+  tog.textContent = demo.classList.contains('hide') ? 'Show content' : 'Hide content';
+}
+
+function select(i) {
+  cur = (i + BGS.length) % BGS.length;
+  const b = BGS[cur];
+  document.getElementById('num').textContent = `${String(cur + 1).padStart(2, '0')} / ${String(BGS.length).padStart(2, '0')}`;
+  document.getElementById('name').textContent = b.name;
+  document.getElementById('desc').textContent = b.desc;
+  [...bar.children].forEach((el, k) => el.classList.toggle('on', k === cur));
+  bar.children[cur].scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+  history.replaceState(null, '', `#${cur + 1}`);
+  reset();
+  b.setup();
+}
+
+function reset() {
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = 1; ctx.filter = 'none';
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+}
+
+function resize() {
+  W = innerWidth; H = innerHeight;
+  cv.width = Math.floor(W * DPR); cv.height = Math.floor(H * DPR);
+  reset();
+  BGS[cur].setup();
+}
+
+addEventListener('resize', resize);
+addEventListener('pointermove', e => { M.tx = e.clientX; M.ty = e.clientY; M.moved = true; }, { passive: true });
+addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight') select(cur + 1);
+  else if (e.key === 'ArrowLeft') select(cur - 1);
+  else if (e.key.toLowerCase() === 'h') toggleDemo();
+});
+
+let last = performance.now();
+function loop(now) {
+  const dt = Math.min((now - last) / 1000, .1); last = now;
+  M.x += (M.tx - M.x) * .08; M.y += (M.ty - M.y) * .08;
+  ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = 1;
+  BGS[cur].draw(now / 1000, dt);
+  ctx.globalCompositeOperation = 'source-over';
+  requestAnimationFrame(loop);
+}
+
+W = innerWidth; H = innerHeight;
+resize();
+select((parseInt(location.hash.slice(1)) || 1) - 1);
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>

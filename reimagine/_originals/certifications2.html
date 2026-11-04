@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Certifications concepts II</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@500;700;900&display=swap" rel="stylesheet" />
+<style>
+  :root { --bg:#0a0a0a; --fg:#ededed; --mu:#8a8a8a; --card:#111113; --bd:rgba(255,255,255,.09); --red:#ef4444; --green:#22c55e; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--fg); font-family:Inter,sans-serif; overflow-x:clip; }
+  body::before { content:''; position:fixed; inset:0; z-index:-1; background-size:32px 32px; background-image:linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 0),linear-gradient(180deg,rgba(255,255,255,.03) 1px,transparent 0); }
+  section { min-height:100vh; padding:100px 20px 90px; border-bottom:1px solid var(--bd); position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .wrap { width:100%; max-width:1040px; }
+  .tag { position:absolute; top:24px; left:24px; right:24px; font:500 12px 'JetBrains Mono'; color:var(--mu); }
+  .tag b { color:var(--red); font-weight:500; }
+  .label { font:600 12px 'JetBrains Mono'; letter-spacing:.1em; text-transform:uppercase; color:var(--mu); margin-bottom:24px; display:flex; align-items:center; gap:12px; }
+  .label span { color:var(--red); } .label::after { content:''; flex:1; height:1px; background:var(--bd); }
+  a { color:inherit; text-decoration:none; }
+  .logo { width:36px; height:36px; border-radius:9px; background:#fff; object-fit:contain; border:1px solid var(--bd); flex:none; }
+  .t { font:700 17px/1.25 Outfit; letter-spacing:-.01em; }
+  .iss { font:12px Inter; color:var(--mu); margin-top:3px; }
+  .date { font:11px 'JetBrains Mono'; color:var(--mu); }
+  .ver { display:inline-flex; align-items:center; gap:4px; font:600 10px 'JetBrains Mono'; color:var(--green); border:1px solid rgba(34,197,94,.35); background:rgba(34,197,94,.08); padding:2px 7px; border-radius:999px; white-space:nowrap; }
+  .go { font:600 12px 'JetBrains Mono'; color:var(--mu); transition:color .2s; } .go .ar { display:inline-block; transition:transform .25s; }
+  a:hover .go { color:var(--red); } a:hover .go .ar { transform:translateX(3px); }
+  .fade { opacity:0; transform:translateY(14px); transition:opacity .6s, transform .6s cubic-bezier(.2,.8,.2,1); } .fade.in { opacity:1; transform:none; }
+  #index { position:fixed; right:18px; top:50%; transform:translateY(-50%); z-index:50; display:flex; flex-direction:column; gap:10px; }
+  #index a { font:500 11px 'JetBrains Mono'; color:var(--mu); text-align:right; } #index a:hover { color:var(--fg); }
+
+  /* 01 bento with featured */
+  .bento { display:grid; grid-template-columns:repeat(4,1fr); grid-auto-rows:150px; gap:14px; }
+  .bt { position:relative; border:1px solid var(--bd); border-radius:18px; background:var(--card); padding:16px; display:flex; flex-direction:column; overflow:hidden; transition:border-color .3s, transform .3s; }
+  .bt:hover { border-color:rgba(239,68,68,.45); transform:translateY(-3px); }
+  .bt .top { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }
+  .bt .t { font-size:15px; margin-top:auto; }
+  .bt.f { grid-column:span 2; grid-row:span 2; padding:0; }
+  .bt.f img.cert { width:100%; height:62%; object-fit:cover; object-position:top; background:#f4f1ea; }
+  .bt.f .in { padding:16px 18px; display:flex; flex-direction:column; flex:1; } .bt.f .t { font-size:22px; margin-top:6px; }
+  .bt.f .badge { position:absolute; top:12px; left:12px; font:600 10px 'JetBrains Mono'; background:var(--red); color:#140404; padding:4px 9px; border-radius:999px; }
+  .bt .bgnum { position:absolute; right:12px; bottom:-8px; font:900 64px/1 Outfit; color:rgba(255,255,255,.04); }
+
+  /* 02 pinboard */
+  .board { position:relative; display:grid; grid-template-columns:repeat(3,1fr); gap:44px 34px; padding:46px 36px; border-radius:24px; background:radial-gradient(circle at 30% 20%,#1a1416,#0e0d0e 70%); border:1px solid var(--bd); }
+  .pin { position:relative; display:block; background:#f4f1ea; padding:8px 8px 14px; border-radius:3px; box-shadow:0 18px 36px rgba(0,0,0,.55); transform:rotate(var(--r)); transition:transform .45s cubic-bezier(.2,.8,.2,1), box-shadow .45s; }
+  .pin:hover { transform:rotate(0) translateY(-6px) scale(1.03); box-shadow:0 30px 60px rgba(0,0,0,.65); z-index:2; }
+  .pin::before { content:''; position:absolute; top:-9px; left:50%; width:18px; height:18px; margin-left:-9px; border-radius:50%; background:radial-gradient(circle at 35% 35%,#ff8a8a,var(--red) 45%,#7f1d1d); box-shadow:0 3px 6px rgba(0,0,0,.5); z-index:2; }
+  .pin img { width:100%; aspect-ratio:4/3; object-fit:cover; object-position:top; display:block; }
+  .pin .cap { color:#151515; font:700 14px/1.25 Outfit; margin-top:10px; padding:0 2px; } .pin .sub { color:#6b6b6b; font:11px 'JetBrains Mono'; margin-top:4px; padding:0 2px; }
+
+  /* 03 credential passes */
+  .passes { display:grid; grid-template-columns:repeat(2,1fr); gap:18px; }
+  .pass { position:relative; display:grid; grid-template-columns:1fr 120px; border-radius:18px; overflow:hidden; background:linear-gradient(135deg,#17171a,#111113); border:1px solid var(--bd); transition:transform .35s cubic-bezier(.2,.8,.2,1), border-color .3s; }
+  .pass:hover { transform:translateY(-4px); border-color:rgba(239,68,68,.45); }
+  .pass .main { padding:18px 20px; display:flex; flex-direction:column; gap:12px; }
+  .pass .hd { display:flex; align-items:center; gap:10px; font:600 10px 'JetBrains Mono'; letter-spacing:.12em; color:var(--red); }
+  .pass .fields { display:grid; grid-template-columns:repeat(2,auto); justify-content:start; gap:4px 26px; margin-top:auto; }
+  .pass .fields span { font:9px 'JetBrains Mono'; color:var(--mu); letter-spacing:.1em; text-transform:uppercase; } .pass .fields b { font:600 12px 'JetBrains Mono'; }
+  .pass .stub { position:relative; border-left:2px dashed rgba(255,255,255,.12); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; padding:14px; background:rgba(239,68,68,.05); }
+  .pass .stub::before, .pass .stub::after { content:''; position:absolute; left:-11px; width:20px; height:20px; border-radius:50%; background:var(--bg); border:1px solid var(--bd); }
+  .pass .stub::before { top:-11px; } .pass .stub::after { bottom:-11px; }
+  .qr { width:64px; height:64px; background:#fff; padding:5px; border-radius:6px; display:grid; grid-template-columns:repeat(8,1fr); }
+  .qr i { background:#111; } .qr i.o { background:transparent; }
+  .pass .stub small { font:9px 'JetBrains Mono'; color:var(--mu); text-align:center; }
+
+  /* 04 flip cards */
+  .flips { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .flip { perspective:1200px; height:260px; display:block; }
+  .flip .in { position:relative; width:100%; height:100%; transform-style:preserve-3d; transition:transform .7s cubic-bezier(.2,.8,.2,1); }
+  .flip:hover .in, .flip:focus .in { transform:rotateY(180deg); }
+  .flip .fr, .flip .bk { position:absolute; inset:0; backface-visibility:hidden; border-radius:18px; border:1px solid var(--bd); overflow:hidden; }
+  .flip .fr { background:var(--card); padding:22px; display:flex; flex-direction:column; }
+  .flip .fr .logo { width:52px; height:52px; border-radius:14px; }
+  .flip .fr .t { margin-top:auto; font-size:19px; } .flip .fr .hint { font:11px 'JetBrains Mono'; color:var(--mu); margin-top:12px; }
+  .flip .bk { transform:rotateY(180deg); background:#f4f1ea; } .flip .bk img { width:100%; height:100%; object-fit:cover; object-position:top; }
+  .flip .bk .go2 { position:absolute; bottom:10px; right:10px; font:600 11px 'JetBrains Mono'; background:var(--red); color:#140404; padding:5px 10px; border-radius:999px; }
+
+  /* 05 summary + issuer filter */
+  .sum { font:500 clamp(22px,2.8vw,30px)/1.4 Outfit; color:rgba(237,237,237,.75); margin-bottom:22px; letter-spacing:-.01em; } .sum b { color:var(--fg); } .sum .r { color:var(--red); }
+  .issuers { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:18px; }
+  .issuers button { all:unset; cursor:pointer; display:flex; align-items:center; gap:9px; padding:7px 13px 7px 7px; border:1px solid var(--bd); border-radius:999px; font:500 12px Inter; color:var(--mu); transition:.25s; }
+  .issuers button img { width:26px; height:26px; border-radius:50%; background:#fff; object-fit:contain; }
+  .issuers button.all { padding:7px 14px; }
+  .issuers button:hover { color:var(--fg); } .issuers button.on { border-color:rgba(239,68,68,.55); color:var(--fg); background:rgba(239,68,68,.08); }
+  .issuers button em { font-style:normal; font:11px 'JetBrains Mono'; color:var(--mu); }
+  .flist { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+  .fl { display:flex; gap:14px; align-items:center; padding:12px; border:1px solid var(--bd); border-radius:16px; background:var(--card); transition:border-color .3s; animation:pop .4s cubic-bezier(.2,.8,.2,1) both; }
+  .fl:hover { border-color:rgba(239,68,68,.45); }
+  .fl .th { width:96px; aspect-ratio:4/3; border-radius:8px; overflow:hidden; background:#f4f1ea; flex:none; } .fl .th img { width:100%; height:100%; object-fit:cover; object-position:top; }
+  @keyframes pop { from { opacity:0; transform:translateY(8px); } }
+
+  /* 06 grouped by topic */
+  .topics { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .topic { border:1px solid var(--bd); border-radius:20px; background:var(--card); padding:18px; }
+  .topic .th { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:14px; }
+  .topic h3 { font:900 24px/1 Outfit; letter-spacing:-.02em; } .topic h3::first-letter { color:var(--red); }
+  .topic .cnt { font:11px 'JetBrains Mono'; color:var(--mu); }
+  .topic a { display:flex; gap:12px; align-items:center; padding:10px; margin:0 -10px; border-radius:12px; transition:background .25s; }
+  .topic a:hover { background:rgba(255,255,255,.04); } .topic a .t { font-size:14.5px; transition:color .25s; } .topic a:hover .t { color:var(--red); }
+
+  @media (max-width:860px) {
+    #index { display:none; }
+    .bento { grid-template-columns:1fr 1fr; } .bt.f { grid-column:span 2; }
+    .board, .flips, .topics { grid-template-columns:1fr 1fr; } .board { padding:36px 18px; gap:34px 18px; }
+    .passes, .flist { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+<nav id="index"><a href="#x1">01 bento</a><a href="#x2">02 pinboard</a><a href="#x3">03 credential passes</a><a href="#x4">04 flip cards</a><a href="#x5">05 summary + issuers</a><a href="#x6">06 by topic</a></nav>
+
+<section id="x1"><div class="tag"><b>01</b> — bento · the latest certificate is the big featured tile, the rest are small tiles</div>
+  <div class="wrap"><div class="label"><span>//</span> Certifications</div><div class="bento" id="s1"></div></div></section>
+
+<section id="x2"><div class="tag"><b>02</b> — pinboard · certificates pinned up with red pins at slight angles; hover straightens and lifts one</div>
+  <div class="wrap"><div class="label"><span>//</span> Certifications</div><div class="board" id="s2"></div></div></section>
+
+<section id="x3"><div class="tag"><b>03</b> — credential passes · each one styled like an ID / boarding pass with a tear-off verify stub</div>
+  <div class="wrap"><div class="label"><span>//</span> Certifications</div><div class="passes" id="s3"></div></div></section>
+
+<section id="x4"><div class="tag"><b>04</b> — flip cards · logo and title on the front; hover flips it to show the certificate itself</div>
+  <div class="wrap"><div class="label"><span>//</span> Certifications</div><div class="flips" id="s4"></div></div></section>
+
+<section id="x5"><div class="tag"><b>05</b> — summary + issuers · a one-line summary (like Activity), issuer logos that filter the list</div>
+  <div class="wrap"><div class="label"><span>//</span> Certifications</div><p class="sum" id="sum"></p><div class="issuers" id="iss"></div><div class="flist" id="fl"></div></div></section>
+
+<section id="x6"><div class="tag"><b>06</b> — by topic · grouped into what each one taught: Web, AI, Data, Blockchain, Leadership</div>
+  <div class="wrap"><div class="label"><span>//</span> Certifications</div><div class="topics" id="s6"></div></div></section>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const C = [
+  { s:'full-stack-web-development-bootcamp', t:'Complete Full Stack Web Development Bootcamp', i:'The App Brewery · Udemy', p:'Udemy', l:'udemy.png', v:true, d:'2025-07-18', topic:'Web Development', id:'UC-444c13cb' },
+  { s:'ai-agents-langchain-llm-apps', t:'AI Agents: Automation & Business with LangChain & LLM Apps', i:'Arnold Oberleiter · Udemy', p:'Udemy', l:'udemy.png', v:false, d:'2026-02-19', topic:'AI & LLMs' },
+  { s:'job-ready-data-science', t:'The Ultimate Job Ready Data Science Course', i:'CodeWithHarry', p:'CodeWithHarry', l:'codewithharry-logo.png', v:false, d:'2025-10-21', topic:'Data Science' },
+  { s:'blockchain-revolution-financial-services', t:'Blockchain Revolution in Financial Services Specialization', i:'INSEAD · Coursera', p:'Coursera', l:'insead.png', v:true, d:'2026-10-21', topic:'Blockchain', id:'UBWWZUDUYK3F' },
+  { s:'prompt-engineering-bootcamp', t:'Prompt Engineering Bootcamp', i:'LetsUpgrade', p:'LetsUpgrade', l:'letsupgrade.png', v:true, d:'2025-08-07', topic:'AI & LLMs', id:'LUEPEAPR125933' },
+  { s:'fly-scholar', t:'FLY-Scholar (Finding the Leader in You)', i:'Competitiveness Mindset Institute, USA', p:'CMI', l:'cmi.png', v:false, d:'2026-01-01', topic:'Leadership' },
+];
+C.forEach((c, k) => { c.img = `cert/${c.s}.jpg`; c.logo = `cert/logos/${c.l}`; c.n = String(k + 1).padStart(2, '0'); c.date = new Date(c.d).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }); });
+const ver = (c) => c.v ? '<span class="ver">✓ Verified</span>' : '';
+const logo = (c) => `<img class="logo" src="${c.logo}" alt="">`;
+const byDate = [...C].sort((a, b) => b.d.localeCompare(a.d));
+
+/* 01 bento */
+(() => { const [f, ...rest] = byDate;
+  $('#s1').innerHTML = `<a class="bt f fade" href="#"><img class="cert" src="${f.img}" alt=""><span class="badge">★ LATEST</span><div class="in"><div class="top">${logo(f)}${ver(f)}</div><div class="t">${f.t}</div><div class="iss">${f.i} · ${f.date}</div></div></a>` +
+    rest.map((c, k) => `<a class="bt fade" href="#"><div class="top">${logo(c)}${ver(c)}</div><div class="t">${c.t}</div><div class="iss">${c.i}</div><span class="bgnum">${String(k + 2).padStart(2, '0')}</span></a>`).join('');
+})();
+
+/* 02 pinboard */
+$('#s2').innerHTML = C.map((c, k) => `<a class="pin fade" href="#" style="--r:${[-3, 2, -1.5, 2.5, -2, 1.5][k]}deg"><img src="${c.img}" alt=""><div class="cap">${c.t}</div><div class="sub">${c.p} · ${c.date}${c.v ? ' · ✓ verified' : ''}</div></a>`).join('');
+
+/* 03 passes */
+(() => {
+  // A decorative QR-ish pattern seeded from the slug; the real stub would link to the verify page
+  const qr = (s) => { let h = 0; for (const ch of s) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return Array.from({ length: 64 }, (_, k) => { h = (h * 1103515245 + 12345) >>> 0; const corner = (k < 19 && k % 8 < 3) || (k % 8 > 4 && k < 24 && Math.floor(k / 8) < 3); return `<i class="${corner || (h >> 16) % 3 ? '' : 'o'}"></i>`; }).join(''); };
+  $('#s3').innerHTML = C.map((c) => `<a class="pass fade" href="#"><div class="main"><div class="hd">${logo(c)}<span>CREDENTIAL · ${c.p.toUpperCase()}</span></div><div><div class="t">${c.t}</div><div class="iss">${c.i}</div></div><div class="fields"><span>Issued</span><span>${c.v ? 'Credential ID' : 'Holder'}</span><b>${c.date}</b><b>${c.v ? c.id : 'Prakash Swami'}</b></div></div><div class="stub">${c.v ? `<div class="qr">${qr(c.s)}</div><small>✓ VERIFY</small>` : `<img class="logo" src="${c.logo}" alt="" style="width:54px;height:54px"><small>VIEW</small>`}</div></a>`).join('');
+})();
+
+/* 04 flip cards */
+$('#s4').innerHTML = C.map((c) => `<a class="flip fade" href="#" tabindex="0"><div class="in"><div class="fr">${logo(c).replace('class="logo"', 'class="logo"')}<div class="t">${c.t}</div><div class="iss">${c.i}</div><div class="hint">${c.date} ${c.v ? '· ✓ verified' : ''} · hover to see ↻</div></div><div class="bk"><img src="${c.img}" alt=""><span class="go2">View →</span></div></div></a>`).join('');
+
+/* 05 summary + issuers */
+(() => {
+  const issuers = [...new Map(C.map((c) => [c.p, c])).values()];
+  const years = [...new Set(C.map((c) => c.d.slice(0, 4)))].sort();
+  $('#sum').innerHTML = `<b class="r">${C.length} certifications</b> from <b>${issuers.length} platforms</b> between ${years[0]} and ${years.at(-1)}, <b>${C.filter((c) => c.v).length}</b> of them verifiable online.`;
+  $('#iss').innerHTML = `<button class="all on" data-p="">All <em>${C.length}</em></button>` + issuers.map((c) => `<button data-p="${c.p}"><img src="${c.logo}" alt="">${c.p} <em>${C.filter((x) => x.p === c.p).length}</em></button>`).join('');
+  const show = (p) => { document.querySelectorAll('#iss button').forEach((b) => b.classList.toggle('on', b.dataset.p === p)); $('#fl').innerHTML = C.filter((c) => !p || c.p === p).map((c, k) => `<a class="fl" href="#" style="animation-delay:${k * 50}ms"><div class="th"><img src="${c.img}" alt=""></div><div style="min-width:0;flex:1"><div class="t" style="font-size:15px">${c.t}</div><div class="iss">${c.i}</div><div style="display:flex;gap:8px;align-items:center;margin-top:8px"><span class="date">${c.date}</span>${ver(c)}</div></div></a>`).join(''); };
+  document.querySelectorAll('#iss button').forEach((b) => b.onclick = () => show(b.dataset.p)); show('');
+})();
+
+/* 06 by topic */
+(() => {
+  const topics = [...new Set(C.map((c) => c.topic))];
+  $('#s6').innerHTML = topics.map((t) => { const list = C.filter((c) => c.topic === t); return `<div class="topic fade"><div class="th"><h3>${t}</h3><span class="cnt">${list.length}</span></div>${list.map((c) => `<a href="#">${logo(c)}<div style="min-width:0;flex:1"><div class="t">${c.t}</div><div class="iss">${c.p} · ${c.date}</div></div>${c.v ? '<span class="ver">✓</span>' : ''}</a>`).join('')}</div>`; }).join('');
+})();
+
+const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: 0.15 });
+document.querySelectorAll('.fade').forEach((el, k) => { el.style.transitionDelay = (k % 3) * 80 + 'ms'; io.observe(el); });
+</script>
+</body>
+</html>

@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Skills with logos</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@500;700;900&display=swap" rel="stylesheet" />
+<style>
+  :root { --bg:#0a0a0a; --fg:#ededed; --mu:#8a8a8a; --card:#111113; --bd:rgba(255,255,255,.09); --red:#ef4444; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--fg); font-family:Inter,sans-serif; overflow-x:clip; }
+  body::before { content:''; position:fixed; inset:0; z-index:-1; background-size:32px 32px; background-image:linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 0),linear-gradient(180deg,rgba(255,255,255,.03) 1px,transparent 0); }
+  section { min-height:100vh; padding:90px 20px 80px; border-bottom:1px solid var(--bd); position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .wrap { width:100%; max-width:1040px; }
+  .tag { position:absolute; top:24px; left:24px; font:500 12px 'JetBrains Mono'; color:var(--mu); z-index:5; }
+  .tag b { color:var(--red); font-weight:500; }
+  .label { font:600 12px 'JetBrains Mono'; letter-spacing:.1em; text-transform:uppercase; color:var(--mu); margin-bottom:28px; display:flex; align-items:center; gap:12px; }
+  .label span { color:var(--red); } .label::after { content:''; flex:1; height:1px; background:var(--bd); }
+  .mono { font-family:'JetBrains Mono',monospace; } .red { color:var(--red); } .mu { color:var(--mu); }
+  #index { position:fixed; right:18px; top:50%; transform:translateY(-50%); z-index:50; display:flex; flex-direction:column; gap:10px; }
+  #index a { font:500 11px 'JetBrains Mono'; color:var(--mu); text-decoration:none; text-align:right; } #index a:hover { color:var(--fg); }
+  .lg { display:grid; place-items:center; }
+  .lg img { width:100%; height:100%; object-fit:contain; }
+  .lg .fb { font:900 1em Outfit; letter-spacing:-.03em; color:#e5e5e5; }
+
+  /* 1 flip wall */
+  .wall { width:100vw; margin-left:calc(50% - 50vw); display:flex; flex-direction:column; gap:14px; mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent); }
+  .wrow { display:flex; width:max-content; gap:14px; animation:mq 40s linear infinite; }
+  .wrow.rev { animation-direction:reverse; animation-duration:46s; }
+  .wall:hover .wrow { animation-play-state:paused; }
+  @keyframes mq { to { transform:translateX(-50%); } }
+  .tile { width:130px; height:130px; perspective:600px; flex:none; }
+  .tile-in { position:relative; width:100%; height:100%; transition:transform .5s cubic-bezier(.3,1.4,.5,1); transform-style:preserve-3d; }
+  .tile:hover .tile-in { transform:rotateY(180deg); }
+  .face { position:absolute; inset:0; border-radius:20px; border:1px solid var(--bd); backface-visibility:hidden; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; background:#121214; }
+  .face .lg { width:46px; height:46px; font-size:22px; }
+  .face.back { transform:rotateY(180deg); background:var(--red); border-color:var(--red); padding:10px; text-align:center; }
+  .face.back b { font:700 15px Outfit; color:#fff; } .face.back span { font:10.5px 'JetBrains Mono'; color:#fecaca; }
+
+  /* 2 bento */
+  .bento { display:grid; grid-template-columns:repeat(6,1fr); grid-auto-rows:minmax(170px,auto); gap:12px; }
+  .bx { background:#111113; border:1px solid var(--bd); border-radius:22px; padding:20px 22px; display:flex; flex-direction:column; position:relative; overflow:hidden; transition:border-color .3s; }
+  .bx:hover { border-color:rgba(239,68,68,.5); }
+  .bx h3 { font:700 22px Outfit; letter-spacing:-.01em; } .bx p { font-size:13px; color:var(--mu); margin:3px 0 16px; }
+  .bx .num { position:absolute; right:18px; top:14px; font:900 54px/1 Outfit; color:rgba(255,255,255,.04); }
+  .lgs { display:flex; flex-wrap:wrap; gap:10px; margin-top:auto; }
+  .chiplg { display:flex; align-items:center; gap:8px; padding:7px 11px 7px 8px; border-radius:12px; background:#18181b; border:1px solid var(--bd); font:500 13px Inter; color:#d4d4d4; transition:.2s; }
+  .chiplg .lg { width:20px; height:20px; font-size:11px; filter:grayscale(1) brightness(1.6); transition:filter .2s; }
+  .chiplg:hover { border-color:var(--hc,#ef4444); color:#fff; transform:translateY(-2px); }
+  .chiplg:hover .lg { filter:none; }
+  .b-lang { grid-column:span 2; } .b-fe { grid-column:span 4; } .b-be { grid-column:span 3; } .b-ai { grid-column:span 3; background:linear-gradient(160deg,rgba(239,68,68,.16),#111113 60%); } .b-ds { grid-column:span 2; } .b-tools { grid-column:span 4; }
+
+  /* 3 magnetic field */
+  .field { position:relative; height:540px; border:1px solid var(--bd); border-radius:24px; overflow:hidden; background:radial-gradient(circle at 50% 50%,#141416,#0b0b0c 70%); }
+  .fl { position:absolute; left:0; top:0; width:58px; height:58px; margin:-29px; border-radius:16px; background:#18181b; border:1px solid rgba(255,255,255,.1); padding:13px; transition:background .2s, border-color .2s; will-change:transform; }
+  .fl .lg { width:100%; height:100%; font-size:15px; }
+  .fl.hot { background:#202024; border-color:var(--red); }
+  .fl-name { position:absolute; pointer-events:none; font:600 12px 'JetBrains Mono'; color:#fff; background:var(--red); padding:4px 9px; border-radius:6px; white-space:nowrap; opacity:0; transition:opacity .15s; z-index:5; }
+  .field-c { position:absolute; inset:0; display:grid; place-items:center; pointer-events:none; text-align:center; }
+  .field-c b { font:900 clamp(40px,7vw,86px)/0.9 Outfit; letter-spacing:-.04em; text-transform:uppercase; color:rgba(255,255,255,.05); }
+
+  /* 4 3d ring */
+  .ring-wrap { display:grid; grid-template-columns:260px 1fr; gap:30px; align-items:center; }
+  .cats { display:flex; flex-direction:column; gap:6px; }
+  .cats button { text-align:left; background:transparent; border:1px solid var(--bd); border-radius:12px; padding:11px 14px; cursor:pointer; color:var(--fg); font:600 15px Outfit; display:flex; justify-content:space-between; align-items:center; transition:.2s; }
+  .cats button span { font:11px 'JetBrains Mono'; color:var(--mu); }
+  .cats button.on { background:var(--red); border-color:var(--red); } .cats button.on span { color:#fee2e2; }
+  .scene { height:440px; perspective:1100px; display:grid; place-items:center; position:relative; }
+  .carousel { position:relative; width:150px; height:170px; transform-style:preserve-3d; animation:spin 16s linear infinite; }
+  .scene:hover .carousel { animation-play-state:paused; }
+  @keyframes spin { from { transform:rotateX(-8deg) rotateY(0); } to { transform:rotateX(-8deg) rotateY(-360deg); } }
+  .cell { position:absolute; inset:0; border-radius:22px; background:rgba(22,22,24,.92); border:1px solid rgba(255,255,255,.12); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; backface-visibility:hidden; box-shadow:0 20px 40px rgba(0,0,0,.4); opacity:0; animation:pop .5s forwards; }
+  @keyframes pop { to { opacity:1; } }
+  .cell .lg { width:58px; height:58px; font-size:26px; } .cell b { font:600 14px Inter; }
+  .floor { position:absolute; bottom:40px; width:420px; height:60px; border-radius:50%; background:radial-gradient(rgba(239,68,68,.25),transparent 70%); filter:blur(6px); }
+
+  /* 5 dock */
+  .dock-wrap { display:flex; flex-direction:column; gap:34px; align-items:center; }
+  .drow { display:flex; flex-direction:column; align-items:center; gap:10px; width:100%; }
+  .drow .t { font:500 12px 'JetBrains Mono'; color:var(--mu); letter-spacing:.08em; text-transform:uppercase; }
+  .dock { display:flex; align-items:flex-end; gap:8px; padding:10px 12px; height:84px; border-radius:22px; background:rgba(30,30,33,.55); border:1px solid rgba(255,255,255,.1); backdrop-filter:blur(12px); }
+  .dk { position:relative; width:52px; height:52px; border-radius:14px; background:#1e1e22; border:1px solid rgba(255,255,255,.08); padding:11px; flex:none; transition:width .12s, height .12s; }
+  .dk .lg { width:100%; height:100%; font-size:14px; }
+  .dk .tip { position:absolute; bottom:calc(100% + 10px); left:50%; transform:translateX(-50%); font:600 11.5px Inter; background:#0f0f10; border:1px solid var(--bd); padding:4px 9px; border-radius:7px; white-space:nowrap; opacity:0; pointer-events:none; transition:opacity .15s; }
+  .dk:hover .tip { opacity:1; }
+  .dk::after { content:''; position:absolute; bottom:-7px; left:50%; width:4px; height:4px; margin-left:-2px; border-radius:50%; background:var(--red); opacity:0; }
+  .dk:hover::after { opacity:1; }
+
+  @media (max-width:760px) { #index { display:none; } .bento { grid-template-columns:1fr 1fr; } .bento > * { grid-column:span 2 !important; } .ring-wrap { grid-template-columns:1fr; } .tile { width:100px; height:100px; } .dock { height:auto; flex-wrap:wrap; justify-content:center; } }
+</style>
+</head>
+<body>
+<nav id="index"><a href="#l1">01 flip wall</a><a href="#l2">02 bento</a><a href="#l3">03 magnetic field</a><a href="#l4">04 3d carousel</a><a href="#l5">05 dock</a></nav>
+
+<section id="l1">
+  <div class="tag"><b>01</b> — flip wall · logos scroll past; hover a tile to flip it</div>
+  <div class="wrap"><div class="label"><span>//</span> Skills &amp; Toolbox</div></div>
+  <div class="wall" id="wall"></div>
+</section>
+
+<section id="l2">
+  <div class="tag"><b>02</b> — bento · a box per category; hover a logo for its brand colour</div>
+  <div class="wrap"><div class="label"><span>//</span> Skills &amp; Toolbox</div><div class="bento" id="bento"></div></div>
+</section>
+
+<section id="l3">
+  <div class="tag"><b>03</b> — magnetic field · move your cursor through the logos</div>
+  <div class="wrap"><div class="label"><span>//</span> Skills &amp; Toolbox</div><div class="field" id="field"><div class="field-c"><b>35 tools.<br>one stack.</b></div><div class="fl-name" id="flname"></div></div></div>
+</section>
+
+<section id="l4">
+  <div class="tag"><b>04</b> — 3d carousel · pick a category; hover to pause the spin</div>
+  <div class="wrap"><div class="label"><span>//</span> Skills &amp; Toolbox</div>
+    <div class="ring-wrap"><div class="cats" id="cats"></div><div class="scene"><div class="floor"></div><div class="carousel" id="car"></div></div></div>
+  </div>
+</section>
+
+<section id="l5">
+  <div class="tag"><b>05</b> — dock · a macOS-style dock per category; hover to magnify</div>
+  <div class="wrap"><div class="label"><span>//</span> Skills &amp; Toolbox</div><div class="dock-wrap" id="docks"></div></div>
+</section>
+
+<script>
+const $ = (s) => document.querySelector(s);
+// [name, simple-icons slug or null, brand colour]
+const S = [
+  { t: 'Languages', b: 'The foundations.', k: 'lang', i: [['JavaScript', 'javascript', '#F7DF1E'], ['TypeScript', 'typescript', '#3178C6'], ['C++', 'cplusplus', '#00599C'], ['Python', 'python', '#3776AB'], ['SQL', 'mysql', '#4479A1']] },
+  { t: 'Frontend', b: 'Responsive interfaces for web and mobile.', k: 'fe', i: [['React.js', 'react', '#61DAFB'], ['Next.js', 'nextdotjs', '#ffffff'], ['React Native', 'react', '#61DAFB'], ['HTML5', 'html5', '#E34F26'], ['CSS3', 'css3', '#1572B6'], ['Responsive UI', null, '#ef4444']] },
+  { t: 'Backend & Databases', b: 'APIs, auth and data.', k: 'be', i: [['Node.js', 'nodedotjs', '#5FA04E'], ['Express.js', 'express', '#ffffff'], ['REST APIs', null, '#ef4444'], ['PostgreSQL', 'postgresql', '#4169E1'], ['Supabase', 'supabase', '#3FCF8E'], ['Firebase', 'firebase', '#FFCA28'], ['Redis', 'redis', '#FF4438']] },
+  { t: 'AI / LLM', b: 'Shipping LLM-powered features.', k: 'ai', i: [['LangChain', 'langchain', '#1C3C3C'], ['LangGraph', 'langchain', '#1C3C3C'], ['OpenAI API', 'openai', '#ffffff'], ['Gemini API', 'googlegemini', '#8E75B2'], ['RAG', null, '#ef4444'], ['ChromaDB', null, '#ef4444'], ['Prompt Engineering', null, '#ef4444']] },
+  { t: 'Data Science', b: 'Analysis and modelling.', k: 'ds', i: [['NumPy', 'numpy', '#4DABCF'], ['Pandas', 'pandas', '#E70488'], ['Matplotlib', null, '#11557C'], ['Supervised Learning', 'scikitlearn', '#F7931E']] },
+  { t: 'Developer Tools', b: 'The everyday kit.', k: 'tools', i: [['Git', 'git', '#F05032'], ['GitHub', 'github', '#ffffff'], ['Postman', 'postman', '#FF6C37'], ['Clerk', 'clerk', '#6C47FF'], ['VS Code', 'visualstudiocode', '#007ACC'], ['Agile / Scrum', 'jira', '#0052CC']] },
+];
+const ALL = S.flatMap((s, ci) => s.i.map(([n, slug, c]) => ({ n, slug, c, ci })));
+const initials = (n) => n.replace(/[^A-Za-z+ ]/g, ' ').trim().split(/\s+/).map((w) => w[0]).join('').slice(0, 3).toUpperCase();
+// white logo by default; brand colour version for hover states
+const logo = (s, color = 'ffffff') => s.slug
+  ? `<span class="lg"><img src="https://cdn.simpleicons.org/${s.slug}/${color}" alt="" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'fb',textContent:'${initials(s.n)}'}))"></span>`
+  : `<span class="lg"><span class="fb">${initials(s.n)}</span></span>`;
+
+/* 1 flip wall */
+(() => {
+  const half = Math.ceil(ALL.length / 2), rows = [ALL.slice(0, half), ALL.slice(half)];
+  $('#wall').innerHTML = rows.map((r, ri) => { const t = r.map((s) => `<div class="tile"><div class="tile-in"><div class="face">${logo(s)}</div><div class="face back"><b>${s.n}</b><span>${S[s.ci].t}</span></div></div></div>`).join(''); return `<div class="wrow${ri ? ' rev' : ''}">${t}${t}</div>`; }).join('');
+})();
+
+/* 2 bento */
+$('#bento').innerHTML = S.map((s, i) => `<div class="bx b-${s.k}"><span class="num">0${i + 1}</span><h3>${s.t}</h3><p>${s.b}</p><div class="lgs">${s.i.map(([n, slug, c]) => `<span class="chiplg" style="--hc:${c}">${logo({ n, slug }, c.replace('#', ''))}${n}</span>`).join('')}</div></div>`).join('');
+
+/* 3 magnetic field */
+(() => {
+  const f = $('#field'), nm = $('#flname');
+  const items = ALL.map((s) => { const el = document.createElement('div'); el.className = 'fl'; el.innerHTML = logo(s); f.appendChild(el); return { el, s, hx: 0, hy: 0, x: 0, y: 0, vx: 0, vy: 0 }; });
+  const layout = () => { const W = f.clientWidth, H = f.clientHeight, cols = 7, rows = Math.ceil(items.length / cols); items.forEach((it, i) => { const c = i % cols, r = Math.floor(i / cols); it.hx = (W / (cols + 1)) * (c + 1) + (r % 2 ? 26 : -26); it.hy = (H / (rows + 1)) * (r + 1); if (!it.x) { it.x = it.hx; it.y = it.hy; } }); };
+  layout(); addEventListener('resize', layout);
+  let m = { x: -999, y: -999 };
+  f.addEventListener('pointermove', (e) => { const r = f.getBoundingClientRect(); m = { x: e.clientX - r.left, y: e.clientY - r.top }; });
+  f.addEventListener('pointerleave', () => { m = { x: -999, y: -999 }; nm.style.opacity = 0; });
+  (function tick() {
+    let near = null, nd = 1e9;
+    items.forEach((it) => {
+      const dx = it.x - m.x, dy = it.y - m.y, d = Math.hypot(dx, dy) || 1;
+      if (d < 150) { const f2 = (150 - d) / 150; it.vx += (dx / d) * f2 * 2.4; it.vy += (dy / d) * f2 * 2.4; }
+      it.vx += (it.hx - it.x) * .04; it.vy += (it.hy - it.y) * .04; it.vx *= .82; it.vy *= .82; it.x += it.vx; it.y += it.vy;
+      it.el.style.transform = `translate(${it.x}px,${it.y}px) rotate(${it.vx * 2}deg)`;
+      const hd = Math.hypot(it.hx - m.x, it.hy - m.y); if (hd < nd) { nd = hd; near = it; }
+      it.el.classList.remove('hot');
+    });
+    if (near && nd < 90) { near.el.classList.add('hot'); nm.textContent = near.s.n; nm.style.opacity = 1; nm.style.transform = `translate(${near.x - nm.offsetWidth / 2}px,${near.y + 40}px)`; } else nm.style.opacity = 0;
+    requestAnimationFrame(tick);
+  })();
+})();
+
+/* 4 carousel */
+(() => {
+  const car = $('#car');
+  const show = (ci) => {
+    const list = S[ci].i, n = Math.max(list.length, 6), rad = Math.round(75 / Math.tan(Math.PI / n)) + 40;
+    car.innerHTML = list.map(([nme, slug, c], k) => `<div class="cell" style="transform:rotateY(${(360 / n) * k}deg) translateZ(${rad}px);animation-delay:${k * 60}ms">${logo({ n: nme, slug }, c.replace('#', ''))}<b>${nme}</b></div>`).join('');
+    $('#cats').querySelectorAll('button').forEach((b, i) => b.classList.toggle('on', i === ci));
+  };
+  $('#cats').innerHTML = S.map((s) => `<button>${s.t}<span>${s.i.length}</span></button>`).join('');
+  $('#cats').querySelectorAll('button').forEach((b, i) => (b.onclick = () => show(i)));
+  show(1);
+})();
+
+/* 5 dock */
+(() => {
+  $('#docks').innerHTML = S.map((s) => `<div class="drow"><span class="t">${s.t}</span><div class="dock">${s.i.map(([n, slug]) => `<div class="dk"><span class="tip">${n}</span>${logo({ n, slug })}</div>`).join('')}</div></div>`).join('');
+  document.querySelectorAll('.dock').forEach((d) => {
+    const ks = [...d.children];
+    d.addEventListener('pointermove', (e) => ks.forEach((k) => { const r = k.getBoundingClientRect(), dist = Math.abs(e.clientX - (r.left + r.width / 2)), s = 52 + Math.max(0, 1 - dist / 150) * 32; k.style.width = k.style.height = s + 'px'; }));
+    d.addEventListener('pointerleave', () => ks.forEach((k) => (k.style.width = k.style.height = '')));
+  });
+})();
+</script>
+</body>
+</html>
