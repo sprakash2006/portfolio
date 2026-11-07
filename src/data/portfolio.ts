@@ -442,7 +442,7 @@ export type Certification = {
 
 // Topics the home page groups certifications under, in display order (the first opens by default);
 // a topic with no certificates is skipped
-export const certificationTopics = ["AI & LLMs", "Web Development", "Data Science", "Blockchain", "Soft Skills"];
+export const certificationTopics = ["AI & LLMs", "Web Development", "Cloud Computing", "Data Science", "Blockchain", "Soft Skills"];
 
 // Detail-page fields (date, learned, skills) are placeholders marked TODO; add image once you have it.
 export const certifications: Certification[] = [
@@ -515,6 +515,30 @@ export const certifications: Certification[] = [
       "Foundations of supervised machine learning",
     ],
     skills: ["Python", "NumPy", "Pandas", "Matplotlib", "Supervised Learning"], // TODO
+  },
+  {
+    slug: "aws-cloud-technology-consultant",
+    title: "AWS Cloud Technology Consultant Professional Certificate",
+    issuer: "Amazon Web Services · Coursera",
+    topic: "Cloud Computing",
+    logo: "/certifications/logos/aws.png",
+    url: "https://coursera.org/verify/professional-cert/BKEL4EPRYB98",
+    date: "October 31, 2026",
+    image: {
+      src: "/certifications/aws-cloud-technology-consultant.jpg",
+      alt: "Coursera professional certificate: AWS Cloud Technology Consultant by Amazon Web Services, Prakash Dayanand Swami",
+      width: 1600,
+      height: 1237,
+    },
+    learned: [
+      "Core AWS cloud concepts and technical essentials",
+      "Providing technical support for AWS workloads",
+      "Developing Python applications on AWS",
+      "DevOps, automation and project management in the AWS Cloud",
+      "Data analytics and databases on AWS",
+      "Designing solutions with the AWS Well-Architected Framework",
+    ],
+    skills: ["AWS", "Cloud Computing", "Python", "DevOps", "Automation", "Databases", "Cloud Consulting"],
   },
   {
     slug: "blockchain-revolution-financial-services",
