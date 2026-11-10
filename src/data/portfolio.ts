@@ -247,6 +247,7 @@ export const projects: Project[] = [
       "Patient-owned medical records: files are AES-256 encrypted onto IPFS, and every grant, revoke, view and download is logged on Polygon. Gasless for patients via an ERC-2771 relayer, with Flutter and React apps.",
     tags: ["Flutter", "React", "Node.js", "Solidity", "Polygon", "IPFS", "Supabase"],
     code: "https://github.com/medichain-connect-app",
+    live: "https://medichain-omega.vercel.app/",
     year: "2026", // TODO
     category: "Blockchain", // TODO
     overview: [
@@ -270,6 +271,7 @@ export const projects: Project[] = [
       "Full-stack SaaS platform for General Practitioners: study analytics, an AI-powered Medicare billing lookup and an exam-prep system with mock tests and PDF reports.",
     tags: ["Next.js", "TypeScript", "PostgreSQL", "Clerk", "Gemini API"],
     code: "https://github.com/thegpedge-ship-it/the-gp-edge",
+    live: "https://thegpedge.com.au/",
     year: "2026", // TODO
     category: "Web", // TODO
     overview: [
